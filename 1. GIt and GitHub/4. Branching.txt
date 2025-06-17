@@ -1,0 +1,46 @@
+1. What is branch?
+    branch is track of commits
+    
+2. What is use of branch?
+    a. When we are develop softwares in predefined delivereables,
+        assume you have delivered one feture and that is live,
+        now you developer works on building next delivereables.
+        they are commiting daily, 
+
+        but if they are commiting on live(delivered) code, there might be issue
+
+        in such case we can create two branch
+        ex. main and develoment, main branch contain live code and development contain
+            currently being developed code
+        when we need to deliver code we merge the branch
+
+    b. Assume one software is live,
+        and there is need to some changes and new feture are introduced in next version release
+
+        then we create branch with new version no.
+        leave previous changes on old branch
+        and add new feature on new branch
+
+        so that in future if we need to revert back to old version.
+            we can revert easily
+
+    -> main branch contain code that are live used by users
+    -> We should not push code into main branch that are not finalized and tested
+
+3. Concept of head
+    - Each branch have head pointer, which points to last commit
+
+4. See available branch
+    - git branch
+
+5. Create branch 
+    = git branch 'branch_name'
+
+6. Switch branch
+    - git checkout <branch_name>
+
+7. Merge branch
+    - Switch to main branch
+    - git merge <branchName>
+
+    now this will go into pull requests

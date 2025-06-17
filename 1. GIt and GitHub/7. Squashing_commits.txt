@@ -1,0 +1,29 @@
+1. We can merge multiple commits into one commit
+
+2.  copy id of last commit
+
+3.  git rebase -i <commit-id>
+
+4.  now we have, something like this
+        pick 6350a43 commit 1 by me
+        pick c8299ea Added new file
+        pick 00bd6e5 Change content of file
+        pick 06d5800 Change content of file2
+
+    we can pick or squash:
+        pick 6350a43 commit 1 by me
+        s c8299ea Added new file
+        s 00bd6e5 Change content of file
+        s 06d5800 Change content of file2
+
+    - all squash commit are squashed into single pick commit
+
+    here below two commit are squashed into upper one,
+        pick 6350a43 commit 1 by me
+        s c8299ea Added new file
+        s 00bd6e5 Change content of file
+        pick 06d5800 Change content of file2
+
+5.  - esc  :x
+    - hit enter and now we can create message for commit
+    - esc  :x and hit enter

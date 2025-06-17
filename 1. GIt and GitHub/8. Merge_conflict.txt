@@ -1,0 +1,14 @@
+1. Confict occures when two user make change at same line of code
+
+2. When one pull request is merged
+   and second one is pending, but second one is containing same change in at same line
+
+   then we need to solve it manually in github
+
+3. When we take pull and 
+   some other user changed same line that we are working on
+   but not commited yet.
+
+   then also confict arise. solve it in IDE
+
+4. Conflict also can arise when merging branch

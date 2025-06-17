@@ -1,0 +1,94 @@
+What should we do if we want to contribute to some other's project?
+
+1. We can't directly push our code to their repository as we haven't access
+
+2. We create copy of that project into our own account by forking it.
+
+3. Now we can do anything in project
+
+4. Clone url to our local
+    now origin url is on our account
+
+5. We can add upstream url, it is url, from where we have forked project
+    - git remote add upstream https://github.com/commclassroom/commclassroomOP.git
+
+    upstream : others url (we can't directly push into upstream url)
+    origin : our own url
+
+6. Always create new branch of work whatever we are doing
+
+7. Now we have added some feature into our code and pushed on our account with new branch
+    now we will request to main project owner
+
+    whatever changs we have on 
+    our repo : new branch 
+    we want to merge it on
+    main repo : main branch
+
+    this request is known as pull request (PR)
+
+8. We creat pull request for our changes,
+    then they review it,
+    suggest some changes
+    and after that they will merge your code
+
+9. How to make pull request?
+    - push your code into your branch
+    - go to your github forked repo
+    - go to open pull request
+    - here we can see
+      base repo: commclassroom/commclassroomOP:main  <- head repo: mitesh12ehd/commclassroomOP:main
+    
+    - write title and description to pull request (PR)
+
+10. Why we should not commit multiple feature on one branch?
+    - when we made some changes and creat pull request for them
+    - after creating pull request if we commit something on same branch
+    - then we are not able to create new pull request for them
+    - new commits are attached within old pull request
+    - it is not easy to review your code by main repo owner
+
+11. Summary : Always make one branch for one pull request while contributing 
+              others code
+
+12. Remove commits from pull request
+    - copy commit id of commit below you want to remove
+
+    - git reset commit-id
+
+    - git add.
+    - git stash  
+
+    - now we need to push it, but we can't simply do this,
+      because online repo contain commits that we don't on local
+      so that we need to do force push
+
+      git push origin mitesh -f
+
+13. Maintain our repo with live updated code,
+    Our forked repo:main branch not contains changes of main repo:main branch
+    
+    - we can see this line if we are updated with upstream url
+        This branch is 1 commit ahead of commclassroom/commclassroomOP:main.
+
+    1. we can click on fetchUpstream / sync fork
+      it update code on our repo with live code
+
+      and take pull
+      - git pull
+    
+      or
+    
+    2. using CLI  
+      git checkout main
+      git fetch --all --prune
+      git reset --hard upstream/main
+
+      last command move head to latest commit of that are take from main branch
+
+      git push origin main : to push changes on our main branch
+
+      or
+
+    3. git pull upstream main
+       git push origin main

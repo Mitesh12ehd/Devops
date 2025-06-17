@@ -1,0 +1,4 @@
+1. Use cheatsheet
+   https://education.github.com/git-cheat-sheet-education.pdf
+
+2. Do hands on for better understanding 

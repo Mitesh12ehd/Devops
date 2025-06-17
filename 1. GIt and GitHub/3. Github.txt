@@ -1,0 +1,31 @@
+- GitHub require to make collobrative enviroment so that multiple devlopers can work on that
+- Developers can push their code on github or any other remote server
+- Developers can also pull other developers code from github
+- Some popular remote server are github, gitlab, bitbucket
+
+1. Connect our repository to our local folder: 
+    in url use ssl url
+    git remote add origin https://github.com/Mitesh12ehd/Git_Practice.git
+
+    origin is name, by default it is origin in case of personal account
+
+2. Show all the url attached to our local folder
+    git remote -v
+    - if we have attached one url we can see two url one for fetch and one for push
+
+3. Push changes
+    - git push origin master
+        origin : Which url you want to push?
+        master : name of 
+        
+4. Can anyone push code in repository if they have url?
+    No, we need ssh key for authentication.
+    
+    1. Go to settings of GITHUB 
+    2. Go to SSH and GPS key
+    3. Check documentation for SSH keys
+    4. Paste given command on terminal 
+    5. Leave all ans empty
+    6. We have two key, public and private
+    7. Open public file and copy content
+    8. SSH key > new SSH key > give name > pase content of file > create key

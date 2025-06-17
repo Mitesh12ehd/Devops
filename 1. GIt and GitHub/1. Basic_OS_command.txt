@@ -1,0 +1,9 @@
+Basic OS command to manipulate file system
+1. ls : Shows all the files and folder in current directory
+    or ls -a , it also shows hidden files
+    we can do ls dirName, it shows item inside given directory
+
+2. mkdir dirName : Create new directory with given name
+3. cd dirName : move into dirName directory
+4. touch fileName.txt : creat new file 
+

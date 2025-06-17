@@ -1,0 +1,4 @@
+1. Fork
+    - Assume you are exploring github and you see project,
+      but you don't have access to commit it in their project
+      so we can fork that project into our account, and work with that
