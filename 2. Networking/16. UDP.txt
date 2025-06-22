@@ -1,0 +1,23 @@
+UPD: User datagram protocol
+    - it is connection-less protocol
+    - used to fast-transfer of data
+    - there is no guarantee that data must got delivered
+    - data may change in between transfer
+    - received data may not be in order
+
+    - UDP use checksum to check received data, 
+      but there is No correction or retransmission is done (unlike TCP)
+
+Structure of segment in UPD:
+    1. source port num (2 bytes)
+    2. dest port num (2 bytes)
+    3. destination port number (2 bytes)
+    4. checksum (2 bytes)
+    those four fields are called headers of segment
+
+    5. actual data
+
+Use case:
+    1. live streaming
+    2. video calls
+    3. DNS use UDP protocol

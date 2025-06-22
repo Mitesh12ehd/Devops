@@ -1,0 +1,68 @@
+Internet protocol:
+    IP are assigned to server, client, node, router and each device
+    
+IPv4: 32 bit number with 4 words
+    - we can create 2^32 unique address
+    - address are in decimal format
+
+    - as we have seen hoping(routing) are happens over internet service provider,
+    - this is called subneting
+
+    ex. 192.168.2.30
+    here 192.168.2 is network address , called subnet id
+         30 is device address, called host id
+
+    - so that when we packet travels, packet should know subnet of destination
+
+Class of IP address:
+    A : 0.0.0.0  to  127.255.255.255
+    B : 128.0.0.0  to  191.255.255.255
+    C : 192.0.0.0  to  223.255.255.255
+    D : 224.0.0.0  to  239.255.255.255
+    E : 240.0.0.0  to  255.255.255.255
+
+Subnet masking:
+    mask the network part of ip and leave for us to use the host part
+    network part: 192.168.2
+    host part: 30
+
+    subnet is not fixed to last 8 bit but it is configurable
+
+    ex. 192.122.106.0 / 24
+    here 24 bit are in the subnet 
+         8 bit are in the host part
+
+How internet service provider got assign Ip?
+    - they are assigned based on regions to reduce hoping
+    - IETF(Internet Engineering Task Force)
+
+IPv6: 128 bit number
+    - as 2^32 address not enough for all devices, there is larger address
+      of 128 bit, 2^128 address
+    - address are in hexadecimal format
+
+    - we can do subneting here also.
+
+    cons: not backward compatible
+          require lot of hardware work to convert into IPv6
+
+Middle boxes:
+    - it is extra device that are also interact with Ip packets
+
+    ex. 
+        Firewall:
+            - Blocks/permits traffic based on security  
+        Intrusion Detection/Prevention System (IDS/IPS) :
+        	- Monitors and blocks suspicious traffic
+        NAT (Network Address Translation) : 
+            - Translates private IPs to public IPs
+        Proxy Server : 
+            - Acts as an intermediary between clients and servers
+        Load Balancer :
+            - Distributes traffic across multiple servers
+        Content Filter :
+            - Blocks restricted or harmful content (e.g., parental control)
+        Traffic Shaper :
+        	- Manages bandwidth by delaying or prioritizing traffic
+        VPN Gateway :
+            - Encrypts traffic for secure remote access

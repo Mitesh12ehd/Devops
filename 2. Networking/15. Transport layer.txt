@@ -39,4 +39,43 @@ Congestion Control:
         Fast Recovery
 
 Error control and flow control:
+    - We need some mechanism such that we can identify if some data loss during 
+      transmission or data isn't in order as they should be.
 
+    - Mechanism is checksum
+
+    - The sender calculates a checksum based on the contents of the message and sends 
+      it along with the data. 
+    - The receiver recalculates the checksum from the received data and compares it 
+      with the original.
+    - If they match, the data is considered correct. If not, there was a transmission error
+
+Timers:
+    - when we send data to receiver, packets may get lost, delayed, or corrupted.
+
+    Case 1:
+    - when sender send data, it start timer  
+        timer = 0
+    - when receiver receive data, he sends acknowledgement
+        and if sender received ack. timer will be reset to 0 
+
+    Case 2:
+    - when sender send data, it start timer  
+        timer = 0
+    - but packets get loss by some reasons and timer expired 
+    - hence we can say that receiver not received data given data packets
+    - and we can resend that packet again
+
+    Case 3
+    - when sender send data, it start timer  
+        timer = 0
+    - when receiver receive data, but he didn't sent ack
+    - then timer expires and sender assumes that packet get loss
+    - he send again, called transmission
+    - now receiver have 2 same packets
+    - This duplication of packet can be solved using sequence number
+
+    - Each byte of data in TCP has a unique sequence number. When the receiver gets data, 
+      it checks the sequence number:
+    - If it’s new, it accepts and processes the data.
+    - If it’s a duplicate (already received this sequence number), it discards it.

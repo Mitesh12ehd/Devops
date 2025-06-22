@@ -1,0 +1,63 @@
+The Network Layer (Layer 3) in the OSI model is responsible for delivering data 
+packets between devices across multiple networks.
+
+Routing:
+    Routing is the process of selecting the best path for a packet to travel from 
+    source to destination across multiple networks.
+
+    - There are graph like structure of router
+    - routing finds best path from them using algorithm like dijsktra
+
+    - Note:
+        in routing not each personal router takes part.
+        ex. my router not connected with neighbors router,
+        but routing happen in between service providers
+
+    Routing table:
+        - A routing table is a data structure in a router that stores information 
+          about possible paths to various network destinations.
+        - each router have routing table
+
+        It contains following:
+            1. Network layer address of destination
+                delivery is called hop to hop delivery
+                next address called next hop
+
+            2. Network layer address of person who are sending packets
+            3. Data you want to sent
+
+Forwarding:
+    Forwarding is the actual action of moving a packet from one interface to 
+    another based on the routing table.
+
+    Forwarding table:
+        A forwarding table is derived from the routing table, but it's optimized 
+        for fast lookup.
+
+What if we want to add new routers in existing structure?
+How we add data in routing table of another router?
+how we add destination network address in our router?
+How we know where to forward data?
+
+    - Control plane, a graph structure
+
+    - there are 2 types of routing we are using to create routing table?
+    
+    1. Static routing:
+        - Routing table manually configured by network admins
+        - Doesn’t change automatically when new router added
+
+    2. Dynamic routing:
+        - Dynamic Routing is a routing technique where routers automatically learn and 
+          update routes based on information they receive from other routers, using
+          routing protocols.
+        - Routing protocols
+            1. Distance vector
+            2. Link state
+            3. Path vector
+
+TTL: time to leave
+    it is time after this time packet got dropped if it not reach to destination
+    - we can check by ping google.com
+    - we can see ttl is 60 second
+    - so that packet not travel indefinite in between routers

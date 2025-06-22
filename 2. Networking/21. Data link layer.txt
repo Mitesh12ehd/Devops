@@ -1,0 +1,6 @@
+Data link layer:
+    here are some of the main functions
+    
+    1. framing: Converts raw bits into structured frames (data units)
+    2. Addressing : Uses MAC addresses to identify devices
+                    your wifi, bluetooth may have different MAC addresses

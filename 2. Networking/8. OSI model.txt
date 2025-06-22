@@ -44,6 +44,8 @@ OSI (open system interconnection) model:
         What if data packet is loss? etc..
         - There is checksum to verify data is correctly received to receiver or not
 
+    - data are in the form of segment
+
 5. Network layer:
     - Now at this point data is transferred from one computer to another computer
     - Router are at network layer
@@ -52,6 +54,9 @@ OSI (open system interconnection) model:
     - assign IP to each data packet so that data reaches to correct destination
 
     - also perform routing, various algorithm used to find best route to transfer data
+
+    - data are in the form of packets
+
 
 6. Data link layer:
     - Physical addressing done at data link layer
@@ -63,6 +68,8 @@ OSI (open system interconnection) model:
 
     - Converts raw bits into frames (structured chunks of data).
     - It ensures that frames are transferred reliably from one physical device (like a computer or switch) to another over a physical medium.
+
+    - data are in the form of frames
 
 7. Physical layer:
     - It is responsible for the physical transmission of raw bits (0s and 1s) over a communication medium 

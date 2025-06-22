@@ -1,0 +1,52 @@
+TCP : Transmission control protocol
+    - connection oriented
+    - Reliable delivery of data
+    - In-order arrival
+    - Error checking
+    - Congestion and flow control
+    - full duplex : we can send file simultaneously using one connection
+
+TCP segment structure:
+    - source port and destination port
+    - sequence number : to track data by order.
+        if we send first segment by sequence no = 33
+        then next segment have sequence no = 34
+
+    - acknowledgement number : Confirms receipt of data
+        acknowledgement number = previous sequence number + 1
+
+    - checksum : to track error in data
+    - flags:  SYN, ACK, FIN, etc.
+    - window size : used for flow control   
+    - data 
+    - and there are other some flag and field, (refer more on internet)
+
+1. Connection establishment: 3-way handshake
+    SYN: Client → Server: "Let’s connect"
+
+    SYN-ACK: Server → Client: "Okay, I’m ready"
+
+    ACK: Client → Server: "Let’s start sending data"
+
+2. Data transfer:
+    - Sender breaks data into segments with sequence numbers.
+    - Receiver acknowledges segments using ACKs.
+    - If a segment is lost, the sender retransmits it.
+    - use checksum to check loss or not
+
+3. Connection termination:
+    - Client sends FIN to close
+    - Server replies with ACK
+    - Server sends its FIN
+    - Client replies with ACK
+
+Note:
+    There are also congestion control
+
+TCP flags:
+    SYN : Start a connection
+    ACK : Acknowledgement
+    FIN : Terminate connection
+    RST : Reset connection
+    PSH : Push data immediately
+    URG : Urgent data

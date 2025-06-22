@@ -1,0 +1,26 @@
+NAT : Network address Translation
+    - NAT allows multiple devices on a local network to share one public 
+      IP address.
+
+    - IPv4 has only 2^32 addresses, 
+      which isn't enough for all devices in the world.
+      to solve this, private IP ranges were defined (RFC 1918), such as:
+
+        10.0.0.0/8
+        172.16.0.0/12
+        192.168.0.0/16
+
+      These private IPs cannot be used on the internet, 
+      so we need NAT to translate them to a valid public IP.
+
+How NAT works?
+    Imagine a device with private IP 192.168.1.10 wants to visit google.com.
+
+    1. The device sends a request to the NAT router.
+    2. The router replaces the source IP (192.168.1.10) with its own public 
+       IP (e.g., 203.0.113.5).
+    3. It keeps a record of this mapping in a NAT table.
+    4. When the reply comes back, the router looks in the NAT table and 
+       forwards the reply to 192.168.1.10.
+
+Refer more on internet
