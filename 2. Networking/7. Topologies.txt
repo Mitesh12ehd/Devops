@@ -1,0 +1,46 @@
+Topologies is structure of device, how they are connected
+
+1. Bus:
+    - One single line 
+    - each device connected to that line
+
+            d1           d2
+            |            |
+    ex. ---------------------------
+                |               |
+                d3              d4
+
+    - Drawback: each line broke, everything went down
+
+2. Ring:
+    - connection of device form Ring
+
+    ex.    d1----d2-----d3
+           |             |
+           d6----d5-----d4
+
+   
+    - Drawback : if one break, we can't transfer data
+                 we need transfer data over those device who don't need.
+
+3. Star:
+    - One central device connected to all the device
+    - device transfer data over central device
+
+    - Drawback : if central fails, network go down
+
+4. Tree: 
+    - Combination of bus and start topology
+  
+           star1        star2
+            |            |
+    ex. ---------------------------
+                |               |
+                d1              star3
+
+5. Mesh : 
+    - Each device connected to all other device in network
+
+    - Drawback : costly,
+                 not scalable: if we want to insert 1 more device
+                        then we need to make connection to all existing device

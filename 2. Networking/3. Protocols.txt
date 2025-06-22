@@ -1,0 +1,15 @@
+Protocols : set of rules
+
+ex. 
+1. TCP : Transmission control protocol
+    - it ensure data reach it's destination completely
+        ex. message 
+
+2. UDP : User datagram protocol
+    - when we don't care about 100% data reach to receiver or not.
+    - but we want fast transmission of data
+    ex. live streaming, video calls
+
+3. HTTP : Hyper text transfer protocol
+   - used by web browsers
+   - it have rules for format of data that are being transferred

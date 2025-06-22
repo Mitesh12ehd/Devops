@@ -1,0 +1,27 @@
+When we transfer data,
+    it not transfer all at once
+    data is transferred in packets.
+
+All the device that are used to transfer data,
+    they all have their IP address
+    format : x.x.x.x
+             value of x can be 0-255
+
+- Check you IP address :
+    public(Internet) :  curl ipinfo.io/ip
+    private(Your local) : ipconfig, check ipv4 address
+
+- We are connected to internet via modem/router.
+    - Modem router is connected to our ISP(internet service provider)
+
+    modem/router has global ip 
+
+    device 1,2,3 are connected to modem/router.
+    modem/router gives ip to each device(known as local ip)
+
+    - How to router find which device has requested data?
+        using NAT (network access translator)
+
+    - How device find which application has requested data?
+        using Port number
+        our application running on some port number

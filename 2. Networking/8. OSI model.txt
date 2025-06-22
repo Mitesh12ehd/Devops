@@ -1,0 +1,87 @@
+OSI (open system interconnection) model:
+    model/standard that define how two or more computer communicate with each
+    other, and share data between them.
+
+- There are 7 layer structure:
+    1. Application
+    2. Presentation
+    3. Session
+    4. Transport
+    5. Network
+    6. Data link
+    7. Physical 
+
+1. Application layer :
+    Application layer contain application that need to transfer data
+
+2. Presentation layer :
+    - Application layer sent data to Presentation layer
+    - Data got from application is in form of letter, numbers, images etc..
+    - Presentation layer converts raw data into machine format
+        ASCII -> EBCDIC
+
+    - Presentation layer also performs encoding, encryption, Data compression
+      serialization/deserialization of data
+    - SSL protocol used for encryption/decryption
+
+3. Session layer : 
+    - Now data in in ready to sent state.
+    - Session layer responsible for establishing, managing and terminating 
+      session between two application.
+
+4. Transport layer : 
+    - When session is established between two devices,
+      transport layer is responsible for end to end communication
+    - transport layer is responsible in when we receive or send data in network layer
+    - it have there own protocols for how data transferred
+        ex. TCP, UDP
+
+    - Segmentation : Data receive from session layer are received in segments
+    - each segment contain src and destination port number, and sequence number
+    - sequence number helps to reassemble data from segments into correct format.
+
+    - it also have standard for error control
+        What if data packet is loss? etc..
+        - There is checksum to verify data is correctly received to receiver or not
+
+5. Network layer:
+    - Now at this point data is transferred from one computer to another computer
+    - Router are at network layer
+    - Function of network layer is logical addressing
+    - assign IP address for sender and receiver
+    - assign IP to each data packet so that data reaches to correct destination
+
+    - also perform routing, various algorithm used to find best route to transfer data
+
+6. Data link layer:
+    - Physical addressing done at data link layer
+    - it helps to find device that need to receive data 
+    - Use MAC address to identify device(MAC : Media access control)
+    - MAC addresses of sender and receiver assigned to data packets
+    - MAC address is 12 digit alphanumeric number
+    - Your bluetooth, your wifi may have different mac address
+
+    - Converts raw bits into frames (structured chunks of data).
+    - It ensures that frames are transferred reliably from one physical device (like a computer or switch) to another over a physical medium.
+
+7. Physical layer:
+    - It is responsible for the physical transmission of raw bits (0s and 1s) over a communication medium 
+      like wires, fiber, or wireless signals.
+    - Hardware section
+
+
+- Now when receiver receive data.
+  each layer perform task in reverse order
+  Data link layer try to get row data from frames and likewise for all layers
+
+
+- TCP/IP model : Internet protocol
+    - There is only 5 layers
+    1. Application (Combination of application + Presentation + session)
+    2. Transport
+    3. Network
+    4. Data link
+    5. Physical
+
+    - This is model more used practically
+    - OSI model is more like theory base

@@ -1,0 +1,33 @@
+Web protocols:
+    TCP/IP:
+        it is connection oriented protocol
+        we need to establish connection first to transfer data
+
+        1. HTTP : Hyper text transfer protocol
+            for html and web pages transfer
+
+            https: s means secure, each data to transfer are encrypted
+        2. DHCP
+            - dynamic host control protocol
+            - allocate ip address to device to connected to network
+        3. FTP
+            - file transfer protocol
+            - nowadays file is transferred over HTTP protocol
+        3. SMTP
+            - simple mail transfer protocol
+            - to send the mails
+        4. POP3 & IMAP
+            - to receive mails
+        5. SSH : Secure shell
+            - used to securely access and manage remote devices (like servers, 
+              routers, or computers) over an untrusted network, such as the internet.
+
+        6. VNC - Virtual Network Computing
+            - It is a remote desktop sharing protocol that allows you to control another 
+              computer over a network by transmitting its screen and input events 
+              (keyboard and mouse).
+
+    UDP: User datagram protocol
+        - stateless connection
+        - data may be loss
+        - fast transfer of data

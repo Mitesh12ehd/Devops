@@ -1,0 +1,27 @@
+Two device communicate in two ways
+    1. Guided ways: 
+        there is wired connection between devices
+        some common cables are
+        - optical fiber cables
+        - coaxial cables
+    
+    2. Un-guided ways:
+        there is not wired connection between two devices
+
+Internet is connected with wires,
+    wires are passed through the ocean
+
+Type of network:
+1. LAN : local area network
+    network within small area like office, home
+    ex. computers connected via ethernet cables
+
+2. MAN : Metropolitan Area Network
+    network withing city
+
+3. WAN : wide area network
+    network all over the all countries
+
+Note: Internet is collection of all this 3 network type
+    ex. Lot of LAN connected to one MAN,
+        Lot of MAN connected to one WAN

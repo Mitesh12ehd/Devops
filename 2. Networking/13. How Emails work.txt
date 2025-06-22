@@ -1,0 +1,31 @@
+- Email must use TCP protocol because we can't lost information in emails
+
+SMTP : 
+    to send and receive mail from SMTP server to server
+
+POP3 : 
+    to download received mail from SMTP server
+
+ 
+Sender -> Sender's SMTP server -> Receiver's SMTP server -> Receiver
+
+Note:
+but this things don't happen when Sender and Receiver are on same host
+ex. mvc@gmail.com -> cmv@gmail.com
+
+Note:
+Find name and IP of SMTP server
+    nslookup -type=mx gmail.com
+
+How to download emails into your local device from server?
+    POP3
+    - use POP (Post office protocol)
+    - POP connect with SMTP server with port 110
+    - authorize and get all the emails
+    - using pop3 we need to download first to see the email.
+
+    IMAP : Internet message access protocol
+    - It is a protocol used by email clients (like Outlook, Thunderbird, 
+      Gmail app) to access and manage emails on a SMTP server — without 
+      downloading or deleting them by default.
+    - We can access from multiple device at a time

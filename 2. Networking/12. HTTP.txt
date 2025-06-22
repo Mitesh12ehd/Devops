@@ -1,0 +1,84 @@
+HTTP : Hyper text transfer protocol
+    - it is client - server architectural protocol
+    - it define rules for how client make request and
+      and how server respond
+    - http request
+      http response
+
+    - HTTP follows rules of TCP protocol
+
+HTTP URL have 
+    - url + path + parameter 
+    ex. youtube.com/playbox/video=235
+
+    here youtube.com is url
+         playbox is path
+         and there is parameter video, value is 235
+    
+    - HTTP request contain headers 
+        there is different headers request headers and response headers
+        we can see headers in network tab of inspect
+        - headers is metadata about request
+
+
+Type of methods for request:
+    - Method tell server what task to do
+
+    1. GET:
+        - Retrieve data from server
+        - Do not modify data into server
+
+    2. POST:
+        - Sends data to the server to create a new resource.
+        - ex. When we fill the form and store data in server
+              we are creating new resource.
+
+    3. PUT:
+        - Sends data to update/replace an existing resource. 
+
+    4. PATCH:
+        - Sends partial update to a resource.
+
+    5. DELETE:
+        - Delete data from server
+
+    6. HEAD:
+        - similar to GET but, response have headers only 
+
+    refer more.
+
+Status codes:
+    - status codes are 3-digit numbers returned by the server to indicate 
+    the result of a client's request. They are grouped into 5 classes, 
+    each with a specific meaning
+
+    Range with their meaning:
+        1xx  Informational : Request received, continuing process
+        2xx	 Success : Request was successfully received and processed
+        3xx	 Redirection : Further action is needed (e.g., redirected to another URL)
+        4xx	 Client Error : Request had an issue from the client side
+        5xx	 Server Error :	Server failed to handle a valid request
+
+    - see mostly used status code
+    - always use status code while making request.
+
+HTTP is a stateless protocol
+    - Http is stateless protocol
+    - it not maintains the previous state.
+    - Then how to maintains state(remember previous information)
+
+    Here are some ways
+
+    1. Cookies:
+        - stored in the browser
+        - Automatically sent with every HTTP request to the same domain
+        - Used for: session IDs, user preferences, tracking
+
+    2. Sessions (server side state):
+        - Server generates a session ID and sends it to the client (usually stored in a cookie)
+        - Server stores session data (e.g., in memory or database)
+        - Next time client sends session ID → server retrieves session data
+
+    3. Local storage:
+        - store data in local storage
+        - data not sent with request automatically

@@ -1,0 +1,42 @@
+Transport layer:
+    - Network layer are responsible for transferring data,
+        but before and after transferring data,
+        there are are transport layer
+
+    - transfer data from application layer to network layer.(int TCP/IP model)
+    
+    - It breaks large data into smaller chunks, ensures reliability, maintains 
+      proper sequencing, and controls flow and errors.
+    
+    Key Responsibilities:
+        Process-to-process delivery (not just host-to-host)
+        Reliable transmission (error detection, retransmission)
+        Flow control
+        Congestion controls
+        Segmentation and reassembly
+
+Multiplexing and Demultiplexing:
+    Multiplexing: Multiple applications (like browser, email) can use the network 
+                  at the same time.
+    Demultiplexing: Receiver uses port numbers to deliver incoming data to the right 
+                    application.
+
+Segmentation and Reassembly:
+    Segmentation: Transport layer breaks large messages into segments (for TCP) or 
+                  datagrams (for UDP).
+    Reassembly: At the receiver’s end, segments are reassembled in the correct order 
+                to form the original message.
+
+Congestion Control:
+    - Congestion happens when network have low bandwidth but we are sending data so 
+      rapidly
+    - Prevents overloading the network.
+    - If too many packets are sent too fast, the network may drop them.
+    - TCP uses algorithms like:
+        Slow Start
+        Congestion Avoidance
+        Fast Retransmit
+        Fast Recovery
+
+Error control and flow control:
+

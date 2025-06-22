@@ -1,0 +1,25 @@
+Port number are 16 bit number
+    total possible port number = 2^16 = 65536
+
+Each application is running on some port number
+
+- All the http transfer is done on Port 80.
+
+1. Port from 0 - 1023 are reserved port
+  i.e. we can't our host application on port 0-1023
+
+2. Port from 1024 - 49152 are registered for some predefined application
+    ex. MongoDB : port 27017
+    ex. MySQL : 1433
+
+3. Remaining port , we can use for our application
+
+---------------------------------------------------------------------------
+
+Port is a logical endpoint that helps computers identify specific processes 
+    or services within a device when communicating over a network.
+
+Ephemeral ports : 
+    Assume you have identified that chrome would receive request
+    but which tab, which window.
+    such thing are identified by Ephemeral ports

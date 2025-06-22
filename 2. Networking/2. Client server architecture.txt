@@ -1,0 +1,4 @@
+- Client send request and server gives response of it
+    ex. we hit google.com and server of google provides their webpage in response
+        here client : us
+             server : google 

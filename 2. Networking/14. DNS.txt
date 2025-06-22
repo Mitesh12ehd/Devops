@@ -1,0 +1,39 @@
+Domain name system:
+    - DNS is like the phonebook of the internet
+    - It translates domain names (like google.com) into IP addresses 
+      (like 142.250.182.206), which computers use to locate and connect 
+      to each other on the internet.
+
+Where domainName > Ip address mapping stored ? 
+    - DNS directory service has database in which each mapping stored
+    - But there may be issue if they use one database
+    - if due to high load, database go down, then no one can use any website
+    - so databases are divided into classes
+
+What is classes?
+    mail.google.com
+
+    mail is a sub-domain
+    google is second level domail
+    com is top level domain
+
+    so that there are multiple databases for these three categories.
+
+Root DNS servers:
+    - there are for top level domains
+        ex.  .io  .com   .edu  .ai
+    - Who is maintaining root DNS servers
+        https://root-servers.org/
+        here we can see each country where server is located
+
+What happens when we hit google.com ?
+    1. It try to find IP in our local system
+
+    2. If not found, then try to find in local DNS server
+        Local DNS server are maintained by your internet service provider
+        they can see all website we visit.
+
+    3. If not found in Local DNS server,
+        then it find from top level domains(root DNS server)
+    
+    4. Then it store in our local, so we can visit against fast.

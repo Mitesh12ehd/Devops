@@ -1,0 +1,28 @@
+Clint server architecture:
+
+    - Client send request , server give response of it
+    - What happens when you make request to server
+    ex. we make request to google.com
+        there so many server of google so that load can be handled
+
+    - Make request using terminal
+        ping google.com
+
+        Pinging google.com [2404:6800:4002:823::200e] with 32 bytes of data:
+        Reply from 2404:6800:4002:823::200e: time=41ms
+        Reply from 2404:6800:4002:823::200e: time=49ms
+        Reply from 2404:6800:4002:823::200e: time=49ms
+        Reply from 2404:6800:4002:823::200e: time=54ms
+
+        Ping statistics for 2404:6800:4002:823::200e:
+            Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+        Approximate round trip times in milli-seconds:
+            Minimum = 41ms, Maximum = 54ms, Average = 48ms
+
+    - We can see we receive all the packets(Lost == 0)
+      - here are 4 packets of 32 bytes
+      - ip of google server 2404:6800:4002:823
+
+P2P(Peer to peer) server architecture:
+    - device connected with each other, there is no central server
+    - each single device can be client, can be server
