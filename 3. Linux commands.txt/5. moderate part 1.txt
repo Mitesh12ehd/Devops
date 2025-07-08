@@ -1,0 +1,76 @@
+touch :
+    used to create empty files and update the timestamps (access time and modification 
+    time) of existing files.
+
+        touch newfile.txt                    # Create single empty file 
+        touch file1.txt file2.txt file3.txt  # Create multiple empty files
+        touch report.{txt,pdf,doc}  
+
+cp : copy file and directories
+
+    # copy content of file1 and replace content of file to with copied content
+    # create new file2 if not exist
+    cp file1.txt file2.txt 
+
+    # we can mention path also 
+    cp /path/to/source.txt /path/to/destination.txt
+
+    cp file.txt folder1/   # Copy file to documents directory
+    cp *.txt folder2/
+
+    # copy multiple files
+    cp file1.txt file2.txt file3.txt destination/
+    cp *.log *.conf folder1/
+    cp {file1,file2,file3}.txt backup/
+
+
+    Copy directories:
+        - We need to pass one option -R
+        - if we don't pass it will throw error
+
+        cp -R cp -R new1/dir1 new2
+        # copy dir1 inside new2 directory with all contents
+
+
+mv : used to move files and directories from one location to another, or to rename them.
+
+    Moving files:
+        mv file.txt /new/location/           # Move file to different directory
+        mv /old/path/file.txt /new/path/     # Move with absolute paths
+        mv *.txt documents/                  # Move all .txt files to documents folder
+
+    Renaming Files and Directories:
+        mv oldname.txt newname.txt           # Rename file
+        mv old_directory new_directory       # Rename directory
+        mv "old name.txt" "new name.txt"     # Rename file with spaces
+        mv random/dir1 .                     # move dir1 to current directory
+    
+    Moving multiple files:
+        mv file1.txt file2.txt file3.txt /destination/
+        mv *.log /var/log/archive/
+        mv {report,data,config}.txt /backup/
+
+    Move and rename both:
+        mv names.txt archive/names_new.txt
+
+rm : Remove file and directories,
+    files are deleted permanently, files are not moved inside recycle bin
+
+    Delete single file:
+        rm file.txt                          # Delete file.txt
+        rm /path/to/file.txt                 # Delete file with absolute path
+        rm ~/document.pdf  
+
+    Delete multiple file:
+        rm file1.txt file2.txt file3.txt     # Delete multiple specific files
+        rm *.txt                             # Delete all .txt files
+        rm *.{log,tmp,bak}  
+
+    Delete directory
+        rm -R dir1
+    
+    (look various option available in rm command)
+    ex. 
+        rm -i file1.txt   # ask for prompt before deletion
+        rm -f file1.txt   #  (No Prompts, Ignore Non-existent Files), no error if file not exist
+        rm -d new_folder/ # delete empty directories only

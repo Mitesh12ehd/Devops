@@ -1,0 +1,10 @@
+sudo : super user do
+    - allows authorized users to execute commands as another user, typically the root 
+      (administrator) user.
+
+    - When you run a command with sudo, the system checks if your user account has 
+      permission to use sudo (defined in the /etc/sudoers file). 
+    - If authorized, it prompts for your password and then executes the command with 
+      elevated privileges.
+      
+    - this command helps when we need admin permission for some commands

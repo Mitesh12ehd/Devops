@@ -1,0 +1,27 @@
+pipe allows you to connect commands together, using the output of one command as the 
+input for another.
+
+tr : translate or delete characters
+
+ex. 
+    1. echo "hello world" | tr 'a-z' 'A-Z'
+        # output : HELLO WORLD
+
+       echo "Hello World" | tr 'A-Z' 'a-z'
+        # output : Hello World
+
+       echo "hello" | tr 'el' 'ax'
+        # Output: haxxo (e→a, l→x)
+
+    2. cat file1.txt | tr 'a-z' 'A-Z'
+        # all content will be capitalized
+
+    3. cat file1.txt | tr 'a-z' 'A-Z' > newFile.txt
+        # store capitalize content of file1 to newFile.txt
+
+    4. deletion of characters
+        echo "hello123world" | tr -d '0-9'
+        # Output: helloworld
+
+        echo "a,b,c,d" | tr -d ','
+        # Output: abcd

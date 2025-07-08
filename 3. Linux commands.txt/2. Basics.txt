@@ -1,0 +1,79 @@
+How commands execute?
+    1.When we hit command
+        git
+      it execute git.exe
+    
+    2. We can see the path of git.exe
+        where git.exe
+
+    hence when we hit git command, it execute file from upper path
+    we can execute path:  "path"
+
+ls : We can list all the things is current directory
+     We can also use path here to list thing at given path
+        ls /home/user
+    (refer option and more on internet)
+
+    ls -a : it shows the all the hidden file
+            all file who start with . are in hidden
+
+    ls -l : shows all file and folder with more information
+
+    we can also do 
+    ls -al : it print all hidden files with more information
+
+    ls -R : it print all file in current directory and 
+        then all the file in child directory and
+        then likewise folder inside folder
+
+mkdir dir_name : create new directory with directory_name
+                 we can also use path here
+                ex. mkdir ~/Documents/projects
+        (refer option and more on internet)
+
+cd : change directory
+    cd new_folder : it moves terminal current directory into new_folder
+
+    1. Absolute path:
+        cd /home/username/Documents
+        it start with root directory    
+
+    2. Relative path:
+        cd folder_name
+        cd Documents/Projects
+        cd ../sibling_folder/subfolder
+
+    3. Move to parent directory
+        cd ..          # One level up
+        cd ../..       # Two levels up
+        cd ../../..    # Three levels up
+        cd .           # . indicate current directory
+
+    4. Move to sibling directory:
+        cd ../folder_name              # Go up one level, then into folder_name
+
+    5. Go to home delivery: from where we open terminal 
+        cd ~
+
+    6. Go to root directory
+        cd /
+
+What is environment variable ? 
+    - They affect environment of your computer
+    - While installing some specific software we set environment variable
+        ex. GCC c/c++ compiler
+    - in most of the case installer automatically set the environment variable
+
+    - we can print value of environment variable
+    ex. echo $PATH : we can see all path
+        echo $TEMP  
+        
+    - echo is also command(i.e. .exe )
+        where echo
+        (we can see path of echo.exe)
+
+pwd : print working directory
+
+man : manual 
+    man command_name : ex. man ls, man echo
+        shows info of that command

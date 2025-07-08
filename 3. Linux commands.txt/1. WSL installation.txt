@@ -1,0 +1,28 @@
+We can not directory execute linux command on windows terminal
+we need environment for linux
+for that use WSL(windows subsystem for linux)
+
+1. Check wsl is installed or not.
+    wsl --list --verbose
+
+    If WSL is installed: Lists your Linux distributions with their state (Running/Stopped) and WSL version
+    If WSL is not installed: Shows an error like "Windows Subsystem for Linux has no installed distributions"
+
+2. Press Win + R, type appwiz.cpl, press Enter
+    Click "Turn Windows features on or off" (left side)
+    Look for "Windows Subsystem for Linux" in the list
+    If checked ✓ = installed, if unchecked = not installed
+   - Restart if neeeded
+
+3. run window powershell as admin
+    wsl --install
+
+4. We can access drive like this
+    cd /mnt/c
+    cd /mnt/d
+
+5. Note: to run wsl
+    hit command : wsl
+
+    or to open from file explorer
+    type wsl and hit enter

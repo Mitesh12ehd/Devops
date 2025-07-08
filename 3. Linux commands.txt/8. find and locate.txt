@@ -1,0 +1,61 @@
+locate:
+    - it is a fast find search utility that find files and directories by name and 
+      pre-built database.
+
+    - by default it is not installed, we need to install separately.
+
+    ex.
+    
+    locate "*.txt"      # shows all the .txt file with their path
+    locate file1.txt    # shows all the file1.txt with their path
+
+    # case insensitive
+    locate -i readme
+
+    locate passwd           # Find files with "passwd" in name/path
+
+
+find :
+    - it is slow compare to locate command
+    - by default it is installed, we don't need to install separately.
+
+    example:
+
+    find .   # shows all the things in current directory and also inside it.
+    find ..  # shows all the things in parent directory
+    find new1/  # find into new1 directory.
+    
+    find . -type d    # find all the directories(not file) in current directory.
+    find . -type f    # find all the files(not directories) in current directory.
+
+    # find file file1.txt inside current directory
+    find . -type f -name "file1.txt" 
+
+    # find all the files who start with temp keyword
+    find . -type f -name "temp*"
+
+    # find all the text file in current directory
+    find . -type f -name "*.txt"
+
+    # case insensitive
+    find -iname "file1.txt"
+
+    # shows file only in current directory not in sub-directory
+    find . -type f -maxdepth 1
+
+    # show all the file which modified less than 20 min ago
+    find . -type f -mmin -20
+
+    # show all the file which modified before 20 min
+    find . -type f -mmin +20
+
+    # find text files which is modified in previous 2 minute
+    find . -type f -mmin +20 -name "*.txt"
+
+    # find file who have size < 1MB, k for kb, g for gb
+    find . -size -1M 
+
+    # find empty file
+    find . -empty
+
+# explore more on internet about both command and their various options
