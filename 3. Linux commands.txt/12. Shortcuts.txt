@@ -1,0 +1,27 @@
+1. When we write long command 
+    move to beginning of command : press CTRL + A
+    move to end of command : press CTRL + E
+
+2. Remove everything after the cursor
+    CTRL + K
+
+3. Remove whole command
+    CTRL + U
+
+4. Run command that run previously
+    find number using history
+    !num
+
+    !find  # run previous find command
+
+5. CTRL + R 
+    - to search previous command
+
+6. clear terminal
+    clear
+
+7. Run multiple command
+    by colon :
+
+    ex. 
+    git add.:git commit -m "intial commit":git push origin main

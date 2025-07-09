@@ -1,0 +1,42 @@
+The alias command allows you to create shortcuts for longer commands or 
+command sequences.
+
+1. See available alias
+    alias
+
+2.  alias name='command'      # Create an alias
+    alias name                # Show what alias points to
+    alias                     # Show all aliases
+    unalias name              # Remove an alias
+
+    ex. 
+    alias ll='ls -l'                        # Long listing
+    alias la='ls -la'                       # Long listing with hidden files
+    alias l='ls -CF'                        # Columnar format
+    alias ..='cd ..'                        # Go up one directory
+    alias ...='cd ../..'  
+
+3. Permanent alias
+    # For Bash
+    echo "alias ll='ls -l'" >> ~/.bashrc
+    source ~/.bashrc                        # Reload configuration
+
+    # For Zsh
+    echo "alias ll='ls -l'" >> ~/.zshrc
+    source ~/.zshrc                         # Reload configuration
+
+    # For all users (system-wide)
+    echo "alias ll='ls -l'" >> /etc/bash.bashrc
+
+3. Creating alias file
+
+    # Create dedicated alias file
+    nano ~/.bash_aliases
+
+    # Add aliases to the file
+    alias ll='ls -l'
+    alias la='ls -la'
+    alias ..='cd ..'
+
+    # Source it in .bashrc
+    echo "source ~/.bash_aliases" >> ~/.bashrc

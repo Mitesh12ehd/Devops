@@ -1,0 +1,47 @@
+sort :
+    organizing data in ascending or descending order based on various criteria
+
+    sort file.txt     # Sort lines alphabetically(lexographically)
+    sort file1.txt file2.txt            # Sort combined contents of both files
+    sort *.txt                          # Sort all .txt files together
+        
+    sort with pipe : 
+        ls | sort                           # Sort directory listing
+        cat file.txt | sort                 # Sort file contents via pipe
+
+    reverse order:  
+        sort -r file.txt
+
+    numeric:
+        sort -n numbers.txt  
+        sort -nr numbers.txt    # numeric and reverse order
+
+jobs : 
+    show the process start by shell
+
+wget : to download files from servers(URLs)
+
+    ex. 
+
+    1. wget https://ontheline.trincoll.edu/images/bookdown/sample-local-pdf.pdf
+        # download pdf in current directory
+
+    2. give our choice name
+        wget -o myPDF1.pdf https://ontheline.trincoll.edu/images/bookdown/sample-local-pdf.pdf
+
+
+top : Shows all the process that are running on system
+
+kill :
+    kill PID
+    ex. kill 789
+
+uname:
+    give current os 
+
+zip and unzip:
+    zip zippedFile.zip names.txt    # zip single file
+                                    # this command also add file if zip already exist   
+
+    unzip zippedFile.zip
+    zip zippedFile.zip names.txt company.txt    # zip multiple files

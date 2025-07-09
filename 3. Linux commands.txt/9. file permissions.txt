@@ -68,3 +68,45 @@ chmod : Change permission of file
             chmod 777 file.txt    # rwxrwxrwx (full access for everyone)
 
 chown : Change ownership
+    
+    1. find current user:
+        whoami > it print current user.
+
+    2. To check current owner of file 
+        ls -l file1.txt
+
+    3. Give access to root (sudo) user
+        sudo chown root file1.txt
+
+        (note: we can't change permission of mounted path)
+
+        When we run command by sudo, it run as a root user
+        when we run directly it run as a current user
+
+    4. Change ownership of groups:
+        chown :groupname file.txt
+
+    5. Change ownership of groups and users both:
+        chown username:groupname file.txt
+
+    6. Find all the files in current directly who have all the permission
+        find . -perm 777
+
+        (here we can use combinations of rwxrwxrwx also)
+
+Multiple file operations:
+    Delete multiple txt files 
+        or want to delete file but don't know name
+
+        find . type -f -name "*.txt" -exec rm -rf {} +
+
+        What is does?
+            1. first it find all txt file (because type -f)
+            2. then we put -exec to execute next command on output of first command 
+            3. then we have written rm -rf command to remove file
+            4. What if we write normal rm commands
+                rm -rf [filename]
+
+                but here filename comes from previous output, we write {} + 
+
+        Note : here we can perform different type of operation like rm.

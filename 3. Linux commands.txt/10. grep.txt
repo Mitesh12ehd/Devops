@@ -1,0 +1,39 @@
+grep : global regular expression print
+    - It allow use to search in content of text
+
+    1. grep "Mites" names.txt
+       grep "Mitesh" names.txt company.txt
+        # search for "Mitesh" in names.txt and return if something found.
+
+    2. Search complete word
+        grep -w "Mitesh" names.txt
+
+    3. Case insensitive
+        grep -i "mitesh" names.txt
+
+    4. Show with line number where given text is present
+        grep -n "Poojan" names.txt
+
+    5. combination
+        we can do combination of option also
+        grep -wi "mitesh" names.
+        grep -win "mitesh" names.txt
+
+    6. Show previous 3 line before given text
+        grep -B 3 "arpit" names.txt
+
+    7. Search in multiple files
+        grep -win "mitesh" ./*.txt
+
+    8. Search recursively(search inside directory also inside likewise)
+        grep -r "mitesh" .
+
+    9. check file which contain given text
+        grep -rl "Mitesh" .'
+
+history : it shows all the commands we have performed till now.
+    
+    1. history : Give all the previous commands
+
+    2. history | grep "ls -l"
+        Give all the command which have ls -l
