@@ -1,0 +1,19 @@
+uname: to get system information
+
+    uname                       # print system name 
+    uname -a                    # shows all the available information
+    uname -s                    # kernel name
+    uname -n                    # Network node hostname
+    uname -r                    # kernel release version
+    uname -o                    # operating system
+    uname -m                    # machine hardware name
+    cat /etc/os-release         # shows all the information about os
+
+lscpu : 
+    shows CPU detail
+
+free : shows system memory usage
+    free
+    free -h         # display in human readable format
+
+vmstat : Shows virtual memory status

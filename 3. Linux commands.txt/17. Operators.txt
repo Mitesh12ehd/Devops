@@ -1,0 +1,40 @@
+& : Background execution
+    - it run command on Background
+
+    ex. ping google.com &
+        now terminal is free and we can run another command
+    
+    ex. ping google.com & github.com
+        run ping google.com in background and github.com in terminal
+
+    Note:
+    - we can't not kill command that is running on background by CRTL + CRTL
+    - we can do it by   
+        1. find process id using ps command
+        2. kill pid
+
+&& : execute second command only if first execute succeeded(return exit status 0)
+    echo "first" && echo "second"
+
+|| : execute second command only if first execute failed(return exit status 0)  
+    ls dummy || echo "Hello"    # if dummy directory not found, then print Hello
+
+! : not operator 
+    rm -r !(names.txt)  # remove all the files except names.txt
+
+>> : append redirection 
+    ls >> file.txt          # Append output to file
+    echo "world" >> file.txt    # write world into file.txt
+
+> : output redirection
+    it replace content not append
+    ls > file.txt           # Write output to file (overwrites)
+    echo "hello" > file.txt # replce content of file with Hello
+
+< : input redirection
+    sort < file.txt         # Use file as input
+
+groups command:
+    echo "hello" && {echo "hello", echo "hello"}
+    
+    - if first execute the both rest will be executed

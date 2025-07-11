@@ -45,3 +45,25 @@ zip and unzip:
 
     unzip zippedFile.zip
     zip zippedFile.zip names.txt company.txt    # zip multiple files
+
+hostname: 
+    The hostname command shows or sets the system's hostname (computer name).
+
+    hostname        # display current hostname
+    hostname -i     # display Ip address
+    sudo hostname newname   # set hostname temporary
+
+domainname: 
+    - The domainname command displays or sets the system's NIS 
+      (Network Information Service) domain name.
+
+    domainname      # display current domain name
+    sudo domainname newdomain   # set domain name
+
+creating and deleting user:
+    - The useradd command is used to create new user accounts on Linux/Unix systems.
+      It requires root/administrator privileges.
+
+    sudo useradd johndoe        # create new user named johndoe
+    sudo passwd johndoe         # ask for password and set password
+    sudo userdel johndoe        # delete user

@@ -1,0 +1,16 @@
+id : displays user and group identification information for the current user or a 
+     specified user.
+
+    id  # shows user id-name, group-id name and all the groups user belongs to
+    id -u   # shows the user id of current user
+    id -u john # shows the user id of john
+    id -g      # shows the primary group id
+    id -G      # show all the groups id
+
+    id -un      # Show username instead of UID
+    id -gn      # Show group name instead of GID
+    id -Gn      # Show all group names
+
+    # read about more option available
+
+lsof:   show all the open files with their user and process
