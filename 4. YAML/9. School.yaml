@@ -1,0 +1,20 @@
+---
+Schools:
+- name: DPS
+  principal: someone
+  Students:
+  - rno: 12
+    name: Mitesh chavda
+    marks: 67
+  - rno: 13
+    name: Sneh Patel
+    marks: 82
+- name: Sunrise Public School
+  principal: Mrs. Sharma
+  Students:
+  - rno: 21
+    name: Rahul Mehta
+    marks: 76
+  - rno: 22
+    name: Anjali Verma
+    marks: 89

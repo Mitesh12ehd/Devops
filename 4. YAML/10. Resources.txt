@@ -1,0 +1,17 @@
+1. How to validate Kubernetes YAML files:
+    https://itnext.io/how-to-validate-kubernetes-yaml-files-9a17b9a30f08
+
+2. to validate yaml files use 
+    https://www.yamllint.com/
+
+3. to convert into json use 
+    https://onlineyamltools.com/convert-yaml-to-json
+    (use only one document)
+
+4. Check datree website and check kunal's youtube 3 videos
+
+5. Monekle by kubeshop:
+    help to work with large yaml files
+
+6. Lens: the kubernets platform:
+    help to write yaml files using graphical interface

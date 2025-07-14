@@ -1,0 +1,39 @@
+likings:
+ fav_fruit: mango
+ dislikes: grapes
+
+# ideal approach write mango at each place
+person1:
+ name: Mitesh
+ fav_fruit: mango
+
+person2:
+ name: Kunal
+ fav_fruit: mango
+
+# reusable approach using anchors
+likings: &likes
+ fav_fruit: mango
+ dislikes: grapes
+
+person1:
+  name: Mitesh Chavda
+  <<: *likes
+# person1 will look like
+#   "person1": {
+#     "name": "Mitesh Chavda",
+#     "fav_fruit": "mango",
+#     "dislikes": "grapes"
+#   }
+# }
+
+person2:
+ name: Rahul
+ <<: *likes
+ dislikes: berries
+# here all the likes will be copied and dislikes will be override
+# "person2": {
+#     "name": "Rahul",
+#     "fav_fruit": "mango",
+#     "dislikes": "berries"
+#   }

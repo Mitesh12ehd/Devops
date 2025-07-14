@@ -1,0 +1,44 @@
+# ------------------- map (!!map) -----------------------
+# key value pair are called maps
+
+name: Mitesh Chavda
+role:
+ age: 21
+ job: student
+
+# or this is same as  
+name: Mitesh Chavda
+role: {age: 21, job: student}
+
+# -------------------- pair -----------------------------
+job_status: 
+  - job: student
+  - job: teacher
+
+  # or
+job_status: {job: student, job: teacher}
+
+
+# ------------------ set --------------------------
+names:  !!set
+ ? Kunal
+ ? Mitesh
+ ? Om
+
+# -------------------- dictionary(ordered map) -------------------------
+# ordered_map preserve order in which they are inserted
+
+fruits: !!omap
+ - first: apple
+ - second: graps
+ - third: banana
+
+people: !!omap
+ - Mitesh:
+    name: Mitesh Chavda
+    age: 50
+    height: 160 cm
+ - Kunal:
+    name: Kunal Kushwaha
+    age: 50
+    height: 160 cm

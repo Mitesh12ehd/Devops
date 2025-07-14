@@ -1,0 +1,119 @@
+# --------------------- Simple key-value pairs ---------------------
+name: John Doe
+age: 30
+active: true
+score: 95.5
+empty_value: null
+
+# --------------------- Strings ---------------------
+
+# Strings (quotes optional for simple strings)
+title: Hello World
+message: "This has special characters: !@#"
+# multiline strings
+description: |        # it assumes new line wherever we put new line
+  This is a multi-line string
+  that preserves line breaks
+  and formatting
+folded_text: >        # it assumes content into single line
+  This is a folded string
+  that will be joined into
+  a single line with spaces
+
+# ---------------------  List/Arrays/seq ---------------------
+# Block style (most common)
+fruits:
+  - apple
+  - banana
+  - orange
+
+# Flow style (inline)
+colors: [red, green, blue]
+
+# Nested lists
+shopping_lists:
+  - groceries:
+      - milk
+      - bread
+  - electronics:
+      - laptop
+      - phone
+
+# note: there can be empty element also called sparse seq
+sparsed_seq:
+  - hey
+  - how
+  -
+  - null
+  - sup
+
+
+# --------------------- Objects/Dictionaries ---------------------
+# Nested objects
+person:
+  name: John
+  age: 30
+  address:
+    street: 123 Main St
+    city: New York
+    zip: 10001
+
+# Flow style objects
+coordinates: {x: 10, y: 20, z: 30}
+
+# --------------------- Mixed data types ---------------------
+database:
+  host: localhost
+  port: 5432
+  credentials:
+    username: admin
+    password: secret123
+  tables:
+    - users
+    - products
+    - orders
+  backup_enabled: true
+  max_connections: 100
+ 
+# --------------------- Special Characters & Escaping ---------------------
+# Special characters in strings
+message: "He said, \"Hello World!\""
+path: 'C:\Users\John\Documents'
+regex: "^[a-zA-Z0-9]+$"
+
+# YAML special characters that need quotes
+special: "yes"     # Without quotes, becomes boolean true
+number: "123"      # Without quotes, becomes integer
+float: "3.14"      # Without quotes, becomes float
+
+# --------------------- Booleans ---------------------
+enabled: true   # True, TRUE, yes, YES, Yes, On, ON, on, y, Y
+disabled: false # False, FALSE, no, No, NO, Off, OFF, off, n, N
+debug: yes      # Also true
+production: no  # Also false
+
+# --------------------- Numbers ---------------------
+count: 42
+price: 19.99
+scientific: 1.2e-3        # 1.2 * (10^-3)
+octal: 0o755              # octal number starts with 0o
+binary: 0b11001           # binary number starts with 0b
+hex: 0xFF                 # hexadecimal start with 0x
+
+# --------------------- Null ---------------------
+empty: null # can be Null or NULL
+nothing: ~
+blank:          # Also null (empty value)
+
+# --------------------- Specifying data types ---------------------
+zero: !!int 0
+positiveNum: !!int 45
+negativeNum: !!int -45
+
+marks: !!float 56.89
+
+string_value: !!str 789
+
+boolean_true: !!bool true
+
+null_value: !!null null

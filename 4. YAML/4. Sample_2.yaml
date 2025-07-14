@@ -1,0 +1,25 @@
+# comma value
+commaValue: !!int +540_000      # 540,000
+
+# not a number
+not a number: .nan
+
+# infinite
+infinite: .inf            # positive infinity
+nagativeInfinity: -.inf   # negative Infinity
+
+# ---------------- date and time -----------------
+
+# date
+birth_date: 2023-12-25      # format date format (YYYY-MM-DD)
+
+# date and time with timezone
+india_date: 2001-12-15T02:59:43+5:30      # is 5:30 is utc time zone
+meeting_time: 2023-12-25T14:30:00Z
+
+# without timezone it assumes local time
+event_time: 2023-12-25T14:30:00
+backup_time: 2023-12-25 14:30:00
+
+# time only
+daily_standup: 09:30:00

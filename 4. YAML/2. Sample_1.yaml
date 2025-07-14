@@ -1,0 +1,45 @@
+# extension of yaml files is .yml or yaml
+# yaml file are case sensitive
+
+# to validate yaml files use https://www.yamllint.com/
+# to convert into json use https://onlineyamltools.com/convert-yaml-to-json
+#         (use only one document)
+
+# space are extremely important, we can't use tabs
+
+# 1. We can store in the form of key value pairs
+"apple" : "i am red fruit"
+1 : "Mitesh's role number"
+---
+# 2. list
+- apple
+- mango
+- banana
+- Apple
+---
+# 3. Block style
+cities:
+ - Gujarat
+ - Kolkata
+ - Mumbai
+...
+
+# 4. Document
+# Yaml is collection of 0 or more documents
+# to start document use ---
+#       - use at beginning of document
+#       - optional for single documents
+#       - required when we have multiple documents in one file
+#       
+# to end document use ...
+#       - use at end of document
+#       - almost always optional
+#       - rarely used
+
+
+# -------------------- Common rules -------------------------
+# 1. Case-sensitive - Name ≠ name
+# 2. Indentation matters - use spaces, not tabs
+# 3. Consistent spacing - same level = same indentation
+# 4. Colon-space - always use key: value (space after colon)
+# 5. No trailing spaces - can cause parsing errors

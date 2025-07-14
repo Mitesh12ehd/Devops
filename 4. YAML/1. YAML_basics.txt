@@ -1,0 +1,40 @@
+YAML : YAML ain't markup language
+    - YAML is a data format to exchange data (similar to JSON and XML)
+    - in YAML, we can only store data, not commands
+    - YAML is a human-readable data serialization format commonly used for configuration 
+      files and data exchange
+
+What is data serialization and deserialization?
+
+    1. serialization :
+        - Converting data structures/objects from memory into a format that can be stored 
+          or transmitted (like a string or file).
+    
+        Object ----> serialization ---> stream of bites ---> store into file, db or memory
+
+    2.  deserialization:
+        - Converting that stored/transmitted format back into usable data 
+          structures/objects in memory.
+
+        file, db or memory ---> deserialization ---> objects
+
+Data serialization language :
+    language used to represent serializalized data.
+    ex. YAML, JSON, XML
+
+YAML is one standard format to store data. 
+    so that we serialize data and store into YAML files.
+    and now we can transfer anywhere.
+
+YAML use case:
+    - used in configuration file in kubernetes and docker.
+    - used in logs and caches etc.
+
+YAML benefits:
+    - simple and easy to read
+    - YAML have strict syntax. 
+      (indentation : use whitespace to define structure like python code)
+    - easily convertable into JSON, XML
+    - most language support YAML
+    - more powerful when representing structured data
+    - there are many parser and tool available for YAML
