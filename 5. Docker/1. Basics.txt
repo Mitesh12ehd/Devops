@@ -1,0 +1,42 @@
+Read this : https://www.techwithkunal.com/blog/getting-started-with-docker
+
+Without docker:
+    1. Project have various dependency and issue comes like 
+        "it's works on my machine"
+    2. If we want setup open source project, 
+        it was much complex task to setup on local
+    3. We can only run one application on one VM(server)
+        ex. We can execute one sanity on one machine, 
+            because application may need isolated environment
+
+Containers:
+    - What if we want to send some of things car, chair, table to our friends
+      that live in other country.
+    - We put things in container and seal them. it opens at the time of delivery.
+    - in between transportation, container may load, unload, transferred from one 
+      mode to another.
+    - See image image1_container.png
+
+    - Same happens with our application,
+      we have static application, database, web frontend, backend
+    - we want to ship our application on another machine.
+    - and we want to run on various type of hardware.
+      ex. see in image image2_container.png
+    - using container we can run multiple application on one machine
+
+Virtual machine:
+    - VM provide multiple virtualized(isolated) environment on same hardware.
+    - virtually one machine divided into 3 machines.
+    - VM are managed by hypervisor
+
+What is docker?
+    - Docker is tool that help us to 
+        1. create container
+        2. manage container.
+        3. scale container
+
+    - Docker is a container platform that allows you to build, test and deploy 
+            applications quickly
+    - A developer defines all the applications and it’s dependencies in a 
+      Dockerfile which is then used to build Docker images that defines a Docker 
+      container 

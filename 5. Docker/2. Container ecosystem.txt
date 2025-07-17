@@ -1,0 +1,31 @@
+
+    1. Runtime: 
+        - it allows us to start and stop container
+
+        runc:
+            - it interact with os to create containers
+            - manages container life cycle (start, stop, pause, resume)
+
+        containerd:
+            - manages runc
+            - high-level container runtime to manage container
+            - it do stuff like how container interact with network
+            - how to get data from internet (ex. pulling the images from registry)
+
+    2. Engine: 
+        - The container engine is the user-facing management layer that provides the 
+          tools, APIs, and interfaces for working with containers.
+
+        ex. docker Daemon (dockerd) :
+            - it is is a background service that manages Docker objects like images, 
+              containers, networks, and volumes
+
+    3. Orchestration:
+        - Container orchestration operates at the cluster level, managing multiple 
+          containers across multiple hosts.
+        - Kubernetes is the dominant orchestration platform, though Docker Swarm and Apache Mesos are 
+          alternatives.
+
+        - helps in cases like
+            1. we want to increase our application version for each container running
+            2. if some of the container stopped, then rerun the stopped container
