@@ -1,0 +1,36 @@
+
+Dockerfile --> Images --> Container
+
+Dockerfile:
+    - Describes steps to create a Docker image.
+    - It’s like a recipe with all ingredients and steps necessary in making your dish.
+    - Dockerfile have no extension.
+        we can create file with name Dockerfile
+
+Images:
+    - A Docker image is a read-only template that contains everything needed to run 
+      an application - the code, runtime environment, system libraries, dependencies, 
+      and configuration files.
+
+    - Immutable: Once created, images cannot be modified. Any changes require 
+                 building a new image or creating a new layer on top.
+
+    - Layered Structure: 
+      - Images are built using a layered filesystem where each instruction in a 
+        Dockerfile creates a new layer. This enables efficient storage and sharing 
+        since common layers can be reused across different images
+
+    - Portable:
+      - Images can run consistently across different environments - development 
+        laptops, testing servers, production clusters - as long as they have a 
+        compatible container runtime
+
+
+Container:
+    - Image are like class, and container are like objects of that class
+    - container is instance of docker image.
+    - more about containers is already covered.
+
+- We can share image with anyone
+- 
+- to share our code we create docker image of our application

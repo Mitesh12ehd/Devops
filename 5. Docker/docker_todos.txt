@@ -1,1 +1,12 @@
-1. Do docker installations
+1. Do docker wsl + desktop installations
+
+Remote registry:
+    store images on cloud
+    ex. docker hub
+        private registry
+
+docker run hello-world
+    1. Try to find hello-world image in local
+    2. If able to find, then run that image
+    3. If not, it tries to find from remote registry(docker hub)
+        and pull from there.

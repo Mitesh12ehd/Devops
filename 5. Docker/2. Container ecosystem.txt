@@ -6,11 +6,29 @@
             - it interact with os to create containers
             - manages container life cycle (start, stop, pause, resume)
 
-        containerd:
+        containerd: 
             - manages runc
             - high-level container runtime to manage container
             - it do stuff like how container interact with network
             - how to get data from internet (ex. pulling the images from registry)
+
+        Problem: 
+            - There are so many container runtime.
+                ex. runc, containerd, lxc, rocket rkt, crio
+            - This created fragmentation where containers built for one platform 
+               wouldn't necessarily work on another, leading to vendor lock-in
+            - Without common standards, developers had to choose between competing 
+              container technologies, and there was no guarantee of portability 
+              between different container engines or orchestration platforms.
+
+        Solution:
+            OCI : open container initiative
+            - it design open standards for containers
+
+            - Kubernetes follow CRI(container runtime interface), and docker is open
+              container initiative(OCI). but Kubernetes say any OCI compliant image
+              will look same to kubernetes.
+
 
     2. Engine: 
         - The container engine is the user-facing management layer that provides the 
