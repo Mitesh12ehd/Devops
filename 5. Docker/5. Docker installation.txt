@@ -1,0 +1,2 @@
+1. Download docker desktop
+    AMD 64 version for windows 64 based system

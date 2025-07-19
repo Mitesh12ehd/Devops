@@ -30,7 +30,3 @@ Container:
     - Image are like class, and container are like objects of that class
     - container is instance of docker image.
     - more about containers is already covered.
-
-- We can share image with anyone
-- 
-- to share our code we create docker image of our application

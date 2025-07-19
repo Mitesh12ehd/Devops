@@ -5,8 +5,43 @@ Remote registry:
     ex. docker hub
         private registry
 
+    See image4
+
+    - we 
+
 docker run hello-world
     1. Try to find hello-world image in local
     2. If able to find, then run that image
     3. If not, it tries to find from remote registry(docker hub)
-        and pull from there.
+        and pull from there and run the image 
+
+Docker hub:
+    https://hub.docker.com/
+
+    docker hub have popular images.
+    ex. mongodb, selenium, maven and every images that are used frequently
+
+Info:
+    when we run mongodb on our local, it must use some os file.
+    so how it happens in image?, because container don't interact with outside world.
+
+    ans: image also contain os file, image have some layer of OS file
+
+docker pull:
+    - to download images from registry
+
+    ex.
+        docker pull mysql       # pull mysql image with latest version
+        docker pull ubuntu:16.04
+
+interactive environment
+    we can run using =it option
+    
+    - it means don't exit after running, 
+    - it remain terminal inside container
+    - if we do ps aux inside container, we can see processes inside container'
+    - this processes have no idea about outside processes
+
+docker ps       # shows only running containers
+docker ps -a # or -all  # shows running and stopped 
+            # docker container ls do same things with same options
