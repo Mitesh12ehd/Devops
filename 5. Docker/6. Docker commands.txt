@@ -1,0 +1,79 @@
+Remote registry:
+    store images on cloud
+    ex. docker hub
+        private registry
+
+    See image4
+
+docker run hello-world
+    1. Try to find hello-world image in local
+    2. If able to find, then run that image
+    3. If not, it tries to find from remote registry(docker hub)
+        and pull from there and run the image 
+
+Docker hub:
+    https://hub.docker.com/
+
+    docker hub have popular images.
+    ex. mongodb, selenium, maven and every images that are used frequently
+
+Notes:
+    when we run mongodb on our local, it must use some os file.
+    so how it happens in image?, because container don't interact with outside world.
+
+    ans: image also contain os file, image have some layer of OS file
+
+docker pull:
+    - to download images from registry
+
+    ex.
+        docker pull mysql       # pull mysql image with latest version
+        docker pull ubuntu:16.04    # pull image with given version
+
+interactive environment: 
+    we can run using -it option
+    
+    - it means don't exit after running, 
+    - it remain terminal inside container
+    - if we do ps aux inside container, we can see processes inside container'
+    - this processes have no idea about outside processes
+
+docker ps       # shows only running containers
+docker ps -a # or -all  # shows running and stopped 
+            # docker container ls do same things with same options
+
+How to stop container?
+    1. find the container id using docker ps
+    2. copy id and hit docker stop [container_id]
+
+docker inspect [container_id or image name]
+    # give all the information about container, info about image, 
+      when container created, 
+      path of container, 
+      current status of container
+      process id of container
+
+docker logs [container_id] : 
+    # Shows the logs(output) from running or stopped Docker container
+
+    docker logs --since 5s 9694
+    # show logs of last 5 seconds
+
+docker container prune -f
+    # delete all the stopped container
+    # -f means forcefully without any warnings
+
+docker run ubuntu echo hey
+    # run ubuntu image and run echo hey into terminal of ubuntu
+
+docker stop [container_id]
+    # stop given container
+
+docker rm [container_id]
+    # remove given stopped container
+
+docker images
+    # shows all the image available in local    
+
+docker rmi [image name/id]
+    # remove images
