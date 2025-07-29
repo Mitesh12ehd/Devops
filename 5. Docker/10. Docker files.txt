@@ -1,0 +1,21 @@
+Dockerfile:
+    - Describes steps to create a Docker image.
+    - It’s like a recipe with all ingredients and steps necessary in making your dish.
+    
+    - Dockerfile have no extension.
+        we can create file with name Dockerfile
+
+    - Every docker file have
+        FROM [base_image]
+
+        ex. FROM ubuntu
+
+    ex. 
+        FROM ubuntu
+        MAINTAINER Mitesh Chavda <miteshchavda57@gmail.com>
+        RUN apt-get update
+        CMD ["echo","Hello my name is mites"]
+
+    ex. 
+        FROM ubuntu
+        CMD ["echo","Hello my name is mites"]

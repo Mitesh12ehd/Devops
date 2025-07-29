@@ -1,0 +1,12 @@
+docker run -d -p 8080:80 nginx
+    # -d means run in detached mode, in background,
+    # we don't have control of terminal of running container
+
+    # -p is for port mapping
+    # it map port between of your local machine and the container
+    # 8080:80 attach port 80 of container to our local port 8080
+    # so that all the things running on port 80 of container, is accessible from port
+    # 8080 of our local
+
+    # if we go to localhost:8080 on our local, we can see nginx is running.
+    # nginx listen to port 80 by default

@@ -1,0 +1,20 @@
+docker commits:
+    - Docker commits create new images from container changes - think of them as 
+      "saving" the current state of a container as a reusable image.
+    - when you run container and make some changes inside it,
+      for ex. install new software or change some files
+    - then those changes only exist in that running container. If you stop and remove 
+      the container, the changes are lost.
+    - docker commits capture those images and create new image that include them.
+
+    syntax:
+    docker commit [option] "message" [container_id] [new image name:version]
+
+    ex. 
+        docker commit -m "added file name.txt" [container_id] name_ubuntu:1.0
+
+        # now if we do docker images.   
+          we can see name_ubuntu image
+
+        # we can run name_ubuntu image
+          docker run -it name_ubuntu:1.0

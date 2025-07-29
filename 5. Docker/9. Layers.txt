@@ -1,0 +1,18 @@
+layers:
+    Multiple image can share some common layers.
+    so that if some of the layers are present then it reduce space by reuse them.
+
+    ex. 
+    docker run ubuntu:16.04         # run ubuntu image.
+    docker image                    # we can see some character of image id
+    docker inspect      # here we can see that 
+
+         "Layers": [
+                "sha256:be96a3f634de79f523f07c7e4e0216c28af45eb5776e7a6238a2392f71e01069",
+                "sha256:df54c846128da3c71cc11b2150a3df39ec86fb170e299765daf6bb016a0705c2",
+                "sha256:47ef83afae74745639f6738a05fe5320fcfca9e6c7765fba4f25e270bc0df9dc",
+                "sha256:1251204ef8fc20da275e09f6e3ab9205421d4ff34732f2d50a1d3e86d2995edd"
+            ]
+
+    - so if any of this layer exist in other image then while downloading other image
+      it take layer from here

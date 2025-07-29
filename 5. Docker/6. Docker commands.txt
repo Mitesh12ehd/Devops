@@ -46,6 +46,11 @@ How to stop container?
     1. find the container id using docker ps
     2. copy id and hit docker stop [container_id]
 
+start container:
+    docker start [container_id]
+
+    copy container id from docker ps -a command
+
 docker inspect [container_id or image name]
     # give all the information about container, info about image, 
       when container created, 
@@ -58,6 +63,14 @@ docker logs [container_id] :
 
     docker logs --since 5s 9694
     # show logs of last 5 seconds
+
+docker exec : 
+    Docker exec runs commands inside already running containers
+
+    syntax : docker exec [options] [container-name/id] [command]
+
+    ex. docker exec -it [container_id] bash
+        # Get a bash shell inside a running container
 
 docker container prune -f
     # delete all the stopped container
@@ -77,3 +90,7 @@ docker images
 
 docker rmi [image name/id]
     # remove images
+
+Removing all the images:
+    1. docker images -q             # give only image id of all images
+    2. docker rmi $(docker images -q)
