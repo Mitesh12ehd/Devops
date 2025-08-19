@@ -13,9 +13,42 @@ Dockerfile:
     ex. 
         FROM ubuntu
         MAINTAINER Mitesh Chavda <miteshchavda57@gmail.com>
-        RUN apt-get update
+        RUN apt-get update  
         CMD ["echo","Hello my name is mites"]
+
+        here 
+        - RUN executes commands during the image build process:
+            when we do docker build
+        - it create new layer in the image
+        - we can write multiple RUN in one dockerfile
+
+        - CMD specifies the default command to run when a container starts
+        - runs when you execute docker run
+        - only last CMD instruction takes effect
 
     ex. 
         FROM ubuntu
         CMD ["echo","Hello my name is mites"]
+
+Building image from dockerfile:
+    docker build 
+
+    syntax : 
+        docker build [OPTIONS] PATH | URL | -
+
+    example:
+        # build using dockerfile in current directory
+        docker build .      
+        
+        # -t for name and optional tag
+        docker build -t myImage:latest .        
+        docker build -t myImage:v1.0 .
+        docker build -t myImage .
+
+        # specify dockerfile location
+        docker build /home/user
+        docker build subfolder/
+        docker build ./frontend
+
+
+        
