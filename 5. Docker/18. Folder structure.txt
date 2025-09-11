@@ -1,0 +1,20 @@
+1. When we copy files inside container
+    do not put directly at root level
+
+    before :
+        COPY package.json package.json  
+        COPY index.js index.js
+        RUN npm install
+    
+    after : 
+        COPY package.json app/package.json
+        COPY index.js app/index.js
+        RUN cd app && npm install   # because docker forget in new layer that you have
+                                      change directory
+
+2. But it is not possible to write app/ in each instruction.
+
+    WORKDIR /app
+    COPY package.json package.json  
+    COPY index.js index.js
+    RUN npm install
