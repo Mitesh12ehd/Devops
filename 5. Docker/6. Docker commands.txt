@@ -38,13 +38,18 @@ interactive environment:
     - if we do ps aux inside container, we can see processes inside container'
     - this processes have no idea about outside processes
 
-docker ps       # shows only running containers
+docker ps               # shows only running containers
 docker ps -a # or -all  # shows running and stopped 
+            # docker container ls do same things with same options
+
+docker container ls       # shows only running containers
+docker container ls -a    # or -all  # shows running and stopped 
             # docker container ls do same things with same options
 
 How to stop container?
     1. find the container id using docker ps
-    2. copy id and hit docker stop [container_id]
+    2. copy id and hit 
+        docker stop [container_id]
 
 start container:
     docker start [container_id]
@@ -71,6 +76,11 @@ docker exec :
 
     ex. docker exec -it [container_id] bash
         # Get a bash shell inside a running container
+        # controls remain inside container
+    
+    ex. docker exec [container-id] ls
+        # print result outside the container in our terminal
+        # controls goes outside the container
 
 docker container prune -f
     # delete all the stopped container

@@ -1,0 +1,91 @@
+# here we have created one simple nodejs server
+# main.js contain one route at "/" which returning "hello from server" in json
+
+# base image
+FROM ubuntu
+
+# refresh packages inside ubuntu
+RUN apt-get update  
+
+# curl to setup nodejs
+RUN apt-get install -y curl
+
+# Downloads the NodeSource setup script and pipes it to bash
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
+
+# Upgrades all installed packages to their latest versions
+RUN apt-get upgrade -y
+
+# Installs Node.js (and npm) from the NodeSource repo you added.
+RUN apt-get install -y nodejs
+
+# now at this point node js is installed, but we haven't any file and folder of our 
+# project
+
+# COPY instruction moves files/directories from your build context (your host machine 
+# where you run docker build) into the image.
+# syntax : COPY [src] [dest]
+COPY package.json package.json
+COPY package-lock.json package-lock.json
+COPY main.js main.js
+
+RUN npm install
+
+ENTRYPOINT ["node","main.js"]
+
+# here we are fetching ubuntu image
+# so we need to login into docker-hub first, if you are not, do it using docker login command
+
+# build image 
+# docker build -t mynodeimage .
+
+# while building it execution line by line.
+
+# go inside running container
+# docker exec -it [container id] bash
+
+# ls
+# now we can check our files which we have copied ex. main.js package.json etc
+
+# cat main.js
+# we can also check content of file
+
+# we can pass PORT number as environment variable
+# docker run -it -e PORT=4000 -p 4000:4000 mynodeimage
+
+# we can also directly use node image as base image
+# then we don't need to setup nodejs on container
+
+###### concept of layers #######
+# when we change something in our code,
+# and we build our image again
+# then it done very faster, 
+# because of layer caching,
+
+# (layer caching : 
+#     1. images are build in layer by layer
+#     2. if we anything in our project and rebuild image
+#     3. if any layer don't affected then docker don't build that again
+#     4. once we get any instruction that got updated, then we build new layer from
+#         all the instruction below that instruction.
+#     )
+
+# it execute all the lines after any line which can affected from project
+# we can also see which line are cached after running docker build command
+
+# note: here one thing to notice that line of instruction in docker file 
+#       matters most
+
+#       because here we have written all copy and run npm command at the end
+
+#       if we write in upper part,
+
+#       then change in any file, cause to execute all the line after the COPY line
+#       which can increase build time.
+
+##### pushing our image on dockerhub ####
+
+# 1. Create image on docker hub website
+# 2. Copy name of image 
+# 3. build our docker image with that name
+#     ex. docker build -t miteshch/demo_nodejs_app .

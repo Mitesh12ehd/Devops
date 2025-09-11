@@ -1,0 +1,11 @@
+- in real life project
+  we do not write COPY instruction for each file
+
+- We can copy whole project 
+    COPY . .
+
+- ignore things that are not needed
+    ex. node_modules, target(in maven project)
+
+- create .dockerignore file
+    /node_modules

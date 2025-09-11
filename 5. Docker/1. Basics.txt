@@ -32,7 +32,7 @@ Virtual machine:
 What is docker?
     - Docker is tool that help us to 
         1. create container
-        2. manage container.
+        2. manage container
         3. scale container
 
     - Docker is a container platform that allows you to build, test and deploy 

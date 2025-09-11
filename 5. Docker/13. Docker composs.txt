@@ -1,0 +1,27 @@
+# If we want to use multiple container as base container, 
+# we can write in configuration file
+
+# create file "docker-compose.yaml"
+
+version: "3.8"
+
+services:
+ postgres:
+  image: postgres
+  ports: 
+    - "5432:5432"
+  environment:  # to pass environment variables
+   POSTGRES_USER: postgres
+   POSTGRES_DB: review
+   POSTGRES_PASSWORD: password
+ 
+ redis:
+  image: redis
+  ports:
+    - "6379:6379"
+
+# To up all the container
+# docker compose up
+
+# to remove container
+# docker compose down

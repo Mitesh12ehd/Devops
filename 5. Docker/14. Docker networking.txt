@@ -1,0 +1,35 @@
+- Container networking refers to the ability for containers to connect to and 
+  communicate with each other, or to non-Docker workloads.
+
+- Docker network has various driver so that our container can communicate with outside
+  world and other container.
+
+- To check available networks   
+    docker network ls
+
+- To run container in specific network
+    docker run -it  --network=host mynodeimage
+    docker run -it  --network=none mynodeimage
+    docker run -it mynodeimage # by default it runs on bridge network.
+
+1. Bridge : 
+    - The default network driver. If you don't specify a driver, this is the type of 
+      network you are creating. Bridge networks are commonly used when your 
+      application runs in a container that needs to communicate with other 
+      containers on the same host.
+
+    - run any container and then
+      run command : docker network inspect bridge.
+
+    - we can see our container is connected to bridge network.
+    - and container also have ip address
+
+2. Host: 
+    - Use the host of machine
+    - if we run container in host network it is directly connected to our network.
+    - in host network we don't need to map port
+    - because both machine is point to one network.
+
+3. None:
+    - Running container have not access of outside networks.
+    - ex. we can't do ping google.com

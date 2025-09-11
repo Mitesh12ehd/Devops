@@ -1,0 +1,12 @@
+- We can pass environment variable inside container while we run container.
+
+You can pass environment variables in several ways:
+ - Using the -e flag (environment variables in the docker run command).
+ - Using an .env file (especially for complex setups).
+ - Using docker-compose.yml (if you’re using Docker Compose).
+
+1. using -e flag
+    docker run -e "MY_VAR=value" my_image
+
+    ex. 
+    docker run -e "DB_CONNECTION_STRING=mongodb://username:password@host:port/db" my_node_app

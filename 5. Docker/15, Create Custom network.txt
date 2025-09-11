@@ -1,0 +1,23 @@
+- We can create our own custom network.
+  which use bridge, host or none as base network driver.
+
+    command : 
+        docker network create -d bridge youtube
+        docker network create -driver bridge youtube
+
+- Now we can use youtube network to run container.
+
+    1. docker run -it --network=youtube --name mycontainer1 ubuntu
+    2. docker run -it --network=youtube --name mycontainer2 busybox
+
+    - Now those both container connect to same network
+    - they both can communicate with each other
+        (hostname of container = container name)
+        (to verify, in mycontainer2 do ping mycontainer1)
+        (we can see it can ping)
+
+    - if we stop mycontainer1, then we can't ping.
+    
+- If both container is running on youtube network.
+    we can see it on 
+    docker network inspect youtube
