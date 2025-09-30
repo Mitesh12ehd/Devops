@@ -6,14 +6,6 @@ touch :
         touch file1.txt file2.txt file3.txt  # Create multiple empty files
         touch report.{txt,pdf,doc} 
 
-vi : vi or vim command used to write text in files
-    vi file1.txt
-
-    1. now it opens editor to write text
-    2. to exit press
-        esc, 
-        :wq  (w for write-save and q for quit)
-
 cp : copy file and directories
 
     # copy content of file1 and replace content of file to with copied content

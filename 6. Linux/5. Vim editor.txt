@@ -1,0 +1,59 @@
+VIM:
+    CLI tool to edit and update files.
+
+    use case:
+        - to write git message
+        - to update only few line quickly
+        - display kubernetes configuration files 
+        - while working with remote server no GUI available   
+
+vi : vi or vim command used to write text in files
+    vi file1.txt
+
+    1. now it opens editor to write text
+    2. to exit press
+        esc, 
+        :wq  (w for write-save and q for quit)
+
+
+Install:
+        sudo apt install vim
+
+Open file in vim  
+    vim filename.txt
+
+    # if file not exits it create blank new file.
+
+modes:
+    i -> Insert mode (start typing text).
+    Esc -> back to Normal mode.
+    : -> Command mode (for saving, quitting, etc). 
+
+commands:
+    :w  Save file.
+    :q  Quit.
+    :wq Save and quit.
+    :q! Quit without saving.
+
+Shortcuts:
+
+    x :
+        - to delete character in default mode
+        - in insert mode x works as char x.
+
+    dd : delete (cut) entire line
+
+    d10 : delete 10 lines
+
+    u : undo the changes
+
+    A : jump to end of current line and goes into insert mode.
+    $ : jump to end of current line.
+
+    0 : jump to start of current line.
+
+    8G : jump to line 8
+
+Search in file:
+    /mitesh : search mitesh in text
+    n : jump to next match

@@ -1,4 +1,4 @@
-Protocols : set of rules
+wgProtocols : set of rules
 
 ex. 
 1. TCP : Transmission control protocol

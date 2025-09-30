@@ -1,0 +1,73 @@
+Linux have hierarchical tree structure.
+    - It has single root folder(unlike windows have multiple root folder(drives))
+    - Inside root there is home directory
+    - Every user(non-root) has own space - (We can see home directory)
+    - program can be installed in user-wide or system-wide
+    - system wide program are available to all users.
+
+/bin : bin in located in root directory
+    - contains binary files(executables)
+    - we can see most of all command inside bin file
+/sbin : also contain other commands
+    - can be used by system users.
+
+/libs : 
+    - located inside root
+    - contain whole library of command that are located in bin
+    - bin only contain executables.
+
+/usr 
+    - it again contain /bin
+    - and this /bin 
+    - it created to avoid storage limitation to avoid space for one user.
+
+    /local
+        - program installed by user stored here.
+        - program all accessible across all the users.
+        - bin files and lib files are also stored.
+    
+    - if we want to install program for only one user.
+        we can do it in home directory
+
+/ opt
+    - third party program you install
+    - Used to install third-party, add-on, or custom applications that are not part 
+      of the system's default package manager.
+
+/boot 
+    - for booting the system.
+    - It contains all the files needed to start (boot) your system before the
+      operating system fully loads.
+
+/etc  
+    - store all users and their basic info (username, UID, home dir).
+    - store group and their members.
+    - configuration for system-wide application is stored.
+
+/dev  
+    - apps and driver access this folders. not users.
+    - contains file that are needed by system to interact with devices.
+
+/var 
+    - contains files user by system while performing their operation.
+    - used for runtime data.
+    - contain cache and logs
+
+/tmp  
+    - contain temporary files for application
+
+/media
+    - When you plug in a USB drive or insert a DVD, Linux will usually automatically 
+      mount it under /media
+
+/mnt 
+    - contains mounted path crated by user.
+    - ex. wsl path from our local is mounted.
+        /mnt/c/Users/Mitesh/OneDrive/Desktop/Devops_practice 
+
+
+Notes:
+    - We are not interacting with all the folder and files inside root folder
+    - installing apps with package managers will do this.
+    - interacting with os will update folder and files accordingly.
+    

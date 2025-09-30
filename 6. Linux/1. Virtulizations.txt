@@ -1,0 +1,23 @@
+What is Virtualization?
+    - Virtualization is the process of creating a virtual (software-based) version of 
+      a computer system, instead of using separate physical machines.
+    - we can Virtualize using Hyper-wiser
+
+Benefits:
+    - If hardware fails, we have backup of os.
+      (because os is separated from hardware)
+
+    - If we don't use Virtualization
+        1. we install os    
+        2. we install application on it
+        here it is tightly coupled with hardware
+
+    - If we use Virtualization
+        1. we can create whole image that contains application and os
+            image is called VMI.
+
+Ways to use linux
+1. WSL
+2. Virtual box
+3. onworks machines
+4. cloud machines

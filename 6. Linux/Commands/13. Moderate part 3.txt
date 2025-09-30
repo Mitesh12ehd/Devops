@@ -67,3 +67,7 @@ creating and deleting user:
     sudo useradd johndoe        # create new user named johndoe
     sudo passwd johndoe         # ask for password and set password
     sudo userdel johndoe        # delete user
+
+switch user:
+    su - admin # try to switch to admin user.
+    su - miteshch

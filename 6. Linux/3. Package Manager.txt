@@ -1,0 +1,132 @@
+- Installing program (softwares) are different on linux
+    because files are split across different folders    
+    ex. /bin, /libs
+
+- Managing apps like uninstalling is more difficult
+
+What is package manager?
+    - Download, installs or updates existing softwares from repository.
+    - Ensure integrity and authenticity of package.
+    - Manage and resolve all required dependencies.
+    - package manager knows where to put files in linux file system.
+    - Package manager provide easy way to upgrade software.
+
+Ubuntu have APT package manager
+    - APT (advanced package tool)
+
+Search package
+    sudo apt search <package-name>
+
+    ex.
+    sudo apt search openjdk        
+        # give all version of openjdk 
+
+    or
+    - If we type any command that is not installed, 
+      terminal gives suggestion of package that includes give command.
+
+Install package
+    sudo apt install <package name>
+    sudo apt install <package1> <package2>
+
+    ex.
+    sudo apt install openjdk-17-jre-headless
+
+Uninstall software
+    sudo apt remove <package name>
+
+    ex. 
+    sudo apt remove openjdk-17-jre-headless
+
+    - here jdk-11 is installed as dependencies of jdk-17 so that we need to remove 
+      that too.
+
+    sudo apt remove openjdk-11-jre-headless
+
+What is apt-get ?
+    - it is another package manager
+    - apt-get is also available on Ubuntu
+    - also used for install, update and uninstall softwares.
+
+    what is difference?
+        - apt is more user friendly.
+        - apt gives more readable output of command than apt-get
+        - apt search is not available in apt-get
+
+Repositories
+    - software and their files are stored in repositories.
+    - repository contains thousands of programs.
+
+    - package manager fetches the packages from repositories
+
+    - Always update the package index before upgrading or installing new packages
+      command : sudo apt update
+
+    - Package index : 
+        - it is list of packages that out package manager keep locally.
+        - it contains which softwares are available
+        - their versions
+        - their dependencies
+        - where to download them from
+
+        - sources.list contains list of all the repositories
+            cat /etc/apt/sources
+
+What happens when software package is not available on repository?
+
+    ex. vscode can't be downloaded from package manager
+
+    what are alternatives?
+
+    1. Ubuntu software center:  
+        here we can search software and install it.
+
+    2. Snap package manager (snappy):
+        - snap comes with Ubuntu.
+        - type command snap to confirm.
+        - various software giving procedure to install their software using snap.
+            ex. see vscode installation using snap
+    
+    3. Add repositories
+        - we can add repository in out sources.list which are not verified by Ubuntu.
+        
+        PPA : personal package archive
+            - PPA are provided by the community 
+            - anybody can create PPA 
+            - private repository to distribute software
+
+            - mostly used by developers to provide faster updates than 
+              official ubuntu repositories
+
+        Note:
+            - those repositories are not verified by linux distribution you are
+              using
+            - so only add trusted repositories.
+
+        ex. 
+            sudo add-apt-repository ppa:deadsnakes/ppa
+            sudo apt update
+            sudo apt install python3.11
+
+        - Canonical (company of ubuntu) provide platform for developers to publish
+          their repositories
+
+          ppa -> tells add-apt-repository that this is a Launchpad PPA
+          deadsnakes → the name of the user or team who maintains the PPA
+          /ppa → the actual repository name under that user's/team's Launchpad account
+
+Difference between snap and apt
+
+    Snap:
+        - dependencies contained withing package
+        - support linux universal package (package type .snap)
+        - automatic updates
+        - large installation size
+
+    APT:
+        - dependencies are shared
+        - only for specific linux distribution (package type .deb)
+        - manual updates
+        - smaller installation size
+
+    

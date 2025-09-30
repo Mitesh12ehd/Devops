@@ -37,3 +37,9 @@ history : it shows all the commands we have performed till now.
 
     2. history | grep "ls -l"
         Give all the command which have ls -l
+
+    3.  to search the command 
+        - press key CTRL + R
+        - type command
+        - see suggestions
+        - hit enter to hit these command that are present in suggestions.
