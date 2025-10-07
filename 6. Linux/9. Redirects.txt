@@ -1,0 +1,17 @@
+Redirect:
+    - redirect result of command output to files.
+
+    > : output redirection
+        - it replace content not append
+
+        ls > file.txt           # Write output to file (overrides)
+        echo "hello" > file.txt # replace content of file with Hello
+        history | grep sudo > history.txt
+
+    >> : append redirection 
+        ls >> file.txt          # Append output to file
+        echo "world" >> file.txt    # write world into file.txt
+        history | grep sudo >> history.txt
+
+    < : input redirection
+        sort < file.txt         # Use file as input

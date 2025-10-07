@@ -1,5 +1,25 @@
-pipe allows you to connect commands together, using the output of one command as the 
-input for another.
+Input and output
+    - each command have input and output
+    - we can use output of one command as input of another command  
+
+Pipe character :
+    - to give output of one command as input of another command
+
+less : 
+    - to display output of command in pagination
+    - helps when printing large files.
+
+    next page : space or f
+    prev page : b
+    scroll down : bottom arrow
+    scroll up : upper arrow
+    start of file : g
+    end of file : G
+
+Examples:
+    cat /var/log/syslog | less
+    ls /user/bin | less
+    history | less
 
 tr : translate or delete characters
 

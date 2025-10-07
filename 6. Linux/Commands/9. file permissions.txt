@@ -1,98 +1,5 @@
-See permission of file:
-    ls -l file1.txt
-
-    here in output:
-        -rw-r--r-- 1 username groupname 1024 Mar 15 14:30 file1.txt
-
-        1. first character is 
-            - (regular file), d (directory), l (symbolic link)
-
-        2. then there is 9 character
-            r means read
-            w means write
-            x means execute
-            - means (permission not granted)
-
-            here,
-                Owner (first rwx) - The user who owns the file
-                Group (second rwx) - Users who belong to the file's group
-                Others (third rwx) - All other users on the system
-
-        3. Then there is rest of the information
-    
-chmod : Change permission of file
-        -  used to change file and directory permissions 
-    note : we can't change directory permission of file that are on windows path(mounted path)
-
-    User categories:
-        u = user/owner
-        g = group
-        o = others
-        a = all (user + group + others)
-
-    Operators:
-        + = add permission
-        - = remove permission
-        = = set exact permission
-
-    Permissions:
-        r = read
-        w = write
-        x = execute
-
-    Examples:
-        chmod u+x file.txt          # Add execute permission for owner
-        chmod g-w file.txt          # Remove write permission from group
-        chmod o=r file.txt          # Set others to read-only
-        chmod a+r file.txt          # Give read permission to everyone
-        chmod u=rwx,g=rx,o=r file.txt  # Set specific permissions for each category
-
-    Numeric method:
-
-        Permission values:
-            4 = read (r)
-            2 = write (w)
-            1 = execute (x)
-
-        Add numbers together for combinations:
-            7 = rwx (4+2+1)
-            6 = rw- (4+2)
-            5 = r-x (4+1)
-            4 = r-- (4)
-            0 = --- (no permissions)
-
-        Examples: 
-            chmod 755 file.txt    # rwxr-xr-x (owner: rwx, group: rx, others: rx)
-            chmod 644 file.txt    # rw-r--r-- (owner: rw, group: r, others: r)
-            chmod 600 file.txt    # rw------- (owner: rw, no access for others)
-            chmod 777 file.txt    # rwxrwxrwx (full access for everyone)
-
-chown : Change ownership
-    
-    1. find current user:
+1. find current user:
         whoami > it print current user.
-
-    2. To check current owner of file 
-        ls -l file1.txt
-
-    3. Give access to root (sudo) user
-        sudo chown root file1.txt
-
-        (note: we can't change permission of mounted path)
-
-        When we run command by sudo, it run as a root user
-        when we run directly it run as a current user
-
-    4. Change ownership of groups:
-        chown :groupname file.txt
-
-    5. Change ownership of groups and users both:
-        chown username:groupname file.txt
-
-    6. Find all the files in current directly who have all the permission
-        find . -perm 777
-
-        (here we can use combinations of rwxrwxrwx also)
 
 Multiple file operations:
     Delete multiple txt files 
@@ -110,3 +17,8 @@ Multiple file operations:
                 but here filename comes from previous output, we write {} + 
 
         Note : here we can perform different type of operation like rm.
+
+Find all the files in current directly who have all the permission
+    find . -perm 777
+    find . -perm rwxrwxrwx
+    (here we can use combinations of rwxrwxrwx also)

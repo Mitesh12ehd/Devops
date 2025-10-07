@@ -22,17 +22,7 @@
 ! : not operator 
     rm -r !(names.txt)  # remove all the files except names.txt
 
->> : append redirection 
-    ls >> file.txt          # Append output to file
-    echo "world" >> file.txt    # write world into file.txt
 
-> : output redirection
-    it replace content not append
-    ls > file.txt           # Write output to file (overwrites)
-    echo "hello" > file.txt # replce content of file with Hello
-
-< : input redirection
-    sort < file.txt         # Use file as input
 
 groups command:
     echo "hello" && {echo "hello", echo "hello"}

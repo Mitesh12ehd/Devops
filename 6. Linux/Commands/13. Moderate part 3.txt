@@ -59,15 +59,3 @@ domainname:
 
     domainname      # display current domain name
     sudo domainname newdomain   # set domain name
-
-creating and deleting user:
-    - The useradd command is used to create new user accounts on Linux/Unix systems.
-      It requires root/administrator privileges.
-
-    sudo useradd johndoe        # create new user named johndoe
-    sudo passwd johndoe         # ask for password and set password
-    sudo userdel johndoe        # delete user
-
-switch user:
-    su - admin # try to switch to admin user.
-    su - miteshch

@@ -1,0 +1,124 @@
+Type of users.
+    1. Super user :
+        - root user.
+        - have all the permission (unrestricted)
+        - to user Super user we need to login as super user or 
+          execute command as super user(sudo).
+        - there is only one super user per computer.
+
+        sudo : super user do
+            - allows authorized users to execute commands as another user, typically the root 
+            (administrator) user.
+            - When you run a command with sudo, the system checks if your user account has 
+            permission to use sudo (defined in the /etc/sudoers file). 
+            - If authorized, it prompts for your password and then executes the command with 
+            elevated privileges.
+            - this command helps when we need admin permission for some commands.
+
+    2. User : 
+        - regular user we create to login.
+        - each user has their own space as
+            /home/mitesh
+
+    3. Service account :
+        - relevant to linux servers
+        - ex.
+            - we have one server
+            - apache application running on that server
+            - MYSQL is running on same server.
+
+        - here each application(service) has its own user.
+
+        - this is best practice with security.
+
+Manage permissions : 
+
+    User level:
+        - give permission to user.
+
+    Group level:
+        - create group of user and give permission to groups.
+
+Commands:
+
+    See users:
+        cat /etc/passwd
+        # it give list of available users on particular machine.
+
+        ex. 
+            root:x:0:0:root:/root:/bin/bash
+            mitesh:x:1000:1000:,,,:/home/mitesh:/bin/bash
+            daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+
+            Username : Password : UID : GID : GECOS : HOMEDIR : SHELL
+            # Password : is encrypted and not showed here
+            # UID : Unique user id  (root user have always UID = 0)
+            # GID : Primary group id
+            # GECOS : general information about user.
+            # HOMEDIR : Absolute path for user's home directory.
+            # SHELL : user's default shell.
+
+    Create user:
+        sudo adduser mitesh2
+        sudo useradd mitesh2    # 
+
+    Update password
+        sudo passwd mitesh2
+
+    Switch user
+        su - mitesh2
+        su -        # login as root user.
+
+    Create group
+        sudo groupadd devops
+
+    See group
+        cat etc/group 
+
+    Delete user 
+        sudo deluser mitesh2
+
+    Delete group  
+        sudo delgroup mitesh2
+
+    Note:
+        there is always two types of command for this operations
+
+        adduser     useradd
+        addgroup    groupadd
+        deluser     userdel
+        delgroup    groupdel
+
+
+        What is differences?
+            - adduser, addgroup.... commands are more user friendly.
+            as we can enter information white creating user 
+
+            - but in useradd, groupadd.... commands we have set information separate
+            by another command
+
+        Which one to use?
+            - while performing manual operation use adduser, addgroup... command
+            - while performing in automated way use useradd, groupadd... command
+
+Groups:
+    - User have one primary group and multiple secondary groups.
+
+    Update users primary group
+        sudo usermod -g [groupname] [username]
+        sudo usermod -g devops mitesh2
+
+    See user's group id and group name
+        id mitesh2
+
+    Update user's secondary groups
+        sudo usermod -G group1,group2 username
+
+    Add new groups in user's secondary groups
+        sudo usermod -aG group1,group2,group3 username
+
+More commands : 
+
+    groups          # display all the groups where current user belongs
+
+    sudo useradd -G devops mitesh2  # Create user mitesh2 and assign secondary group.

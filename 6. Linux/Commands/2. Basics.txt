@@ -1,36 +1,3 @@
-How commands execute?
-    1.When we hit command
-        git
-      it execute git.exe
-    
-    2. We can see the path of git.exe
-        where git.exe
-
-    hence when we hit git command, it execute file from upper path
-    we can execute path:  "path"
-
-ls : We can list all the things is current directory
-     We can also use path here to list thing at given path
-        ls /home/user
-    (refer option and more on internet)
-
-    ls -a : it shows the all the hidden file
-            all file who start with . are in hidden
-
-    ls -l : shows all file and folder with more information
-
-    we can also do 
-    ls -al : it print all hidden files with more information
-
-    ls -R : it print all file in current directory and 
-        then all the file in child directory and
-        then likewise folder inside folder
-
-mkdir dir_name : create new directory with directory_name
-                 we can also use path here
-                ex. mkdir ~/Documents/projects
-        (refer option and more on internet)
-
 cd : change directory
     cd new_folder : it moves terminal current directory into new_folder
 

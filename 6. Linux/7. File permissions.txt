@@ -1,0 +1,98 @@
+Owner : 
+    user that created the file 
+
+Commands:
+
+    ls -l       # shows permission of file and folders in current directory
+    ls -l file1.txt      # shows permission of particular file
+
+    ex.
+        -rwxrwxrwx 1 mitesh mitesh test.pdf
+        # here the owner is mitesh 
+                   group is mitesh
+
+chown : Change ownership
+    
+    syntax:
+        sudo chown [username]:[groupname] [filename]
+
+    ex.
+        sudo chown mitesh2:devops names.txt
+        sudo chown mitesh2 myPDF1.pdf
+        sudo chown root file1.txt
+
+        - change group
+            sudo chown :groupname file.txt
+            sudo chgrp groupname file.txt
+
+See permission of file:
+    ls -l file1.txt
+
+    here in output:
+        -rw-r--r-- 1 username groupname 1024 Mar 15 14:30 file1.txt
+
+        1. first character is 
+            - (regular file), d (directory), l (symbolic link)
+
+        2. then there is 9 character
+            r means read
+            w means write
+            x means execute
+            - means (permission not granted)
+
+            here,
+                Owner (first rwx) - The user who owns the file
+                Group (second rwx) - Users who belong to the file's group
+                Others (third rwx) - All other users on the system
+
+        3. Then there is rest of the information
+    
+chmod : Change permission of file
+        -  used to change file and directory permissions 
+
+    User categories:
+        u = user/owner
+        g = group
+        o = others
+        a = all (user + group + others)
+
+    Operators:
+        + = add permission
+        - = remove permission
+        = = set exact permission
+
+    Permissions:
+        r = read
+        w = write
+        x = execute
+
+    Examples:
+        chmod u+x file.txt          # Add execute permission for owner
+        chmod g-w file.txt          # Remove write permission from group
+        chmod o=r file.txt          # Set others to read-only
+        chmod a+r file.txt          # Give read permission to everyone
+        chmod u=rwx,g=rx,o=r file.txt  # Set specific permissions for each category
+        chmod -x api                # Remove execute permission from api directory 
+                                      for current user.
+        chmod g=rwx config.yml
+        chmod g=r-- config.yml
+
+    Numeric method:
+
+        Permission values:
+            4 = read (r)
+            2 = write (w)
+            1 = execute (x)
+
+        Add numbers together for combinations:
+            7 = rwx (4+2+1)
+            6 = rw- (4+2)
+            5 = r-x (4+1)
+            4 = r-- (4)
+            0 = --- (no permissions)
+
+        Examples: 
+            chmod 755 file.txt    # rwxr-xr-x (owner: rwx, group: rx, others: rx)
+            chmod 6 44 file.txt    # rw-r--r-- (owner: rw, group: r, others: r)
+            chmod 600 file.txt    # rw------- (owner: rw, no access for others)
+            chmod 777 file.txt    # rwxrwxrwx (full access for everyone)

@@ -1,0 +1,38 @@
+How commands will execute?
+    1.When we hit command
+        git
+      it execute git.exe
+    
+    2. We can see the path of git.exe
+        where git.exe
+
+    hence when we hit git command, it execute file from upper path
+    we can execute path:  "path"
+
+ls : 
+    - list all the things in current directory
+
+    ex.
+        ls
+        ls -a   # shows hidden files too
+        ls -l   # shows with more information(permission, owner infomation)
+        ls -al 
+        ls -a /home/user
+        ls /home/user
+        ls apis     # print all the available files and folders in apis directory
+        ls -R   # shows recursively, print available file and folder inside folders likewise
+
+mkdir :
+    - to make new directory 
+
+    ex.
+        mkdir pages
+        mkdir scenarios
+        mkdir /home/mitesh/projects/apis    # absolute path, create apis into /home/mitesh/projects
+        mkdir project/api   # create apis into project directory
+        mkdir logs apis reports     # create multiple directory
+        mkdir ../backup     # Create backup at parent level.
+
+        # create parent directory
+        mkdir -p /home/mitesh/projects/dev/api/routes
+            # if home/mitesh/projects not exist, it create all the directory

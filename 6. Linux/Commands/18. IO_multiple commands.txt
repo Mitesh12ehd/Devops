@@ -1,0 +1,14 @@
+Input and output
+    - every command built in 3 streams
+
+    STDIN(0) : Standard input
+    STDOUT(1) : Standard output
+    STDERR(2) : Standard error
+
+    ex.
+        ls -l doesnotexist.txt
+        # output it giving is error message
+
+    
+Execute multiple command sequentially
+    clear; sleep 5; echo "Hello"
