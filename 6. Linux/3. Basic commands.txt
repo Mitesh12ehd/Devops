@@ -1,14 +1,3 @@
-How commands will execute?
-    1.When we hit command
-        git
-      it execute git.exe
-    
-    2. We can see the path of git.exe
-        where git.exe
-
-    hence when we hit git command, it execute file from upper path
-    we can execute path:  "path"
-
 ls : 
     - list all the things in current directory
 
@@ -36,3 +25,64 @@ mkdir :
         # create parent directory
         mkdir -p /home/mitesh/projects/dev/api/routes
             # if home/mitesh/projects not exist, it create all the directory
+
+cd : 
+    - change directory
+
+    ex. 
+    
+    cd pages    # move terminal control to pages folder
+    cd /home/username/Documents    # absolute path, it start with root directory 
+    cd folder_name                 # relative path
+    cd Documents/Projects
+    cd ../sibling_folder/subfolder
+
+    # moves to parent directory
+    cd ..          # One level up
+    cd ../..       # Two levels up
+    cd ../../..    # Three levels up
+    cd .           # . indicate current directory
+
+    cd ../folder_name              # Move to sibling directory
+    cd ~    # Go to home directory: from where we open terminal 
+    cd /    # Go to root directory
+
+pwd : print working directory
+
+    ex.
+    pwd     # output : /mnt/c/Users/Mitesh/OneDrive/Desktop/Devops_practice
+
+man : manual 
+    man command_name : ex. man ls, man echo
+        shows info of that command
+
+cat :
+    - concatenate
+
+    example. 
+
+    cat fileName.txt    # display content of file
+    cat -n filename.txt # display content with attached line number
+
+    # display content of multiple file by concatenate it
+    cat fileName.txt file2.txt file3.txt    
+
+    # creating file and write content
+    cat > newfile.txt      # to save press ctrl + d to save ctrl + c to exit
+
+    # Combine multiple file into one
+    cat file1.txt file2.txt > combined.txt
+
+    # Appending the contents
+    cat additional.txt >> existing.txt
+
+touch : 
+    create new file 
+    
+    example:
+        touch file1.txt   # create new file
+        touch file1.txt file2.txt   # create multiple file 
+        touch report.{txt,pdf,doc} 
+
+        # if file already exist then update timestamp
+        touch existing.txt

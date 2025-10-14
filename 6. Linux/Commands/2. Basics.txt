@@ -1,29 +1,13 @@
-cd : change directory
-    cd new_folder : it moves terminal current directory into new_folder
+How commands will execute?
+    1.When we hit command
+        git
+      it execute git.exe
+    
+    2. We can see the path of git.exe
+        where git.exe
 
-    1. Absolute path:
-        cd /home/username/Documents
-        it start with root directory    
-
-    2. Relative path:
-        cd folder_name
-        cd Documents/Projects
-        cd ../sibling_folder/subfolder
-
-    3. Move to parent directory
-        cd ..          # One level up
-        cd ../..       # Two levels up
-        cd ../../..    # Three levels up
-        cd .           # . indicate current directory
-
-    4. Move to sibling directory:
-        cd ../folder_name              # Go up one level, then into folder_name
-
-    5. Go to home delivery: from where we open terminal 
-        cd ~
-
-    6. Go to root directory
-        cd /
+    hence when we hit git command, it execute file from upper path
+    we can execute path:  "path"
 
 What is environment variable ? 
     - They affect environment of your computer
@@ -38,9 +22,3 @@ What is environment variable ?
     - echo is also command(i.e. .exe )
         where echo
         (we can see path of echo.exe)
-
-pwd : print working directory
-
-man : manual 
-    man command_name : ex. man ls, man echo
-        shows info of that command

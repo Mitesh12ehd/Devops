@@ -31,6 +31,11 @@ grep : global regular expression print
     9. check file which contain given text
         grep -rl "Mitesh" .'
 
+    More examples:
+        history | grep sudo     # give all previous command with 'sudo'
+        history | grep rm    # find all previous command with 'rm'
+        history | grep rm >> sudo-rm-commands.txt       # append content into file.
+
 history : it shows all the commands we have performed till now.
     
     1. history : Give all the previous commands

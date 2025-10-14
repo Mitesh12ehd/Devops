@@ -22,8 +22,6 @@
 ! : not operator 
     rm -r !(names.txt)  # remove all the files except names.txt
 
-
-
 groups command:
     echo "hello" && {echo "hello", echo "hello"}
     

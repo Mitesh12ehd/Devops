@@ -12,7 +12,7 @@ for that use WSL(windows subsystem for linux)
     Click "Turn Windows features on or off" (left side)
     Look for "Windows Subsystem for Linux" in the list
     If checked ✓ = installed, if unchecked = not installed
-   - Restart if neeeded
+   - Restart if needed
 
 3. run window powershell as admin
     wsl --install
