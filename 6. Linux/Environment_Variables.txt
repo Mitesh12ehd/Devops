@@ -1,0 +1,82 @@
+Environment variables:
+    - store value 
+    - environment variable are available for whole environment
+    - by convention name should be in upper case  
+
+    ex.  
+        SHELL = /bin/bash
+        HOME = /home/mitesh    # here mitesh is currently logged in user
+        USER = mitesh
+
+Commands:
+    # show all environment variable that is available for current user
+    printenv     
+
+    # check value for variable
+    printenv USER   # or
+    echo "$USER"
+    echo $USER
+
+Create own environment variables:
+
+    # create
+    export DB_USERNAME=dbusermitesh
+    export DB_PASSWORD=Mitesh123@
+
+    # update value
+    export DB_USERNAME=dbuserdev
+
+    # delete variable
+    unset DB_USERNAME
+
+    # persist environment variables
+    - if we exit the terminal after export variable, that variable not accessible in new terminal   
+      or new session.
+    - to save the environment variable we use .bashrc file that 
+      is present inside /home/username directory.
+
+        1. add environment variable in .bashrc file
+            vim .bashrc
+            
+            # add below lines
+            export DB_USERNAME=dbusermitesh
+            export DB_PASSWORD=Mitesh123@
+
+            # save and quit
+
+        2. refresh the system
+            source .bashrc            
+
+Use environment variable in application:
+    - every programming language has its own way to access environment variables
+
+Setup the environment variable for all the user:
+    - we use file 
+        /etc/environment
+
+    vim /etc/environment
+    # enter variable and it's value
+    DB_USERNAME=dbusermitesh
+    MY_VAR="hello_world"
+
+PATH environment variable:
+    - there is Path environment variable at /etc/environment,
+      which is same for all the user.
+
+    PATH : 
+        - it is list of directories with executable files, separated by :
+        - when we execute any command, it check here all the path and execute from here.
+            ex. MINGW environment path, java path, python path
+
+    Create custom command or program using PATH:
+        1. Create welcome file(no sh extension, as we are creating our own program)
+        2. Add shell script code inside it
+        3. Give execute permission 
+            chmod a+x welcome
+        4. Add in .bashrc
+            PATH=$PATH:/home/mitesh         # location where welcome program exist
+        5. refresh
+            source .bashrc
+        6. Execute program
+            /home/mitesh/welcome
+            # note : this program can be executable at any place

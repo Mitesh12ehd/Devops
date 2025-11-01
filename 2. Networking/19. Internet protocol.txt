@@ -52,6 +52,9 @@ Middle boxes:
     ex. 
         Firewall:
             - Blocks/permits traffic based on security  
+            - Using Firewall rules we can define, which request are allowed.
+            - to prevent unauthorized access from entering a private network
+
         Intrusion Detection/Prevention System (IDS/IPS) :
         	- Monitors and blocks suspicious traffic
         NAT (Network Address Translation) : 

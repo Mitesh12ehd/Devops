@@ -1,0 +1,25 @@
+nslookup:   
+    nslookup google.com     # we can check ip for google.com server
+    nslookup 142.251.42.238 # give more info of ip
+
+ifconfig:
+    we can get 
+        IP address
+        subnet masking
+        gateway address
+        router ip address 
+
+netstat:
+    - tell about what active internet connection on your machine 
+    - which application is actively listening on their specific port
+    - if we get some error while running specific application, 
+      we can check here that application is running or not
+
+ps aux:
+    - show which process is running on which port
+    - also shows resources consumed by process
+
+ping:
+    - to check that application is accessible or not
+    ex.
+        ping google.com

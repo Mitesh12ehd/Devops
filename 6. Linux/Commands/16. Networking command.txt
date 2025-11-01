@@ -1,4 +1,0 @@
-nslookup:   
-    nslookup google.com     # we can check ip for google.com server
-    nslookup 142.251.42.238 # give more info of ip
-

@@ -1,0 +1,208 @@
+Shell script
+    - to avoid repetitive command manually execution on multiple place
+    - we write command in sequence into one file
+    - file have extension .sh
+
+Shell - sh - bash
+    Shell : it is program that interpret our command in terminal 
+
+    Different shell implementation:
+        1. sh (bourne shell) : /bin/sh
+        2. bash (bourne again shell) : /bin/bash
+            - improved version of sh
+            - default shell program in most of unix like system.
+
+How out shell script decide on which shell program we need to execute?
+    - using shebang
+    - in first line of shell script we define
+        #!/bin/bash
+        #!/bin/sh
+        #!/bin/zsh
+
+    - here #! are called shebang line.
+
+Sample shell script:   setup.sh
+
+    #!/bin/bash
+
+    echo "Hello from bash script"
+
+Execute shell script: two ways
+    1. ./shellscript.sh
+    2. bash shellscript.sh
+
+Variable:
+
+    # Declare variable 
+    file_name=config.yaml 
+    name="Mitesh"
+
+    # Use variable
+    echo "using file $file_name to configure something"
+
+    # Store output of command in variable
+    config_files=$(ls config)     
+    echo "here are all configuration files: $config_files"
+
+Conditional statement:
+
+    if [ -d "config" ]
+    then 
+        echo "Reading config directory contents"
+        config_files=$(ls config)
+    else
+        echo "config directory not found, creating one"
+        mkdir config
+    fi                 # indicate end of if else statements 
+
+
+    - there is also else if statement 
+        if [ conditions ]
+        then
+            [code]
+        elif [ conditions ]
+        then 
+            [code]
+        else
+            [code]
+        fi
+
+
+Conditions: 
+    conditions inside if block are command
+        - if it return exit status 0 then condition become false
+        - if it return exit status 1 then condition become true
+
+    File conditions:
+        Condition	Meaning	                          Example
+        -e file	    file exists	                        [ -e myfile.txt ]
+        -f file	    file exists and is a regular file	[ -f /etc/passwd ]
+        -d file	    file exists and is a directory	    [ -d config ]
+        -r file	    file is readable	                [ -r data.txt ]
+        -w file	    file is writable	                [ -w output.log ]
+        -x file	    file is executable	                [ -x script.sh ]
+        -s file	    file exists and size > 0	        [ -s log.txt ]
+
+    Numeric(relational) conditions:
+        -eq  : check if equal
+        -ne  : check if not equal
+        -gt  : check if value of left operand is greater than right operand
+        -lt  : check if value of left operand is less than right operand
+        -ge  : greater than or equal
+        -le  : less than or equal
+
+        ex. 
+            num_files=10
+            if [ num_files -eq 12]
+
+    string operators:
+        ex.
+            user_group=xx
+            if [ "$user_group" == "devops" ]
+            then 
+                echo "configure the server"
+            elif [ "$user_group" == "admin" ]
+                echo "administer the server"
+            else    
+                echo "No permission to configure the server"
+            fi
+
+        ex. 
+            if [ "$str1" = "$str2" ]
+            if [ -z "$str" ]           # check if string is empty
+            if [ -n "$str" ]           # check if string is not empty
+            if [ "$str1" = "$str2" ]
+            if [ "$str1" < "$str2" ]   # lexicographically
+            if [ "$str1" > "$str2" ]   # lexicographically
+
+Passing argument to script
+
+    Passing parameters
+        ./setup.sh param_value1 param_value2
+
+    1. Positional parameters
+        - parameter are processed in order they are sent
+        - index start with 1
+
+        # accessing parameter   
+        user_group=$1
+        user_group=$2
+
+        # printing all the parameters
+        echo "All params: $*"
+
+        # printing number of parameters
+        echo "Number of params: $#"
+
+Read user input
+    read -p "Enter username: " username     # input will be stored into username variable
+    echo "Username: $username"              # printing input
+
+Loops:
+
+    1. for loop : 
+        for param in $*
+        do
+        echo "$param"
+        done
+    
+    2. While loop :     
+        sum=0
+        while true
+        do 
+        read -p "enter a score: " score
+
+        if [ "$score" = "q" ]
+        then 
+            break;
+        fi
+            
+        sum=$(($sum + $score))      # for arithmetic operations
+        echo "Total score: $sum"
+        done
+
+Functions:
+    function score_sum {  # or function (){} works fine
+        sum=0
+        while true
+        do 
+        read -p "enter a score: " score
+
+        if [ "$score" = "q" ]
+        then 
+            break;
+        fi
+            
+        sum=$(($sum + $score))      # for arithmetic operations
+        echo "Total score: $sum"
+        done
+    }
+    score_sum
+
+    function create_file(){
+        file_name=$1
+        touch $file_name
+    }
+    create_file names.txt
+    create_file enrollment.txt
+    create_file test.sh
+
+    # Returning value from Functions
+    - We can't actually return the value from function directly
+    - but we can use return statement, and then we access output of last command
+    
+    ex.
+        function sum(){
+            total=$(($1+$2))
+            return $total
+        }
+        sum 4 5
+        result=$?
+        echo "$result" 
+
+Boolean
+    true or false used in shell script
+    ex.
+    is_valid_filename = true
+    if [ "$is_valid_filename"  = true ] 
+    if [ "$is_valid_filename" = "true"]
