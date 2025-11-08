@@ -1,0 +1,141 @@
+where :
+    The where command is used in Windows Command Prompt (cmd) to locate the path of executable files
+
+    ex.
+        where python
+        where cmd
+
+whoami : 
+    find current user:
+        whoami > it print current user.
+
+df : disk free
+    - displays information about disk space usage on mounted filesystems
+    - it shows how much space is used and available on your storage devices
+
+    df command shows in kbs
+
+    - to show in mbs
+        df -m
+
+    - in human readable format
+        df -h
+
+    (explore more option on internet or man command)
+
+du : disk usage
+    - displays the disk space used by files and directories
+
+    du - h # in human readable format
+    du new1/dir1
+
+head and tail:
+    The head and tail commands are Unix/Linux utilities for viewing parts of files:
+
+    head:
+        head file.txt           # Shows first 10 lines
+        head -n 5 file.txt      # Shows first 5 lines
+        head -20 file.txt       # Shows first 20 lines
+        head -c 100 file.txt    # Shows first 100 bytes
+
+    tail:
+        tail file.txt           # Shows last 10 lines
+        tail -n 5 file.txt      # Shows last 5 lines
+        tail -20 file.txt       # Shows last 20 lines
+        tail -f logfile.txt     # Continuously shows new lines added to file
+
+diff:
+    compares files line by line and shows the differences between them
+
+sort :
+    organizing data in ascending or descending order based on various criteria
+
+    sort file.txt     # Sort lines alphabetically(lexographically)
+    sort file1.txt file2.txt            # Sort combined contents of both files
+    sort *.txt                          # Sort all .txt files together
+        
+    sort with pipe : 
+        ls | sort                           # Sort directory listing
+        cat file.txt | sort                 # Sort file contents via pipe
+
+    reverse order:  
+        sort -r file.txt
+
+    numeric:
+        sort -n numbers.txt  
+        sort -nr numbers.txt    # numeric and reverse order
+
+jobs : 
+    show the process start by shell
+
+wget : to download files from servers(URLs)
+
+    ex. 
+
+    1. wget https://ontheline.trincoll.edu/images/bookdown/sample-local-pdf.pdf
+        # download pdf in current directory
+
+    2. give our choice name
+        wget -o myPDF1.pdf https://ontheline.trincoll.edu/images/bookdown/sample-local-pdf.pdf
+
+
+top : Shows all the process that are running on system
+
+kill :
+    kill PID
+    ex. kill 789
+
+uname:
+    give current os 
+
+zip and unzip:
+    zip zippedFile.zip names.txt    # zip single file
+                                    # this command also add file if zip already exist   
+
+    unzip zippedFile.zip
+    zip zippedFile.zip names.txt company.txt    # zip multiple files
+
+hostname: 
+    The hostname command shows or sets the system's hostname (computer name).
+
+    hostname        # display current hostname
+    hostname -i     # display Ip address
+    sudo hostname newname   # set hostname temporary
+
+domainname: 
+    - The domainname command displays or sets the system's NIS 
+      (Network Information Service) domain name.
+
+    domainname      # display current domain name
+    sudo domainname newdomain   # set domain name
+
+id : displays user and group identification information for the current user or a 
+     specified user.
+
+    id  # shows user id-name, group-id name and all the groups user belongs to
+    id -u   # shows the user id of current user
+    id -u john # shows the user id of john
+    id -g      # shows the primary group id
+    id -G      # show all the groups id
+
+    id -un      # Show username instead of UID
+    id -gn      # Show group name instead of GID
+    id -Gn      # Show all group names
+
+    # read about more option available
+
+lsof:   show all the open files with their user and process
+
+Execute multiple command sequentially: 
+    clear; sleep 5; echo "Hello"
+
+Input and output
+    - every command built in 3 streams
+
+    STDIN(0) : Standard input
+    STDOUT(1) : Standard output
+    STDERR(2) : Standard error
+
+    ex.
+        ls -l doesnotexist.txt
+        # output it giving is error message

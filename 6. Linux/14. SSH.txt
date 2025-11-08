@@ -1,0 +1,101 @@
+SSH
+    - secure shell
+    - protocol that gives users a secure way to access computer over the internet.
+
+    Use case:
+        - Copy files to remote server
+        - Install software on server
+
+    2 ways to authenticate:
+        1. Username and password of remote server 
+            - Admin create user on remote server 
+
+        2. SSH key:
+            - Client create ssh key pair
+                private key + public key
+                - private key : stored securely on client machine
+                - public key : can be shared ex. with remote server 
+
+            - Client can connect remote server with its private key
+            - if public key of client is not registered then client not able
+              to connect 
+
+SSH for services
+    - services like jenkins often require to connect server vis SSH,
+    
+    1. Create jenkins user on application server
+    2. Create SSH key pair on jenkins server
+    3. Add public SSH key to authorized_keys on application server
+
+Port 22:
+    - SSH runs on port 22 by firewall by default on each machine
+
+Connect remote server:
+
+    1. Connect using username and password
+        - Create remote server (ex. on cloud.digitalocean.com)
+        - Choose authentication method as password (set password there)
+
+        use below command:
+            ssh [username]@[ip_address]
+            ssh root@64.225.108.160
+
+            # then it ask for password
+            # after this we are connected to remote server
+            # We are into terminal of remote server, 
+              now we can install or perform anything on server
+
+    2. Connect using ssh key pair
+
+        - generate ssh key on our machines
+            1. Check currently available ssh keys  
+                ls .ssh
+
+            2. create ssh keys
+                ssh-keygen -t rsa   # rsa is algorithm
+
+                # it ask for paraphrase (something like password) 
+                    (leave empty if not needed)
+
+            3. Check again
+                ls .ssh
+                # now we can see private key and public key files.
+
+        - Add public key to authorized_keys on remote server
+            1. Copy our public key
+                cat .ssh/id_rsa.pub
+
+            1. Connect to remote server
+
+            2. ls .ssh
+               cat .ssh/authorized_keys     # ensure authorized_keys file exist
+
+            3. vim .ssh/authorized_keys
+                # paste copied public key, save and exit 
+
+            4. Now we can connect remote server without password
+                ssh root@64.225.108.160
+
+            Note:
+                - here it takes our private key from default .ssh/id_rsa
+                - but if we have multiple key pairs, then default location might not be
+                  correct
+
+                - so when we write 
+                    ssh root@64.225.108.160         # it equal to below
+                    ssh -i .ssh/id_rsa root@64.225.108.160
+
+                - using upper command we can give private key of our choice
+
+Execute script on remote server:
+
+    1. Create shell script file on local 
+    2. Copy it into remote server
+        - use scp (secure copy)
+        
+        scp [filepath] root@ip/path
+        scp test.sh root@64.225.108.160/root
+
+        # this function also take default private key as parameter
+        # to configure private key use below command 
+        scp -i .ssh/id_rsa  test.sh root@64.225.108.160/root
