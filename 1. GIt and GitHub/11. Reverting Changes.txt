@@ -1,0 +1,32 @@
+Reset:
+    - to delete all the changes till some particular commit
+    - if commit is not pushed yet, we can do reset on that also 
+      and in this case we don't need to push.
+
+    1. soft reset: 
+        git reset <commit-id>
+        git reset --soft <commit-id>
+        git reset HEAD~1    #one commit before HEAD
+        git reset HEAD~2    #two commit before HEAD
+
+        - it delete commits till given commit id or HEAD
+        - but changes of that commit are move to stage area.
+
+    2. hard reset:
+        git reset --hard <commit-id>
+        git reset --hard HEAD~1
+
+        - here changes of those commit will be removed and not shown in stage
+
+    # Pushing deleted commits
+        - since delete commits are present on remote server, 
+          we can't simply do git push
+
+        - git push --force
+
+Revert:
+    - to revert changes of particular one commit.
+    - it not override commits, it make new commit with reverse change of given commit
+
+    - git revet <commit-id>
+    - git push

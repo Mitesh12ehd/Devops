@@ -1,4 +1,4 @@
-1. Confict occures when two user make change at same line of code
+1. Conflict occurs when two user make change at same line of code
 
 2. When one pull request is merged
    and second one is pending, but second one is containing same change in at same line
@@ -7,8 +7,11 @@
 
 3. When we take pull and 
    some other user changed same line that we are working on
-   but not commited yet.
+   but not committed yet.
 
-   then also confict arise. solve it in IDE
+   then also conflict arise. solve it in IDE
+
+   - after solving it run command
+        git rebase --continue
 
 4. Conflict also can arise when merging branch

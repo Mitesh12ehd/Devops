@@ -1,0 +1,17 @@
+Leave the branch or delete it?
+    - it depends on use case of specific branch
+    - for example, if there is branch for some bug fix or new feature 
+      it should be deleted after the merging
+
+    - but some teams prefer main and development branch, 
+      so here development branch should not be delete.
+
+How to delete branch?
+
+    1. Delete branch from remote repository using branch section.
+    2. Take git pull
+    3. Cleanup (Delete branch on local which are not present on remote)
+        - switch to main branch
+        - 
+    - Delete from local
+        git branch -d feature_database

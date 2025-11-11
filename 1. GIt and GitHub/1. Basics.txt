@@ -1,5 +1,5 @@
 1. What is VCS?
-    - versin control system also known as source control
+    - version control system also known as source control
     - it helps to track and manage software code changes
     - ex. if problem arise in current code and if we want to revert back our old
       code, VCD helps in that
@@ -25,7 +25,7 @@
     show email
         git config --global user.email
 
-4. Intialize VCS in our current directory
+4. Initialize VCS in our current directory
     git init : on git init .git folder is created,
                .git folder keep track of each changes
 
@@ -41,6 +41,11 @@
     git rm index.js
 
 8. When we complete changes in code, we commit it
+    - git commit
+        - it opens vim editor to type git message and description
+        - first line denotes commit message and other line will be gone as
+          description
+
     - git commit -m 'New : Add new function x()' -m 'Demo.java > Add new function x()'
     - second -m is optional for description
 
@@ -69,22 +74,8 @@
       we can move back changes from staging area
       git restore --staged note.txt
 
-12. Reverting commits
-    git reset <commit-id>
-    or 
-    git reset --hard <commit-id>
-    - we can revert changes upto given commit id.
-      all sthe commits after given commit id will be removed
-
-    how to revert changes that are made on particular commit?
-    1. git revert <commit-id-to-revert>
-    2. it make new changes to revert the change that are made in given commit
-    3. Push new changes
-        git add .
-        git commit -m 'message'
-
-13. Stashing : 
-    - we have some chnages we want to stash them
+12. Stashing : 
+    - we have some changes we want to stash them
         then 
         1. add changes to staging area first and check git status
         2. git stash

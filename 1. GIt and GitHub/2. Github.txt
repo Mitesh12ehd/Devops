@@ -1,0 +1,43 @@
+- GitHub require to make collaborative environment so that multiple developers can work on that
+- Developers can push their code on github or any other remote server
+- Developers can also pull other developers code from github
+- Some popular remote server are github, gitlab, bitbucket
+
+Authentication:
+    1. Using SSH:
+        - generate key pair on local
+        - check key pair 
+            ls ~/.ssh
+        - print desired public key
+            cat ~/.ssh/id_ed25519.pub
+        - copy content
+
+        - if we need to generate key read instruction to generate key
+            github > settings > ssh and gpg keys > Add ssh key
+    
+        - Go to github > settings > SSH and GPG keys > Add ssh key
+        - paste content and save
+        - Now we don't need to enter password or Personal Access Token
+
+    2. Using password:
+        - Go to Settings → Developer Settings → Personal Access Tokens → Tokens (classic) or “Fine-grained tokens”.
+        - Generate a token with permissions like repo and workflow.
+        - while pushing changes they ask for username and password
+            in password use PAT.
+
+1. Connect our local git cli to our local folder: 
+
+    in url use ssl url
+    git remote add origin https://github.com/Mitesh12ehd/Git_Practice.git
+
+    origin is name, by default it is origin in case of personal account
+
+2. Show all the url attached to our local folder
+    git remote -v
+    - if we have attached one url we can see two url one for fetch and one for push
+
+3. Push changes
+    - git push origin master     # push to specific remote and branch
+    - git push          # push to current remote and branch
+        origin : Which url you want to push?
+        master : name of branch

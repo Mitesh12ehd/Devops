@@ -1,0 +1,13 @@
+- When you have made some changes in local,
+  another developer have pushed some new changes before you push,
+  then we need to pull these changes first
+
+- but if we do simple 
+    git pull
+  it will merge your commit with pulled commits
+
+- and when you push commit, it actually pushing 2 commits.
+
+Solution:
+    - git pull -r           # git pull rebase
+    - now we can push our own commit only.

@@ -20,14 +20,14 @@ What should we do if we want to contribute to some other's project?
 7. Now we have added some feature into our code and pushed on our account with new branch
     now we will request to main project owner
 
-    whatever changs we have on 
+    whatever changes we have on 
     our repo : new branch 
     we want to merge it on
     main repo : main branch
 
     this request is known as pull request (PR)
 
-8. We creat pull request for our changes,
+8. We create pull request for our changes,
     then they review it,
     suggest some changes
     and after that they will merge your code
@@ -42,7 +42,7 @@ What should we do if we want to contribute to some other's project?
     - write title and description to pull request (PR)
 
 10. Why we should not commit multiple feature on one branch?
-    - when we made some changes and creat pull request for them
+    - when we made some changes and create pull request for them
     - after creating pull request if we commit something on same branch
     - then we are not able to create new pull request for them
     - new commits are attached within old pull request

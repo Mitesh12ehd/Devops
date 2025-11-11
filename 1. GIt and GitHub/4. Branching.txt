@@ -2,20 +2,20 @@
     branch is track of commits
     
 2. What is use of branch?
-    a. When we are develop softwares in predefined delivereables,
-        assume you have delivered one feture and that is live,
-        now you developer works on building next delivereables.
-        they are commiting daily, 
+    a. When we are develop softwares in predefined deliverables,
+        assume you have delivered one feature and that is live,
+        now you developer works on building next deliverables.
+        they are committing daily, 
 
-        but if they are commiting on live(delivered) code, there might be issue
+        but if they are committing on live(delivered) code, there might be issue
 
         in such case we can create two branch
-        ex. main and develoment, main branch contain live code and development contain
+        ex. main and development, main branch contain live code and development contain
             currently being developed code
         when we need to deliver code we merge the branch
 
     b. Assume one software is live,
-        and there is need to some changes and new feture are introduced in next version release
+        and there is need to some changes and new feature are introduced in next version release
 
         then we create branch with new version no.
         leave previous changes on old branch
@@ -40,7 +40,7 @@
     - git checkout <branch_name>
 
 7. Merge branch
-    - Switch to main branch
+    - Switch to main branch or other branch
     - git merge <branchName>
 
     now this will go into pull requests

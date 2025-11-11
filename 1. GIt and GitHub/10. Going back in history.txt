@@ -1,0 +1,10 @@
+- Check the code version at specific old commits
+
+    1. copy commit id from git log
+    2. git checkout [commit-id]
+        - now we are at detached HEAD pointer
+    3. if we open project in any IDE we can see change till specific commits
+
+    4. get back to HEAD
+        git checkout main       # main or any current branch
+        - now HEAD is valid at top.
