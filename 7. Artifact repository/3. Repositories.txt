@@ -1,0 +1,9 @@
+Type of repositories:
+    1. Proxy:
+        - this repository is linked to some other remote repository
+        - ex. maven-central is remote public repository
+        - if we open proxy repo from nexus UI, we can see remote repository URL
+
+        - while building application, we first check dependency is exist on proxy 
+          repo, if not exist then it takes from remote repository
+        - save network bandwidth

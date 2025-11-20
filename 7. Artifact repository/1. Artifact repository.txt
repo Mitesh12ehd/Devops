@@ -1,0 +1,32 @@
+Artifact:
+    - apps built into single file
+    - app source code -> artifact
+    - different artifact formats are JAR, WAR, TAR, ZIP etc.
+
+Artifact repository:
+    - storage of artifact 
+    - artifact repository support specific format
+    - if application produce different type of artifacts, then we need different 
+      type of repository for artifact
+
+Artifact repository manager:
+    - to manage all different types of repository
+    - ex. Nexus, Mvn central repository, NPM
+
+Maven central repository:
+    - public repository manager 
+    - it store libraries/frameworks you use as dependencies
+
+Nexus:
+    - upload and store different artifacts
+    - retrieve(download) artifact later
+    - central storage of artifacts
+    - nexus support below repository types (include each major type)
+        https://help.sonatype.com/en/formats.html
+
+    - Can be integrate with LDAP (to store and verify user identities inside an organization)
+    - Flexible and API integration with other tools (CI/CD)
+    - Backup and restore
+    - cleanup policies( delete old artifacts when new are created)
+    - Search functionality 
+    - user token support for system user authentication

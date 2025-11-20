@@ -1,0 +1,74 @@
+What is build and package manager tools?
+    - to deploy application code and its dependencies on server
+    - package application into single movable file.
+    - package file called artifact
+    - artifact used to deploy multiple times
+
+    - we need to build artifact by compressing, compiling.
+
+Artifact repository:
+    - to store artifact
+    - ex. Nexus, jfrog artifactory
+
+What is artifact file?
+    - it depends on programming language
+    - in java, artifact file will be JAR or WAR
+    - in node, artifact file zip or tar file
+    - include whole code + dependencies
+
+Maven:
+    - pom.xml file store all the dependencies
+
+    - build maven project (Build & Create the Artifact)
+        mvn package
+
+    - build maven project (Build & Create the Artifact + Install to Local Repository)
+        mvn install
+
+    Run the artifact (JAR in case of maven and gradle)
+    java -jar target/java-maven-app-1.1.0-SNAPSHOT.jar
+
+Gradle:
+    - build.gradle file store all the dependencies
+    - build Gradle project
+        gradle build
+
+Node:
+    - npm and yarn are package managers (they are not build tools like gradle and maven)
+    - npm command to install and build
+    - npm command should run in directory where package.json is present
+
+    Create artifact:
+        - npm pack 
+        # it create tar file react-nodejs-example-1.0.0.tgz
+        # we can extract and see package folder inside 
+        # package folder have code
+    
+    # How to create artifact of frontend code?
+        - frontend/react code need to be transpiled
+        - code need to be compressed/minified
+        - there are separate build tools for frontend code ex. webpack
+
+        Webpack:
+            - browsers don't understand fancy modern code or complex imports directly
+            - webpack helps by Converting modern JS → browser-friendly JS
+
+            # How to use webpack?
+            1. install webpack and webpack-cli in dev dependencies
+                npm install webpack webpack-cli --save-dev
+            2. Create a webpack.config.js in your project root
+                const path = require('path');
+                module.exports = {
+                entry: './src/index.js',  // your main file
+                output: {   
+                    path: path.resolve(__dirname, 'dist'),
+                    filename: 'bundle.js',
+                },
+                mode: 'development',  // or 'production'
+                };
+            3. npm run webpack  # or we can create script in package.json
+                                     "scripts": {"build": "webpack"}    
+
+publish/push artifact to artifactory (repository):
+    - No need to build and move different artifact types(JAR, WAR, ZIP)
+    - We use concept of docker images  

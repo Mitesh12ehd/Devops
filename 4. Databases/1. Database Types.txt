@@ -1,0 +1,46 @@
+1. Key value databases:
+    - ex. redis, memcached, etcd from kubernetes
+    - no primary db  
+    - in memory databases, very fast
+    - used for caching (fast retrieval)
+    - unique keys 
+    - no joins
+    - memory storage is limited
+
+2. Wide-column databases:
+    - row key : column1 column2
+    - for one key values are divided into multiple columns
+    - ex. Casandra, Hbase
+    - schema less
+    - scalable
+    - no joins
+    - queries similar to sql 
+    - best for time-series, historical data
+
+3. Document databases
+    - MongoDB, DynamoDB, CouchDB
+    - schema less
+    - set of collection
+    - no joins
+    - denormalized
+    - faster read, slower writes
+
+4. Relational databases:
+    - MYSQL, Postgres
+    - structured
+    - schema based
+    - SQL(structured query language) to read and write 
+    - ACID property (Atomicity, consistency, isolation, durability)
+    - difficult to scale
+
+5. Graph databases:
+    - for storing data such type of networks
+    - social media connections, 
+    - edge and nodes
+
+6. Search databases:
+    - to fast Search
+    - ex. Elastic search, solr  
+    - create index of words 
+    - store inverted mapping
+        word --> List of documents containing it

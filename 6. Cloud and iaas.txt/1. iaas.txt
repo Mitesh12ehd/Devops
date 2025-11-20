@@ -1,0 +1,69 @@
+What is infrastructure as a service?
+    - We setup our application on cloud servers
+    - no physical server required anymore
+    - iaas providers are GCP, AWS, Azure, Digital ocean
+
+Setup on digital ocean  
+    1. Create droplet on digital ocean
+    2. Add ssh key for authentication
+    3. By default it doesn't have firewall
+        - firewall close access by default
+        - and we can allow limited access on specific ports
+        - ssh port is 22
+    
+    4. Add firewall in networking section
+        - Add our IPV4 address
+
+Install tools
+    ex. install java
+    1. Check java is available?
+        java
+    2. it give suggestion to how to install specific version
+    3. apt update 
+    4. Copy command from suggestion and install java
+
+Run artifact on cloud machine
+    1. Copy jar to cloud machine using secure copy
+        scp target/java-maven-app-1.1.0-SNAPSHOT.jar root@68.183.86.89:/root
+
+    2. run that jar
+        java -jar java-maven-app-1.1.0-SNAPSHOT.jar
+        # we can see our application started on port 8080
+
+    3. Check application is running or not
+        68.183.86.89:8080   # go to this on local browser
+
+        # if firewall is enabled
+        # Make new custom rule with port 8080 enabled with all ip or specific ip
+
+        # another way to Check
+        1. run application on detached mode 
+            java -jar java-maven-app-1.1.0-SNAPSHOT.jar &
+        2. ctrl + c and check 
+            ps aux | grep java 
+
+Create linux user (other than root)
+    - we can add it using adduser command
+        adduser mitesh
+
+    - we can add our user to sudo group
+        usermod -aG sudo mitesh
+        # by adding into sudo group we can execute root level command
+          using sudo prefix
+
+    - switch user
+        su - mitesh
+
+    - we can logout, and control goes back to root user
+        exit
+    - we also logout from root user by exit
+
+    Add public ssh key for that user:
+        - we added public key for only root user 
+        - we can add public key for mitesh user using CLI
+
+        1. Connect using root user
+        2. switch user su - mitesh
+        3. here we need to create .ssh as it not exist before
+            mkdir .ssh
+            sudo vim .ssh/authorized_keys

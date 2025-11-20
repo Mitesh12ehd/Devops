@@ -1,0 +1,51 @@
+Configuration:
+    - Nexus require large sized server around 4GB ram and minimum 30-40 GB SSD
+    - require java 8 installed
+
+Install nexus:
+    - here we are manually installing nexus so install it on /opt (optional) folder
+
+    1. cd /opt
+    2. wget https://download.sonatype.com/nexus/3/nexus-3.86.2-01-linux-x86_64.tar.gz
+        # url is for nexus unix setup
+        # wget is for download file at this url (here it is tar.gz)
+
+    3. unzip the tar file
+        tar -zxvf nexus-3.86.2-01-linux-x86_64.tar.gz
+
+    4. we can see there is two folder in /opt folder
+        nexus-3.86.2-01 : contain runtime and application of nexus
+        sonatype- work : contains own config for nexus and data
+                        can be used for backup
+
+Create nexus user and give permission:
+    - chown -R nexus:nexus nexus-3.86.2-01
+    - chron -R nexus:nexus sonatype-work
+
+Set nexus configuration 
+    - vim nexus-3.86.2-01/bin/nexus.rc
+    - Add run_as_user="nexus" and save
+
+Run nexus service:
+    # Now we can run the nexus service with our nexus user.
+    # here nexus start is executable file
+    /opt/nexus-3.86.2-01/bin/nexus start        
+
+    # check service is running
+    ps aux | grep nexus
+
+    # we can check port 
+    netstat -lnpt      
+
+    # port is 8081
+    # allow port 8081 through firewall
+
+    # verify
+    go to http://143.110.243.95:8081/
+
+Login into nexus:
+    - while launching nexus service it automatically create username and password
+    - username is admin 
+    password: cat /opt/sonatype-work/nexus3/admin.password
+
+    - Update password from UI
