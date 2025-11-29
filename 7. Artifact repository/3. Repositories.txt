@@ -7,3 +7,12 @@ Type of repositories:
         - while building application, we first check dependency is exist on proxy 
           repo, if not exist then it takes from remote repository
         - save network bandwidth
+
+    2. Hosted repository
+        - your own private repository inside Nexus, Artifactory, etc.
+        - You upload your own project artifacts here (for deployment, CI/CD, backups).
+        - private (only your team can access it)
+
+    3. Group repository
+        - if we want single endpoint for multiple repositories
+        - This is a virtual repo combining multiple repos (hosted + proxy).

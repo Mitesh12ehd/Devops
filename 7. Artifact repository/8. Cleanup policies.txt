@@ -1,0 +1,35 @@
+Cleanup policy:
+    - A Cleanup Policy in Nexus is a rule that automatically deletes old, unused, or 
+    unwanted artifacts from repositories.
+    - it cleanup based on 
+        Last Downloaded,
+        Last updated
+        Release type
+
+Create cleanup policy on nexus:
+    - Go to cleanup policy > create cleanup policy
+    - Choose format
+    - Set cleanup criteria 
+        ex. for assert name matcher use regex in which we want to apply cleanup 
+            policy
+
+    - We can check preview that matches with out cleanup criteria
+
+Apply cleanup policy to repositories
+    - in repository settings, we can select cleanup policy
+    - now it will run automatically
+    - after applying cleanup policy to repository, task is created in nexus
+        (we can see it System  > Task section)
+
+Configuring on cleanup policy
+    - when cleanup policy run it doesn't delete component,
+      it only marked for deletion
+
+    To delete component that is marked for deletion:
+    - Create task Admin - compact blob store
+    - select time and frequency of task to run
+
+Manually execute task
+    - We can manually execute task apart from its scheduled time.
+    - Go to task > select task > Run
+    

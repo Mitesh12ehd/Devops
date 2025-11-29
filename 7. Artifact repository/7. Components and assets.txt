@@ -1,0 +1,16 @@
+Component:
+    - if we see structure of repository
+        com 
+         example
+          java-maven-app
+          java-gradle-app
+
+    - here java-maven-app and java-gradle-app are components
+
+Assets: 
+    - file inside these components are called assets
+    - actual physical package/files
+
+Example of docker:
+    - Docker layers are assets 
+    - if docker image have 2 component, they may share same asset(same layer)

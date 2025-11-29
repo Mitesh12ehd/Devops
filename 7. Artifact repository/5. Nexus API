@@ -1,0 +1,21 @@
+Nexus API:
+    - to get information that are needed in CI/CD
+    - for ex. information of component, repository, versions etc.
+    - It allows you to automate everything you normally do in the Nexus UI.
+
+How to access REST endpoint?
+    - using tool like curl or wget to execute http request 
+    - request require user and password (use user with required permission)
+    - it give json response
+
+Query to see repository:
+    curl -u user:password -X GET "http://143.110.243.95:8081/service/rest/v1/repositories"  
+    - we can only see repository that are accessible to given user
+    - if we give admin user and admin password we can see all
+
+Query to see all the component in certain repository:
+    - curl -u user:password -X GET "http://143.110.243.95:8081/service/rest/v1/components?repository=<REPO-NAME>"
+    - curl -u user:password -X GET "http://143.110.243.95:8081/service/rest/v1/components?repository=maven-snapshots"
+
+Query to see certain the component in certain repository:
+    -  curl -u user:password -X GET "http://143.110.243.95:8081/service/rest/v1/components/<components_id>"

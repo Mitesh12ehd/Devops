@@ -1,0 +1,108 @@
+Create nexus user
+    - Create user from nexus UI
+    - set as active
+
+Create role
+    - here we can decide privileges.
+
+    ex. 
+        - search maven-snap
+        - we can see there is different privileges admin, create, delete, view etc.
+        - to publish artifact select view privileges with * permission
+
+    - After creating role, go to users section and select newly created role.
+
+Publish artifact of gradle project
+    - here we publish artifact of out application in existing maven-snapshot
+      nexus 
+      
+    1. Add configuration in gradle project  
+        - add below configuration
+
+        # build.gradle
+        version '1.0-SNAPSHOT'
+        apply plugin: 'maven-publish'  // to use command of gradle publish
+        publishing{
+            publications{
+                maven(MavenPublication){
+                    artifact("build/libs/my-app-$version"+".jar"){
+                        extension 'jar'
+                    }
+                }
+            }
+            repositories{
+                maven{
+                    name 'nexus'
+                    // we can get this url from nexus UI from maven-snapshots repository
+                    url "http://143.110.243.95:8081/repository/maven-snapshots/"    
+                    allowInsecureProtocol = true        // to publish using http url
+                    credentials{
+                        username project.repoUser           // to get from gradle.properties file
+                        password project.repoPassword       // to get from gradle.properties file
+                    }
+                }
+            }
+        }
+
+        # gradle.properties
+        repoUser = mitesh
+        repoPassword = xxx
+
+        # settings.gradle
+        rootProject.name = 'mys-app'
+
+    2. Jar create
+        - build project
+            gradle build
+
+        - we can see build/libs/our_jar_file
+
+    3. Publish jar  
+        # run below command in project root directory
+        - gradle publish 
+
+        - we can see inside maven-snapshot repository in nexus UI
+
+Publish artifact of maven project:
+
+    1. Add plugin in respective section in pom.xml
+            <plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-deploy-plugin</artifactId>
+	            <version>3.1.1</version>
+	        </plugin>
+	        <plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-deploy-plugin</artifactId>
+	        </plugin>
+            
+    2. Add repository url
+        <distributionManagement>
+            <snapshotRepository>
+                <id>nexus-snapshots</id>
+                <url>http://143.110.243.95:8081/repository/maven-snapshots/</url>
+            </snapshotRepository>
+        </distributionManagement>
+
+    3. Configure username and password for maven
+        - in maven username and password are stored in settings.xml
+
+        - create settings.xml at below path
+            c/Users/Mitesh/.m2/settings.xml
+
+        - Add username and password
+            <settings>
+                <servers>
+                    <server>
+                        <id>nexus-snapshots</id>
+                        <username>mitesh</username>
+                        <password>xxx</password>
+                    </server>
+                </servers>
+            </settings> 
+
+    4. Build and upload jar
+        mvn package
+        mvn deploy
+    
+    5. Now we can see our jar in nexus UI

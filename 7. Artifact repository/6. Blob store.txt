@@ -1,0 +1,48 @@
+Blob store
+    - nexus storage to store all the uploaded files
+    - storage of binary files
+    - local storage or cloud storage
+    - we can see default blob store in nexus Ui > Repository > blob store section
+
+See blob stores in nexus:
+    - go to blob store section
+    - here we can see all blob store available with its type and size
+
+See where blob store are stored 
+    
+    - ls /opt/sonatype-work/nexus3/             # here it have directory called blobs
+    - cd /opt/sonatype-work/nexus3/
+    - ls blobs/         
+        # it have one blob store called default (same as on nexus ui)
+
+    - ls blobs/default  
+        # in content directory all the data is stored
+        # it has same number of volume as blob count(shown in Nexus UI)
+
+Type of blob store:
+    1. File : file represent file system based storage
+    2. s3 : cloud based storage  (aws)
+
+Create new blob store:
+    - Go to blob section > Create new blob
+    - select type (file or s3)
+    - set path
+        /opt/sonatype-work/nexus3/blobs/mystore
+        # this path should be accessible with our user which we have created to work with nexus
+    
+    - after creating we can see new folder with store name at
+        ls blobs/
+
+    - while creating new repository, 
+        we can select blob store
+
+Notes:
+    - blob store can't be modified
+    - blob store that is used by any repository, can't be deleted
+    - we can't change blob store for repositories
+
+    Things to decide
+    - how many blob store to create?
+    - with which size?
+    - which one you will use for which repos
+    - you need to know approximate how much space each repo will need
