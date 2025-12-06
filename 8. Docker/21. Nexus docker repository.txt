@@ -1,0 +1,57 @@
+Create repository on nexus:
+    - Nexus > Create repository > choose type docker-hosted
+
+Create role:
+    - create role that have access to docker-hosted repository
+    - Give privilege for 
+        nx-repository-view-docker-docker-hosted-repo-*
+
+Assign role to existing user:
+    - Go to user section
+    - Select user and assign newly created role
+
+Configure port:
+    - Our docker client(that is setup on our local machine) can't connect path that represent docker
+      repository
+    - we need separate port where docker repository is accessible
+    - this type of connection is only available in docker repository types
+
+    Setup separate port
+        - Go to repository
+        - Repository Connectors
+        - Select http and give port ex. 8083
+        - save changes
+
+        - verify it by netstat -lnpt command
+
+    - Allow inbound port 8083 via firewall section of digital ocean
+
+Configure token (realms):
+    - this setup is require for docker login into this docker-hosted repository
+    - Go to Security > Realms > Active Docker Bearer Token Realm > save
+    - after this setup we are able to login via ip_address and port
+
+Allow insecure registry:
+    - by default docker execute all command (push, pull, login) via https endpoint
+    - but nexus docker-hosted registry is non-secure
+
+    1. Create file (if not exist)
+        sudo vim /etc/docker/daemon.json
+
+    2. Add ip_address and port  
+        {
+            "insecure-registries": ["143.110.243.95:8083"]
+        }
+
+Push images:
+    1. Build image
+        docker build -t my-app:1.0 .
+    2. Tag image 
+        docker tag my-app:1.0 143.110.243.95:8083/my-app:1.0
+    3. Push image
+        docker push 143.110.243.95:8083/my-app:1.0
+    4. Verify in nexus UI
+        Go to docker-hosted repository and check image is available
+
+Fetch all image information:
+    curl -u mitesh:Mitesh@123 -X GET 'http://143.110.243.95:8081/service/rest/v1/components?repository=docker-hosted-repo'

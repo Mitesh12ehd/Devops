@@ -1,0 +1,78 @@
+# Docker compose:
+
+# If we want to use multiple container as base container, 
+# we can write in configuration file
+
+# create file "docker-compose.yaml"
+
+# Note: if we want to communicate two apps then, in docker compose we don't need to create network 
+        and pass network name in docker run command, docker compose handle itself.
+        - it create separate new network. (We can see in network ls after compose up)
+
+version: "3.8"
+
+services:
+ postgres:
+  image: postgres
+  ports: 
+    - "5432:5432"
+  environment:  # to pass environment variables
+   POSTGRES_USER: postgres
+   POSTGRES_DB: review
+   POSTGRES_PASSWORD: password
+
+ redis:
+  image: redis
+  ports:
+    - "6379:6379"
+
+# To run docker compose file
+1. run docker-compose.yml file
+    docker compose up
+    docker compose up -d    # run in detached mode
+
+2. run compose file with different name (also remove network)
+    docker compose -f myapp.yml up -d   # run in detached mode
+    docker compose -f myapp.yml up
+
+# To stop and remove container
+1. stop docker-compose.yml file
+    docker compose down
+2. stop compose file with different name
+    docker compose -f mongo.yaml down
+
+Ways to handle order of containers in docker compose:
+
+1. depends on:
+    - only wait for first container to start, not fully readiness
+
+    services:
+        mongodb:
+            image: mongo
+
+        mongo-express:
+            image: mongo-express
+            depends_on:
+            - mongodb
+
+2. health check
+    mongodb:
+        image: mongo
+        healthcheck:
+            test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+            interval: 5s
+            timeout: 5s
+            retries: 10
+    mongo-express:
+        image: mongo-express
+        depends_on:
+            mongodb:
+            condition: service_healthy
+
+3. restart policy
+    - restart if fails, hence second container restart if first one is yet to complete
+
+    mongodb:
+        # configuration
+    mongo-express:
+        restart: always

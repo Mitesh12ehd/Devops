@@ -1,0 +1,17 @@
+Setup nexus using docker image:
+    - we can setup nexus using docker image very easily
+    - it is much easier to setup rather than setup on vm.
+
+    1. Create docker volume for nexus 
+        docker volume create nexus-data
+
+    2. Run nexus
+        - by default nexus store all the data at /nexus-data directory inside container
+
+        docker run -d -p 8081:8081 --name nexus -v nexus-data:/nexus-data sonatype/nexus
+
+    3. Go to localhost:8081
+
+    4. Check user  
+        - docker image sonatype/nexus automatically create nexus user inside container
+          (that we creating explicitly while setup nexus on vm)

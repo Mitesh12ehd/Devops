@@ -1,0 +1,22 @@
+Docker ignore file:
+    - we don't need auto-generated folders like target/, build/, node_modules/
+    - we don't need README.md file
+    - to ignore this use docker ignore file
+    
+    - in real life project, we do not write COPY instruction for each file
+    - We can copy whole project 
+        COPY . .
+    - we can mention this folders in docker ignore file
+
+Create .dockerignore file
+    .git
+    .cache
+    *.md
+
+    # Ignore sensitive file
+    private.key
+    settings.json
+
+    # Ignore folders
+    node_modules
+    target

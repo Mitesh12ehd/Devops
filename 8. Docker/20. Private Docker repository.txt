@@ -1,0 +1,125 @@
+Docker registry:
+    - aws ECR (Elastic container registry) provide docker private repository service
+    - digital ocean also provide that.
+    - docker registry used to build and tag an image
+
+Docker repository:
+    - collection of related images with same name but different version
+    - we store different tags (version) of the same image
+
+Creating repository on ECR:
+    - Go to aws > ECR > Create repository
+    - give name
+    - create repository
+
+Setup AWS ClI and configure credential
+    1. Setup AWS CLI 
+        sudo apt update
+        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+        sudo apt install unzip -y
+        unzip awscliv2.zip
+        sudo ./aws/install
+        aws --version
+
+    2. Configure credential
+        - Create access key and secret access key on AWS IAM service
+        - run command aws configure 
+            enter details
+
+        - verify
+            command:  aws sts get-caller-identity
+            output: {
+                "UserId": "AIDAVNQZEDXFFGE2NVXFT",
+                "Account": "372641111498",
+                "Arn": "arn:aws:iam::372641111498:user/mitesh"
+            }
+
+Push images:
+    - view push command section inside repository
+    
+    1. Authentication: (check command from view push command section)
+        aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 372641111498.dkr.ecr.ap-south-1.amazonaws.com
+
+    2. Tag the image (rename the image)
+        - by default docker push command push image to docker hub repository
+            docker push my-app:1.0
+
+        - to push it on another repository, we need to tag(rename the image)
+            (in this command we can give version)
+
+        docker tag my-app:latest 372641111498.dkr.ecr.ap-south-1.amazonaws.com/my-app:latest
+        docker tag my-app: 372641111498.dkr.ecr.ap-south-1.amazonaws.com/my-app:1.0
+
+        - now if we check available image, we can see copy of main image with our given tag
+
+    3. Push images 
+        docker push 372641111498.dkr.ecr.ap-south-1.amazonaws.com/my-app:latest
+        docker push 372641111498.dkr.ecr.ap-south-1.amazonaws.com/my-app:1.0
+
+    4. Push new image after making changes in code
+        - build new image
+            docker build -t my-app:1.1 .
+        - tag image 
+            docker tag my-app:1.1 372641111498.dkr.ecr.ap-south-1.amazonaws.com/my-app:1.1
+        - push image    
+            docker push 372641111498.dkr.ecr.ap-south-1.amazonaws.com/my-app:1.1
+
+How we use this concept?
+    - Jenkins or any other CI tool push the image on private repository
+        (Jenkins use the same command to push)
+    - Now we need to deploy it into development server
+        (development server pull images from private repository and docker hub)
+
+Use image from private repositories:
+    - we can add same type of configuration in docker compose file
+    - see below docker compose file
+    - using this file now we can run application on our local
+
+    - here my-app image will be taken from our private repository
+    - mongo and mongo-express are take from docker hub
+
+        version: '3'
+
+        services:
+        my-app:
+            image: 372641111498.dkr.ecr.ap-south-1.amazonaws.com/my-app:1.0
+            ports:
+            - 3000:3000
+        mongodb:
+            image: mongo
+            ports:
+            - 27017:27017
+            environment:
+            - MONGO_INITDB_ROOT_USERNAME=mitesh
+            - MONGO_INITDB_ROOT_PASSWORD=mitesh123
+        mongo-express:
+            image: mongo-express
+            ports:
+            - 8081:8081
+            restart: always # to make sure mongo-express is running after mongodb runs
+            environment:
+            - ME_CONFIG_BASICAUTH_USERNAME=mitesh
+            - ME_CONFIG_BASICAUTH_PASSWORD=mitesh123
+            - ME_CONFIG_MONGODB_ADMINUSERNAME=mitesh
+            - ME_CONFIG_MONGODB_ADMINPASSWORD=mitesh123
+            - ME_CONFIG_MONGODB_SERVER=mongodb
+
+    Note:
+        - in our server.js code we use different mongodb url while running with docker compose
+        - rebuild the image after changes and push it to private repository
+        - update url accordingly if you want to run in local use local url, if you want to use compose  
+          use docker compose url
+        
+        How address localhost:27017 comes when we run using docker compose?
+            - it done helps with docker compose file
+            - we have defined mongodb container configuration
+
+        ex.
+            // use when starting application locally with node command
+            let mongoUrlLocal = "mongodb://mitesh:mitesh123@localhost:27017";
+
+            // use when starting application as a separate docker container
+            let mongoUrlDocker = "mongodb://mitesh:mitesh123@host.docker.internal:27017";
+
+            // use when starting application as docker container, part of docker-compose
+            let mongoUrlDockerCompose = "mongodb://mitesh:mitesh123@mongodb";

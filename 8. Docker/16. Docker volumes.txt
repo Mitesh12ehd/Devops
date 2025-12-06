@@ -1,0 +1,94 @@
+Docker volumes:
+    - it used for data persistence
+    - when container is destroyed it delete all the file inside them, but we can keep file using docker 
+      volume
+
+    - We can prevent using docker volumes.
+        docker run -it -v C:\Users\Mitesh\data:/home/abc my_image
+        - now if we create anything inside container and stop the container and remove it.
+        - all the change persist inside C:\Users\Mitesh\data
+
+    - Folder in physical file system in mounted into virtual file system of docker.
+
+Type of docker volume:
+
+    1. Host volume:
+        - we decide where on the host file system the reference is made
+        ex.
+        docker run -v /home/mount/data:/var/lib/mysql/data
+
+    2. Anonymous volume:
+        - we only give path of directory inside container
+        - on host machine docker itself decide where it store that data
+        - for each container a folder is generated that gets mounted
+        ex.
+        docker run -v /var/lib/mysql/data
+
+    3. Named volume:
+        - we can create volume and reference it by volume name
+        - mostly used
+
+        #### Create your own volumes ####
+        1. Create volume
+            docker create volume my_volume
+
+        2. Check available volumes
+            docker volume ls
+
+        3. Use these volumes 
+            docker run -it -v my_volume:/data ubuntu bash
+
+            - if we any other container with same volume then all the data is shared across
+            all the container with same volume.
+
+        4. Check path of volume 
+            docker volume inspect my_volume
+
+Use named volume in docker compose:
+    services:
+        mongodb:
+            image: mongo
+            ports:
+                - 27017:27017
+            volumes:    
+                - db-data:/var/lib/mysql/data
+    # define all the volumes that are used
+    volumes:
+        db-data
+
+Docker volume locations
+    windows: C:\ProgramData\docker\volumes
+    linux: /var/lib/docker/volumes
+    mac:   /var/lib/docker/volumes
+
+Hands on:
+    - mongo db store all the data at /data/db directory
+    - below configuration persist data.
+
+    version: '3'
+
+    services:
+        mongodb:
+            image: mongo
+            ports:
+            - 27017:27017
+            environment:
+            - MONGO_INITDB_ROOT_USERNAME=mitesh
+            - MONGO_INITDB_ROOT_PASSWORD=mitesh123
+            volumes:
+            - mongo-data:/data/db 
+        mongo-express:
+            image: mongo-express
+            ports:
+            - 8081:8081
+            restart: always # to make sure mongo-express is running after mongodb runs
+            environment:
+            - ME_CONFIG_BASICAUTH_USERNAME=mitesh
+            - ME_CONFIG_BASICAUTH_PASSWORD=mitesh123
+            - ME_CONFIG_MONGODB_ADMINUSERNAME=mitesh
+            - ME_CONFIG_MONGODB_ADMINPASSWORD=mitesh123
+            - ME_CONFIG_MONGODB_SERVER=mongodb
+        volumes:
+        mongo-data:
+            driver: local # it tell docker, which mechanism to use to store volume, although 
+                        # although default value is local if we don't define

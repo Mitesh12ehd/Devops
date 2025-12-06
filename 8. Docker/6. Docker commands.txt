@@ -11,6 +11,11 @@ docker run hello-world
     3. If not, it tries to find from remote registry(docker hub)
         and pull from there and run the image 
 
+    - Run image with our own name
+        docker run --name <container_name> <image>
+        docker run --name myapp nginx
+
+
 Docker hub:
     https://hub.docker.com/
 
@@ -29,7 +34,7 @@ docker pull:
     ex.
         docker pull mysql       # pull mysql image with latest version
         docker pull ubuntu:16.04    # pull image with given version
-
+ 
 interactive environment: 
     we can run using -it option
     
@@ -54,7 +59,8 @@ How to stop container?
 start container:
     docker start [container_id]
 
-    copy container id from docker ps -a command
+    - it start previously stopped container
+    - copy container id from docker ps -a command
 
 docker inspect [container_id or image name]
     # give all the information about container, info about image, 
@@ -63,10 +69,10 @@ docker inspect [container_id or image name]
       current status of container
       process id of container
 
-docker logs [container_id] : 
+docker logs [container_id or name] : 
     # Shows the logs(output) from running or stopped Docker container
 
-    docker logs --since 5s 9694
+    docker logs --since 5s [container_id]
     # show logs of last 5 seconds
 
 docker exec : 
@@ -77,7 +83,7 @@ docker exec :
     ex. docker exec -it [container_id] bash
         # Get a bash shell inside a running container
         # controls remain inside container
-    
+        
     ex. docker exec [container-id] ls
         # print result outside the container in our terminal
         # controls goes outside the container

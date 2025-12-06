@@ -28,6 +28,8 @@ Virtual machine:
     - VM provide multiple virtualized(isolated) environment on same hardware.
     - virtually one machine divided into 3 machines.
     - VM are managed by hypervisor
+    - VM takes size in GB in and take minutes to start 
+    - where docker take size in MB and take second to start
 
 What is docker?
     - Docker is tool that help us to 
@@ -40,3 +42,13 @@ What is docker?
     - A developer defines all the applications and it’s dependencies in a 
       Dockerfile which is then used to build Docker images that defines a Docker 
       container 
+
+How docker is used in development and deployment cycle?
+
+    ex. 
+
+    1. Develop JS app (ex. used mongodb image from docker hub)
+    2. commit to git 
+    3. trigger CI/CD and build docker image
+    4. Push image to private repository
+    5. deployment server pull that image, also pull mongodb image from docker hub

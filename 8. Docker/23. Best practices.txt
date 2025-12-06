@@ -1,0 +1,106 @@
+1. Use official docker image as base image
+    ex. to run nodejs application,
+        instead of using ubuntu as base image and setup nodejs on them,
+        use image node.
+
+2. Do not use latest tag always
+    ex. FROM node,
+    - it might take different image each time and it might break the code.
+    - latest tag is unpredictable
+    use 
+        FROM node:20.0.2
+
+3. Full blown operating system distro
+    - Do not use image with tag that provide Full blown operation system like ubuntu, debian
+    - image with full blown operating system are large in size.
+    - large image are difficult to push and pull
+
+    - Use leaner operating system distro
+    - it bundle only necessary utilities
+
+    ex. 
+        FROM node:20.0.2    # Do not use
+        FROM node:20.0.2-alpine    # use this
+
+4. Optimize caching image layers
+    - each command in docker file executed as layer.
+    - even if we use image from docker hub are also pulled and pushed layer by layer.
+
+    - write instruction in docker file such that it build least layer again
+    
+    example:
+    - to crate image of node app
+        1. base image
+        2. Copy our code into image
+        3. set work directory
+        4. Run npm install
+        3. CMD ENTRYPOINT
+    
+    - but here if change anything in code in do npm install again, which are not required
+      we just need to copy our code again
+    - npm install required only when we change package.json 
+
+    - New instruction:
+        1. Base image
+        2. Set work directory
+        3. COPY package.json and package-lock.json
+        4. RUN npm install
+        5. Copy our code
+        6. CMD ENTRYPOINT
+
+5. Copy only required file and folders inside docker image
+    - we don't need auto-generated folders like target/, build/, node_modules/
+    - we don't need README.md file
+    - to ignore this use docker ignore file
+
+6. Multi-stage build:
+    - some files are required to build the image, 
+      but don't required in the final image to run the app
+    - for example: test dependencies, temporary file, development tools
+    
+    - dependencies file like package.json and pom.xml are needed to install dependencies, but not needed 
+      to run the app
+    - JDK is require the compile tha java cod
+    - but not required to run java application
+
+    Use multi build stage:
+        - it create temporary image and create final image from them.
+
+    example:
+        # Build stage
+        FROM maven AS build     # here build is name of stage
+        WORKDIR /app
+        COPY myapp /app
+        RUN mvn package
+
+        # Run stage
+        FROM tomcat
+        COPY --from=build /app/target/file.war /usr/local/tomcat/webapps
+        # here we have copied artifact from build stage
+
+7. Use the privileged user
+    - by default root user will start application, if don't define in docker file
+
+    Create separate user and group:
+        - create user and group
+        - set required permission
+
+        ex.
+        # Create group and user
+        RUN groupadd -r mitesh && useradd -g tom tom
+
+        # Set ownership and permission
+        RUN chown -R mitesh:mitesh /app
+
+        # switch to user
+        USER mitesh
+
+        # RUN application
+        CMD node index.js
+
+    Note: Some base image have generic user, then we don't require to create user
+        ex. node image have user named node
+
+8. Scan your image for vulnerabilities:
+    - docker scout command to scan image
+        docker scout cves my-app:1.0

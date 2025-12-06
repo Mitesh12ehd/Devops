@@ -1,0 +1,96 @@
+Use mongo and mongo-express (for mongodb ui) image in development:
+        
+    1. Pull both image
+        docker pull mongo
+        docker pull mongo-express
+
+    2. Create network to communicate
+        docker network create mongo-network
+
+    3. Run mongo container
+        (check documentation of image)'
+        Specify port:
+        - mongo container run on 27017 by default 
+        
+        Pass environment variable:
+        - as per documentation, we can pass specified environment variable
+        MONGO_INITDB_ROOT_USERNAME
+        MONGO_INITDB_ROOT_PASSWORD
+        
+        Final command:
+        docker run -d \
+        -p 27017:27017 \
+        -e MONGO_INITDB_ROOT_USERNAME=mitesh \
+        -e MONGO_INITDB_ROOT_PASSWORD=mitesh123 \
+        --name mongodb \
+        --net mongo-network \
+        mongo 
+        
+    4. Run mongo-express container
+        - it run on port 8081
+
+        docker run -d \
+        -p 8081:8081 \
+        -e ME_CONFIG_BASICAUTH_USERNAME=mitesh \
+        -e ME_CONFIG_BASICAUTH_PASSWORD=mitesh123 \
+        -e ME_CONFIG_MONGODB_ADMINUSERNAME=mitesh \
+        -e ME_CONFIG_MONGODB_ADMINPASSWORD=mitesh123 \
+        -e ME_CONFIG_MONGODB_SERVER=mongodb \
+        --net mongo-network \
+        --name mongo-express \
+        mongo-express
+
+    5. Create database and collection on mongo ui
+        - give name and create database
+        - create collection inside database
+        - give same database and collection name in project
+
+    5. Configure in project
+        - set same username and password in project
+
+Running mongo and mongo-express using docker compose:
+
+version: '3'
+
+services:
+ mongodb:
+  image: mongo
+  ports:
+  - 27017:27017
+  environment:
+  - MONGO_INITDB_ROOT_USERNAME=mitesh
+  - MONGO_INITDB_ROOT_PASSWORD=mitesh123
+ mongo-express:
+  image: mongo-express
+  ports:    
+  - 8081:8081
+  restart: always
+  environment:
+  - ME_CONFIG_BASICAUTH_USERNAME=mitesh
+  - ME_CONFIG_BASICAUTH_PASSWORD=mitesh123
+  - ME_CONFIG_MONGODB_ADMINUSERNAME=mitesh
+  - ME_CONFIG_MONGODB_ADMINPASSWORD=mitesh123
+  - ME_CONFIG_MONGODB_SERVER=mongodb
+
+version: '3'
+
+services:
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mitesh
+      - MONGO_INITDB_ROOT_PASSWORD=mitesh123
+
+  mongo-express:
+    image: mongo-express
+    ports:
+      - "8081:8081"
+    restart: always
+    environment:
+      - ME_CONFIG_BASICAUTH_USERNAME=mitesh
+      - ME_CONFIG_BASICAUTH_PASSWORD=mitesh123
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=mitesh
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=mitesh123
+      - ME_CONFIG_MONGODB_SERVER=mongodb

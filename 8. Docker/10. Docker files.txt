@@ -50,5 +50,24 @@ Building image from dockerfile:
         docker build subfolder/
         docker build ./frontend
 
+Dockerize node js app example:
 
-        
+    # base node image (alpine is lightweight linux distribution)
+    FROM node:13-alpine 
+
+    ENV MONGO_DB_USERNAME=admin \
+        MONGO_DB_PWD=password
+
+    RUN mkdir -p /home/app
+
+    # here make sure that we are not copying node_modules folders
+    COPY ./app /home/app
+
+    # set default dir so that next commands executes in /home/app dir
+    WORKDIR /home/app
+
+    # will execute npm install in /home/app because of WORKDIR
+    RUN npm install
+
+    # no need for /home/app/s  erver.js because of WORKDIR
+    CMD ["node", "server.js"]
