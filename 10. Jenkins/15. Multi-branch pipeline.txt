@@ -1,0 +1,40 @@
+Multi-branch pipeline:
+    - project have multiple branches
+    - multi branch pipeline required when we need such below requirement:
+        - we want to run test on every branch
+        - execute deployment on main branch
+        - build test and deploy when other branch merged into main branch
+    
+    - pipeline for all the branches
+    - different behavior based on branches
+
+    Below things not present compared to freestyle or pipeline job:
+        - UI based Configuration not available in multi-branch pipeline
+        - parameters not available
+
+Create multi-branch pipeline
+    - New item > Name > Select multi  branch pipeline
+    - Attach git repository and credential
+    - Check Build Configuration
+        - Set jenkins file. 
+
+    Discover branch
+        - We can discover branch with various available options
+        
+        ex. Filter by name (with regular expression):
+            - we can discover branch starting with feature or fixes using regular expression 
+            on branch names
+            - .* for scanning all the branches
+
+    - On saving changes in multi branch pipeline, 
+        it automatically build all the branch with jenkins file.
+
+Common practices:
+    - in project, usually one jenkins file shared across all the branch
+    - we put inner condition for different branches
+
+Execute multi-branch pipeline:
+    - to run pipeline from GUI click on 
+        'Scan Multibranch Pipeline Now'
+
+    - to check logs, we need to check logs for each branch individually.

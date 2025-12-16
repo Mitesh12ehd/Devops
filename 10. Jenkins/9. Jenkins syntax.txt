@@ -1,0 +1,132 @@
+Post instruction:
+    - We can write post at the after stages insider pipeline tag
+    - to execute some logic after specific stages executed
+
+    ex. 
+        - Send email about build condition
+        - Save logs only if that stage fails
+        - Retry or run extra actions if that stage becomes unstable
+
+    - We can use post block in two ways
+        1. At pipeline level : run after entire pipeline run
+        2. Inside stage: run after that specific stage run
+
+        example:
+            pipeline {
+                agent any
+
+                stages {
+                    stage('Build') {
+                        steps {
+                            echo "Building..."
+                        }
+                    }
+                    post {
+                        failure {
+                            echo "Build failed. Saving logs..."
+                        }
+                    }
+                }
+
+                post {
+                    success {
+                        echo "Pipeline success!"
+                    }
+                }
+            }
+
+    - There are various post conditions:
+
+    1. always: runs every time
+    2. success:	Runs when build succeeds
+    3. failure:	Runs when build fails
+    4. unstable: When tests fail or build is unstable
+    5. aborted:	When job is manually stopped
+    6. hanged:	When current result ≠ previous result
+    7. fixed:	When previously failed but now succeeded
+    8. regression:	When build result becomes worse
+    9. cleanup:	Runs at the very end (cleanup tasks)
+
+Define condition for each stage:
+    
+    ex. we want to execute stage if current branch is Development
+        stage("test"){
+            when{
+                expression{
+                    BRANCH_NAME == 'development'
+                    // BRANCH_NAME == 'master' || BRANCH_NAME == 'development'
+                    // BRANCH_NAME == 'dev' && CODE_CHANGES == true
+                }
+            }
+            steps{
+                echo "testing the application"
+            }
+        }
+
+Define variable:
+    // Define outside of pipeline
+    CODE_CHANGES = getGitChanges()
+    // Use it in expression
+    expression{
+        BRANCH_NAME == 'dev' || CODE_CHANGES == true
+    }
+
+Environment variable:   
+    script {
+        def ENV = 'dev'   // local only
+        env.ENV = 'dev'   // to create or Update
+                          // accessible across all the stages
+    }
+
+Environment variable in jenkins file:
+
+    Note: Use variable in double quotes instead of single quotes,
+          single quotes are interpreted as simple string
+
+    1. Provided by jenkins:
+        - Location to find list of environment variable that are available in jenkins
+            Go to [jenkins_url (ip + port)]/env-vars.html
+
+    2. Define and use environment variable:
+        pipeline{
+            agent any
+            environment{
+                // variable inside environment block, can be accessible using env.
+                // we can also access without env
+                NEW_VERSION = '1.3.0'
+            }
+            stages{
+                stage("build"){
+                    steps{
+                        echo "building version ${NEW_VERSION}"
+                    }
+                }
+            }
+        }
+
+
+Tools attribute for build tools:
+    - to access build tools for your project
+    - by defining maven tool, we can use maven command in all the stages
+
+    pipeline{
+        tools{
+            maven "maven-3.9" // this is tool we have configured in tool section of Jenkins GUI
+        }
+    }
+
+script block to write custom logic:
+    - in declarative syntax we can't write custom logic directly
+    - for ex
+        complex if/else
+        loops
+        dynamic variables
+        calling custom Groovy methods
+        
+
+Update jenkins file and other file in replay section:
+    - after build application, 
+        we can replay same build by making some changes quickly.
+
+    - also we can run only particular stage from already builded pipeline, again from GUI 
+        to reduce time for whole pipeline

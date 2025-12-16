@@ -1,0 +1,102 @@
+Parameterize your build:
+    - to pass parameter for our build
+    - type of parameter are 
+        - string
+        - text
+        - choice
+        - booleanParam
+        - password
+        - file
+        - credentials
+        - run
+
+    ex.
+
+    pipeline{
+        parameters{
+            // datatype(name, choice, description)
+            choice(name: 'VERSION', choices: ['1.1.0', '1.2.0', '1.3.0'], description: '')
+            booleanParam(name: 'executeTests', defaultValue: true, description: '')
+        }
+    }
+
+    - Use parameter
+    stage("test"){
+        when{
+            expression{
+                params.executeTests == true
+                // or params.executeTests works as well
+            }
+        }
+    }
+    stage("deploy"){
+        steps{
+            echo "Deploying version ${params.VERSION}"
+        }
+    }
+
+    - Pass parameter through GUI:
+        - Commit the jenkins file
+        - Build project (so that it fetch the changes from git repository)
+            and it catch that parameter block 
+
+        - We have 'Build with parameter' option available
+        - Our to parameter 
+            choice : available in dropdown
+            executeTests : available in checkbox
+
+Input parameter in jenkins file:
+    use case 1:
+        - in deploy stage, if we want user input that in which environment they want to deploy
+            ex. DEV, TEST or PROD
+
+    use case 2:
+        - which version to build and deploy
+
+    stage("deploy"){
+        input{
+            message "Select the environment to deploy to"
+            ok "Done"
+            parameters{
+                choice(name: 'ENV', choices: ['dev','staging','production'], description:'')
+            }
+        }
+        steps{
+            script{
+                gv.deployApp();
+                echo "Deploying to ${ENV}"
+                // input parameter accessed without params.ENV
+            }
+        }
+    }
+
+    output:
+        - when we build application,
+            it take pause in deploy stage and we select ENV and click Done button in UI.
+
+    - to receive multiple input from user
+        define multiple parameters
+
+        parameters{
+            choice(name: 'ENV_1', choices: ['dev','staging','production'], description:'')
+            choice(name: 'ENV_2', choices: ['dev','staging','production'], description:'')
+        }
+
+
+    - Assigning input directly to environment variable
+        stage("deploy"){
+            // to create locally use def variable_name or variable_name
+            // to create globally use env.variable_name
+            env.ENV = input(
+                message: "Select the environment to deploy to",
+                ok: "Done",
+                parameters: [
+                    choice(
+                        name: 'ENV',
+                        choices: ['dev', 'staging', 'production'],
+                        description: 'Select environment'
+                    )
+                ]
+            )
+            echo "Deploying to ${ENV}"
+        }

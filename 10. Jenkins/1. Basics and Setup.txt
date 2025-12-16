@@ -1,0 +1,57 @@
+What is build automation?
+
+    scenario:
+        - developer pushes code to git
+        - now it should be tested and build
+        - we can't do it our local machine as it takes time and too much configuration we need to check 
+
+        - we can do it in separate server where
+            - test environment is prepared
+            - docker login credential are configured
+            - all the necessary tools are installed
+
+    - We want test and build automatically
+    - Test code > Build application > Push to repository > Deploy to server
+    - Jenkins is one of the build automation tool
+
+Jenkins:
+    - build automation tool
+    - Provide UI 
+    - Jenkins need to be installed on dedicated server
+    - We can install all the tool we need (Docker, Maven, Gradle) etc.
+    - we can configure task (run test, build app, deployment)
+    - we can send notification, push docker image on our repository
+
+    - Jenkins provide plugins for integration with other tools (docker, aws, nexus, java, maven, gitlab, github)
+
+Setup Jenkins:
+    - We can setup on server directly or we can use docker image (easiest way)
+
+    1.  Create droplet and allow firewall:
+        - Create droplet 
+            4GB RAM is recommended, 2GB is also fine.
+        - Create firewall 
+            - allow port 8080
+            - jenkins application listen on port 8080
+
+    2. Run Jenkins:
+        Port 8080 : jenkins listen
+        Port 50000 : where master and worker node communicate 
+                     as jenkins run as cluster
+
+        Volume : jenkins store data at /var/jenkins_home path
+
+        Final Command:
+        docker run -p 8080:8080 -p 50000:50000  -d -v jenkins_home:/var/jenkins_home jenkins/jenkins:lts
+
+    3. Initialize jenkins:
+        - Go to ip:8080
+        - Go to path given in UI
+            ex. /var/jenkins_home/secrets/initialAdminPassword
+
+        - Go to this path inside container
+            docker exec -it [container_id] bash
+            cat /var/jenkins_home/secrets/initialAdminPassword 
+        - enter password in UI    
+
+        - Create user in UI

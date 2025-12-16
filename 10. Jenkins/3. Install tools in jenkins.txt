@@ -1,0 +1,59 @@
+Ways to install build tools:
+    ex. Java app with maven build tool
+        run test
+        build jar file
+
+    ex. Node app
+        npm build tool
+        run test 
+        package and push to repository
+
+    - depending on programming language, we need different tools installed and configured on jenkins
+    - Install plugins for various tool via jenkins UI
+        other option is install tool inside jenkins container or wherever jenkins is setup
+
+Add npm and node directly on server:
+    - Go inside container as root user
+        docker exec -it -u 0 [container_id] bash
+    - Install curl if not present
+
+    - Download nodesource_setup.sh script
+        curl -sL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh
+
+    - Execute script
+        bash nodesource_setup.sh
+
+    - Install nodejs
+        apt install nodejs
+
+Add tools in jenkins:
+    - Go to 'Manage Jenkins' section
+    - Go to tool section
+    - There are tools available like (Maven, JDK, Git, Gradle, Ant)
+    
+    - If tools is not available here we can add it via Plugin section
+
+    Add maven:
+        - Maven > Add Maven
+        - select version 
+        - We can install from other source (Add installed section) by zip, command etc.
+
+Add plugins  
+    - if anything in not available in tool section, add it via plugin
+    
+    1. Manage jenkins > Plugin > available plugin
+    2. Search plugin  
+        ex. node
+    3. Install plugin
+    4. Now it is available in tools
+        we can configure nodejs for jobs via tool section as same as we have added maven
+
+    5. After configure in tool
+        - In job > build step > node is available
+    
+Installing tools via plugin vs Installing tools directly on server:
+    - Installing tool directly on server is much flexible
+        - We can run each and every command of our choice using 'Execute Shell' build step 
+
+    - Installing tools via plugin is easy but    
+        - it have limited fields in build step

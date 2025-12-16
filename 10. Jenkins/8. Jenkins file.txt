@@ -1,0 +1,37 @@
+Jenkins file
+    - Jenkins file name Jenkinsfile don't require extension groovy.
+    - We can give our own file name ex. pipeline.groovy
+
+Syntax of jenkins file:
+    1. Scripted:
+
+
+    2. Declarative:
+        - easier to get started, but not powerful
+        - it has predefined structure
+        - must start with pipeline
+
+        ex.
+            pipeline{
+                agent any  // agents - where to execute
+                            // agent can be node, executor on node
+
+                // stages is where work happens
+                stages{
+                    stage("build"){
+                        steps{
+                            echo "Building application"
+                        }
+                    }
+                    stage("test"){
+                        steps{
+                            echo "Testing application"
+                        }
+                    }
+                    stage("deploy"){
+                        steps{
+                            echo "Deploying application"
+                        }
+                    }
+                }
+            }

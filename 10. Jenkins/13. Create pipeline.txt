@@ -1,0 +1,74 @@
+Goal to create pipeline
+
+    1. Build jar file
+        mvn package
+
+    2. Build image from that jar file using dockerfile
+        # Base image to run jar file
+        FROM amazoncorretto:8-alpine3.20-jre
+
+        EXPOSE 8080
+
+        # Create directory
+        RUN mkdir -p /usr/app
+
+        COPY ./target/java-maven-app-*.jar /usr/app
+        WORKDIR /usr/app
+
+        CMD java -jar java-maven-app-*.jar
+
+    3. Docker login on private docker hub repository
+
+    3. Push image
+
+Jenkinsfile
+
+pipeline{
+    agent any
+    tools{
+        maven "maven-3.9"
+    }
+    stages{
+        stage("build jar"){
+            steps{
+                    script{
+                        echo "building the application..."
+                        sh "mvn package"
+                    }
+            }
+        }
+        stage("build image"){
+            steps{
+                    script{
+                        echo "building the docker image..."
+                        // extract username and password from credential that we have added in GUI
+                        withCredentials([
+                            usernamePassword(
+                                credentialsId: 'docker-hub-repo',
+                                usernameVariable: 'USER',
+                                passwordVariable: 'PASS'
+                            )
+                        ]){
+                            // inside this block we have access to USER and PASS variable
+
+                            // build image
+                            sh "docker build -t miteshch/demo-app:jma-2.0 ."
+
+                            // login into docker, taking password from input as it become masked
+                            sh "echo ${PASS} | docker login -u ${USER} --password-stdin"
+
+                            // push image
+                            sh "docker push miteshch/demo-app:jma-2.0"
+                        }
+                    }
+            }
+        }
+        stage("deploy"){
+            steps{
+                script{
+                    echo "deploying the application..."
+                }
+            }
+        }
+    }
+}

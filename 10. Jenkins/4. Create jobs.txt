@@ -1,0 +1,126 @@
+Type of jobs available on jenkins:
+    1. Go to New Item or New job section
+    2. We can see type of job available 
+
+        1. Freestyle job:
+            - most basic type
+            - suitable for small scale project
+            - lack some advance feature that are provided in other job type
+
+        2. Pipeline job:
+            - A job that runs a Jenkinsfile with stages for build, test, deploy.
+            - Use case:
+                - CI/CD for real applications
+                - Docker builds, Kubernetes deployment
+                - Multi-step workflows
+                - GitHub/GitLab/Bitbucket automated pipelines 
+
+        3. Multi-branch pipeline:
+            - Automatically creates a pipeline job for every branch in your repo.
+            - Where to use:
+                - Git projects with multiple branches
+                - Feature branch CI/CD
+                - PR (pull request) testing
+
+        - Other job types are 
+            - Multi-configuration project
+            - Folder
+            - Organization folder
+
+Build step: it is a command or predefined action that Jenkins runs during the job execution
+    - Job → Configure → Build Section → Add build step
+    - common build steps are 
+
+        1. Execute shell:
+            - to run linux shell command
+            - to run shell script
+
+        2. Invoke top-level maven target
+            - to run maven command
+            - write command in goal section that we want to run.
+            - if we choose maven target build step, we don't need to write maven in maven command   
+                ex. for maven --version
+                    write --version
+
+        3. Execute Windows Batch Command
+            - to run .bat command or windows cmd command
+
+        4. invoke gradle
+        5. invoke ant etc...
+
+Creating freestyle job:
+    1. New item > Give job name > Select freestyle.
+    2. To configure job go to configuration section of job.
+    3. Add build step
+        ex. Execute shell:
+                npm --version       # works if we have setup npm and node.
+    
+       Add build step for maven using maven build step
+        ex. Invoke top-level Maven targets
+                --version
+    
+    4. Save changes
+
+Execute job:
+    - Click on 'Build Now'
+    
+    - Check executed job details:
+        1. Check Builds tab
+        2. Click on execute job to see details
+        3. We can Check 
+            - Status
+            - Changes 
+            - Console output
+            - Delete builds
+
+Configure git repository in jobs:
+    1. Job > Configure > Source code management
+    2. Choose git
+    3. Provide Git URL
+    4. Add credential
+    5. Select branch
+
+    - if we execute job now, it fetch code and check branch from github repository
+
+Check where data about jobs are stored:
+    Check all jobs:
+        ls /var/jenkins_home/jobs
+        - all jobs create separate folder at upper directory.
+
+    Go into job:
+        ls /var/jenkins_home/jobs/my-job
+        - we have builds folder, it contains all build(Executed task)
+
+    Check our git repository:
+        ls /var/jenkins_home/workspace/my-job
+        - we can see our code here
+
+Execute script that is available in our git repository:
+    - for example we have setup.sh script on our repository
+    - Job > Configure > Build step > Execute shell > 
+    
+    chmod +x setup.sh   # add execute permission
+    ./setup.sh          # execute
+
+Run test and build jar file of maven project:
+    - We have one maven project inside maven project 
+    - it contains one jUnit @Test
+
+        src/test/java/AppTest.java
+        @Test
+        public void testApp() {
+            Application myApp = new Application();
+            String result = myApp.getStatus();
+            assertEquals("OK", result);
+        }
+
+    - create job that run @Test and create jar from mvn package command
+
+        1. Create job
+        2. Configure git repo
+        3. Add maven build step 
+            test        # mvn test command execute all the test at path src/test/java inside project
+            package
+
+        4. Check generated jar
+            ls /var/jenkins_home/workspace/maven-job/target

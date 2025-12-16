@@ -1,0 +1,25 @@
+Groovy:
+    - script is written in Groovy programming language
+
+Create pipeline job:
+    - New Item > Give name > Choose pipeline 
+    - We can choose script as one of them:
+
+    1. Pipeline script:
+        - write script directly (for sample Check hello world or maven script)
+        - Groovy sendbox: it allow to execute Groovy function without needing admin 
+                          permission.
+
+    2. pipeline script with scm:
+        - Use pipeline script from git repository.
+        - Add git repository url and credential 
+        - Configure repository
+        - Create Jenkins or groovy file inside repository
+        - Give path of jenkins file in UI > Script Path
+
+Stage view:
+    - It is ui feature that show view of builds
+    - It show below details
+        1. Checking SCM  
+        2. each stage 
+        3. log of each stage individually

@@ -1,0 +1,96 @@
+Design below flow using freestyle job in jenkins:
+    Checkout git repo > Run test > Build jar file > Build image > push to private repository
+
+Attach docker in jenkins container:   
+    - to use docker command in job
+
+    1. Start jenkins with below command:
+        docker run -p 8080:8080 -p 50000:50000 -d \
+            -v jenkins_home:/var/jenkins_home \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            jenkins/jenkins:lts
+
+    2. Install docker inside jenkins container:
+        docker exec -it -u 0 9cae20c23ee6 bash        # Move into container with root user
+        curl https://get.docker.com/ > dockerinstall && chmod 777 dockerinstall && ./dockerinstall
+
+    3. Enable docker.sock file permission:
+        - by enabling docker.sock file permission we are able to execute docker command.
+        - Give read write permission to everyone
+            chmod 666 /var/run/docker.sock
+
+    4. Now we can run docker command inside jenkins container with any user 
+        - We can execute docker command in our job.
+
+Execute docker file from git repository.
+    (prerequisites: repository must have valid docker file)
+
+    - Job > Configure > Execute shell
+    - docker build -t java-maven-app:1.0 .
+    - Image is available inside jenkins container
+
+Add credential for docker hub:
+    1. Add credential in jenkins
+        Manage jenkins > credential > System > Global credentials > New credential
+
+    2. Add username and password (Personal access token)
+
+Push image to private repository:
+
+    1. Create private repository on hub.docker.com
+
+    2. Refer credential in Job 
+        - Job > Configure > Environment 
+        - Use secret text(s) or files > Binding (Add) > Username and password (separated)
+        - Give variable name USERNAME AND PASSWORD
+        - Select correct credential from dropdown
+
+    4. Execute shell command to 
+        - build image with our own tag
+        - login into docker hub
+        - push the image
+
+        docker build -t miteshch/demo-app:1.0 .
+        docker login -u $USERNAME -p $PASSWORD
+        docker push miteshch/demo-app:1.0 .
+
+    5. We can check our image on docker hub
+
+Push image to nexus private docker repository:
+    1. Allow insecure registry (Allow on VM, not inside docker container):
+        - allow url of nexus repository
+    
+        vim /etc/docker/daemon.json 
+        {
+            "insecure-registries": ["143.110.243.95:8083"]
+        }
+    
+    2. Restart docker
+        - systemctl restart docker
+
+    3. Start jenkins container (stopped because we have restarted docker service)
+        - docker start [container_id]
+
+    4. Allow permission of docker.sock file again
+        - Move into container 
+            docker exec -it -u 0 9cae20c23ee6 bash
+        - Allow
+            chmod 666 /var/run/docker.sock
+
+    5. Add credential of nexus in jenkins
+        - Manage jenkins > credential > System > Global credentials > New credential
+        - Give username and password
+        - save
+
+    6. Configure job
+        - Choose nexus credential
+        
+        - Build and push image
+            # Build image with ip and port of docker repository on nexus
+            docker build -t 209.38.250.80:8083/java-maven-app:1.0 .
+
+            # Login into nexus docker repository
+            docker login -u $USERNAME -p $PASSWORD 209.38.250.80:8083
+
+            # Push image
+            209.38.250.80:8083/java-maven-app:1.0

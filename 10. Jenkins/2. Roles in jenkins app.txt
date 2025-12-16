@@ -1,0 +1,11 @@
+There are 2 roles for jenkins app
+
+    1. Jenkins administrator
+        - operation or devops teams
+        - setup jenkins cluster
+        - install plugins
+        - Backup jenkins data
+
+    2. Jenkins user
+        - developer or devops teams
+        - creating actual job to run workflows

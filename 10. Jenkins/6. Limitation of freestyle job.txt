@@ -1,0 +1,25 @@
+Limitation of freestyle job:
+    - Cannot create multiple stages (Build → Test → Deploy).
+    - Difficult to maintain as everything is configured through GUI
+    - No advanced feature like 
+        - parallel stages
+        - complex conditions
+        - dynamic parameters
+        - retry logic
+        - shared libraries
+    - Not able to provide infrastructure as code
+
+    - manage multiple jobs and their plugin is not manageable
+    - not maintainable when multiple freestyle job used.
+
+Where freestyle job used?
+    - It used when we want to do smaller task or step
+        - Running basic build commands (mvn test, npm install, etc.)
+        - Running shell or batch scripts
+        - Pulling code from Git and building it
+
+    - We can use freestyle job inside another job
+        Add build step > Build other project > Give name of freestyle job to trigger
+
+Pipeline Job:
+    - superset of freestyle job
