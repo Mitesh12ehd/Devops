@@ -1,0 +1,25 @@
+1. Install plugins
+    'Multibranch Scan Webhook Trigger'
+
+2.  Configure job
+    - Go to multi branch pipeline job
+    - Configure > Scan Multibranch Pipeline Triggers
+    - Check 'Scan by webhook' checkbox
+
+    - Enter trigger token
+        - it is any token, we can give name 'githubtoken'
+
+3. Create webhook in github repository with token
+    - Github > repository > Settings > Webhook 
+    - Add webhook
+    
+    1. Enter url
+        JENKINS_URL/multibranch-webhook-trigger/invoke?token=TOKENHERE
+        http://64.227.175.136:8080/multibranch-webhook-trigger/invoke?token=githubtoken
+
+    2. Choose ssl verification method
+    3. Select event
+
+4. Test trigger
+    - change code of branch we want to trigger pipeline
+    - pipeline of specific branch in which we committed is build automatically.

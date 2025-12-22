@@ -1,0 +1,231 @@
+Requirements:
+    - If we have multiple branch, maintaining same jenkins file for all branch is not good practice.
+    - If we make change to one jenkins file, we need to ensure across all jenkins file.
+    
+    ex.
+        - if we running 5 micro-service from 5 different branch and we want to build all 5 micro-service,
+          then maintaining 5 jenkins file is not good.
+
+Jenkins shared library
+    - it is extension to pipeline
+    - it has its own repository
+    - written in groovy
+
+    benefits:
+        - code reusability
+        - easy maintenance
+        - faster pipeline creation
+
+Create jenkins shared library
+    - it is repository
+    - Create groovy project (using IntelliJ or any other tool)
+    - maintain this groovy project in git repository
+
+Structure of shared library:
+    vars folder:
+        - contains all the function that we call from Jenkinsfile
+        - each function/execution step is its own groovy file
+
+    src folder:
+        - Helper code
+
+    resources folder:
+        - use external libraries
+        - non-groovy file
+
+    Example of var folders:
+        buildImage.groovy
+            #!/user/bin/env groovy
+
+            def call(){
+                echo "building the docker image..."
+                // extract username and password from credential that we have added in GUI
+                withCredentials([
+                        usernamePassword(
+                                credentialsId: 'docker-hub-repo',
+                                usernameVariable: 'USER',
+                                passwordVariable: 'PASS'
+                        )
+                ]){
+                    // inside this block we have access to USER and PASS variable
+
+                    // build image
+                    sh "docker build -t miteshch/demo-app:jma-2.0 ."
+
+                    // login into docker, taking password from input as it become masked
+                    sh "echo ${PASS} | docker login -u ${USER} --password-stdin"
+
+                    // push image
+                    sh "docker push miteshch/demo-app:jma-2.0"
+                }
+            }
+
+        buildJar.groovy
+            #!/user/bin/env groovy
+
+            def call(){
+                echo "building the application..."
+                sh "mvn package"
+            }
+
+Make shared library globally available:
+    - Go to Manage jenkins > System
+    - Go to Global Trusted Pipeline Libraries or Global Pipeline Libraries section
+    - Give name
+    - Default version:
+        - main
+        - we can give branch name or specific version of git repository
+        - we can also give till some specific commit using commit hash
+    - Set git repository url
+    - Set credential
+    - save
+
+    - now this shared library is available across all pipeline
+
+Use function of shared library into our project jenkins file:
+    - We can use function by importing library
+
+    #!/user/bin/env groovy
+
+    // Import library
+    // Give same name as we have given in jenkins GUI
+    @Library("jenkins-shared-library")_
+    // Put underscore after Library, it tell jenkins to import this library then run further code.
+    // It is mandatory to put _ in declarative syntax, to put _ after Library
+
+
+    pipeline{
+        agent any
+        tools{
+            maven "maven-3.9"
+        }
+        stages{
+            stage("build jar"){
+                steps{
+                    script{
+                        buildJar();
+                    }
+                }
+            }
+            stage("build image"){
+                steps{
+                    script{
+                        buildImage();   
+                    }
+                }
+            }
+            stage("deploy"){
+                steps{
+                    script{
+                        echo "deploying the application..."
+                    }
+                }
+            }
+        }
+    }
+
+Pass parameter in function of shared library:
+    - define parameter
+
+        def call(String imageName){
+            echo "building the docker image..."
+            // extract username and password from credential that we have added in GUI
+            withCredentials([
+                    usernamePassword(
+                            credentialsId: 'docker-hub-repo',
+                            usernameVariable: 'USER',
+                            passwordVariable: 'PASS'
+                    )
+            ]){
+                // inside this block we have access to USER and PASS variable
+
+                // build image
+                sh "docker build -t $imageName ."
+
+                // login into docker, taking password from input as it become masked
+                sh "echo ${PASS} | docker login -u ${USER} --password-stdin"
+
+                // push image
+                sh "docker push $imageName"
+            }
+        }
+
+    - pass parameter to Jenkinsfile
+
+        script{
+            buildImage "miteshch/demo-app:jma-3.0";   
+        }
+
+Create helper function for reusability:
+    src/com.example/Docker.groovy
+
+        #!/user/bin/env groovy
+
+        package com.example
+
+        // implement Serializable interface
+        // Purpose of Serializable to make all the thing (environment variable, shell executor, withCredential)
+
+        class Docker implements Serializable {
+
+            def script
+
+            // script contain all the command and method for pipeline
+            Docker(script){
+                this.script = script
+            }
+
+            def buildDockerImage(String imageName){
+                script.echo "building the docker image..."
+                script.withCredentials([
+                        script.usernamePassword(
+                                credentialsId: 'docker-hub-repo',
+                                usernameVariable: 'USER',
+                                passwordVariable: 'PASS'
+                        )
+                ]){
+                    // inside this block we have access to USER and PASS variable
+
+                    // build image
+                    script.sh "docker build -t $imageName ."
+
+                    // login into docker, taking password from input as it become masked
+                    // use variable in single qualities and inside bracket
+                    // script.sh "echo ${PASS} | docker login -u ${USER} --password-stdin"
+                    script.sh "echo '${script.PASS}' | docker login -u '${script.USER}' --password-stdin"
+
+                    // push image
+                    script.sh "docker push $imageName"
+                }
+            }
+        }
+
+
+    vars/buildImage.groovy:
+        #!/user/bin/env groovy
+
+        import com.example.Docker
+
+        def call(String imageName){
+            return new Docker(this).buildDockerImage(imageName)
+        }
+
+Project scoped shared library:
+    - We can create jenkins shared library for only one project
+    - in that case we don't need to attach our jenkins-shared-library to system of jenkins GUI  
+    - Import library in different way
+    - Here, we need to define 
+        repository url, credential of jenkins shared library withing jenkins file
+
+    Jenkinsfile
+
+        // Import library
+
+        // identifier: library_name@tag : tag can be branch name or commit hash
+
+        library identifier: "jenkins-shared-library@main", 
+                retriever: modernSCM([
+                    $class: "GitSCMSource", 
+                    remote: "https://github.com/Mitesh12ehd/jenkins-shared-library.git",
+                    credentialsId: "github-credential"
+                ])

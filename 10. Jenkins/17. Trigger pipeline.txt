@@ -1,0 +1,81 @@
+Trigger Jenkins build jobs?
+    - We can trigger jobs automatically when changes happen in git repository.
+    - Jenkins and github/gitlab need to be configured for that
+    - Github/Gitlab notify Jenkins to start the jobs
+    - We can also schedule that build execute at given time
+
+Configure automatic triggering of 'pipeline' type jenkins jobs for Github:
+
+    1. Download plugin:
+        'GitHub plugin' and 'Github integration' plugin
+
+    2. Add webhooks in Github:
+        - Go to Github > currently connected repository > settings
+        - webhooks > add webhooks
+        - Enter Jenkins URL 
+            [url]/github-webhook
+            http://64.227.175.136:8080/github-webhook
+
+            Note: localhost url not works here. 
+             
+        - Enable or disable SSL according to our jenkins method
+        - select even you want to trigger pipeline
+        - Add webhook
+
+        Recent deliveries:
+            - after creating webhook, we can see if connection is success or not in Recent deliveries section 
+              of that webhook
+            - when pipeline is build we can see request, response and body of api request in this section
+
+    4. Configure jobs
+            choose 'GitHub hook trigger for GITScm polling' checkbox
+
+Configure automatic triggering of 'pipeline' type jenkins jobs for Gitlab:
+    1. Download plugin:
+            'Gitlab'
+
+    2. Add gitlab configuration in System:
+        - Manage jenkins > System 
+        - Check 'Enable authentication for /project end point'
+
+        - we need to add url and credential of github/gitlab where jenkins communicate with github/gitlab
+
+        1. Manage jenkins > Gitlab
+
+        2. Add gitlab connection:
+            - Name
+            - API URL : https://api.github.com
+                set url of github/gitlab where it is hosted
+
+            - credential:
+                - create personal access token on github with below permission
+                    - api
+
+                - choose type 'GitLab API token'
+                - set API token
+                - set ID
+
+    3. Add gitlab configuration in jobs configuration:
+        - Configure jobs
+        - Find dropdown 'GitLab Connection' and choose created gitlab connection
+
+        - in Build triggers section
+            - check the 'Build when change a pushed to gitlab webhook URL:[url]/project/[job-name]'
+            - Choose gitlab event trigger
+                ex. push, opened merge request events
+
+
+    3. Add integration in Gitlab:
+        - Go to Gitlab > Project > settings > Integrations
+        - Search for Jenkins
+        - Go into Jenkins section
+            - Enable integration
+            - Choose trigger event like (push, merge)
+            - Enter jenkins url
+                http://64.227.175.136:8080/
+            - Check uncheck ssl based on our hosted method of jenkins
+            - Project name: Give project name same as job name of jenkins
+            - enter username and password of jenkins
+
+        - Test settings
+            - We can see build is triggered
