@@ -1,0 +1,228 @@
+Versioning:
+    4.2.1
+    Major.Minor.Patch
+
+    Major:
+        - contain big changes, breaking changes, Not backward compatible
+    
+    Minor:
+        - New feature
+        - backward compatible
+        - API feature
+
+    Patch:
+        - Minor changes and bug fixes
+        - doesn't change API
+
+    Suffix:
+        ex. 1.1.0-SNAPSHOT, 2.3.5.RELEASE
+        - here SNAPSHOT is suffix
+        - more information
+        - ex. SNAPSHOT suffix is used for development version
+
+How to increase version?
+    - increment version in pom.xml file
+    - we can increase version inside the build automation
+    - build tools have command to increment version
+
+Increase version of maven application:
+    - it take older version from pom.xml and convert it into newer version according to properties in command
+        
+    build-helper:parse-version:
+        - parse a version string and set properties containing parts of the version.
+        - it set following properties
+            [propertyPrefix].majorVersion
+            [propertyPrefix].minorVersion
+            [propertyPrefix].incrementalVersion
+            [propertyPrefix].qualifier
+            [propertyPrefix].buildNumber
+            
+        - it also set following properties based on base properties
+            [propertyPrefix].nextMajorVersion
+            [propertyPrefix].nextMinorVersion
+            [propertyPrefix].nextIncrementalVersion
+            [propertyPrefix].nextBuildNumber
+    
+    versions:set:
+        - to set new version in exchange of old version
+
+    Full command:
+        for powershell/cmd: escapes dollar sign
+        mvn build-helper:parse-version versions:set -DnewVersion='${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.nextIncrementalVersion}' versions:commit
+
+        for linux shell: escapes dollar sign
+        mvn build-helper:parse-version versions:set -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion} versions:commit
+
+        to use inside sh while writing in jenkins file:
+        - there is different way to escapes the dollar sign
+        mvn build-helper:parse-version versions:set -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.nextIncrementalVersion} versions:commit
+
+
+        mvn \
+        build-helper:parse-version \
+        versions:set \
+        -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion} \
+        versions:commit
+
+Increment version via CI/CD:
+
+    Increment version > Build app > Build image > Push to docker repository
+
+    1. Increment version:
+        sh "mvn build-helper:parse-version versions:set -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.nextIncrementalVersion} versions:commit"
+
+    2. Build Jar with new version
+        - mvn package
+        - it build jar file with version present in pom.xml
+
+    3. Increasing version of docker image:
+        - we were using static docker image version 
+            sh "docker build -t miteshch/demo-app:jma-4.0 ."
+        - best practice is use application version as docker image version
+        - check the code
+
+    4. Make dynamic version while building docker image
+        - we were using static version of application in docker file.
+        - previous: 
+            COPY ./target/java-maven-app-1.1.0-SNAPSHOT.jar /usr/app
+            CMD java -jar java-maven-app-1.1.0-SNAPSHOT.jar
+        - new: 
+            COPY ./target/java-maven-app-*.jar /usr/app
+            CMD java -jar java-maven-app-*.jar
+
+
+        problem:
+            - target folder contains multiple jar file, but we need only one that is newly created
+        solution:
+            - we can clean target folder before mvn package
+            - mvn clean package
+
+    Code:
+    
+    pipeline{
+        agent any
+        tools{
+            maven "maven-3.9"
+        }
+        stages{
+            stage("increment version"){
+                steps{
+                    script{
+                        echo "Incrementing app version"
+                        sh "mvn build-helper:parse-version versions:set -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.nextIncrementalVersion} versions:commit"
+                        
+                        // Store version in IMAGE_NAME variable
+                        def matcher = readFile("pom.xml") =~ "<version>(.+)</version>"
+
+                        // matcher[0] is first full match
+                        // matcher[0][1] is value inside (.+)
+                        def version = matcher[0][1]
+
+                        // BUILD_NUMBER variable is provide by jenkins, appending it to make unique image name each time
+                        env.IMAGE_NAME = "${version}-${BUILD_NUMBER}"
+                    }
+                }
+            }
+            stage("build app"){
+                steps{
+                    script{
+                        echo "Building the application..."
+                        sh "mvn clean package"
+                    }
+                }
+            }
+            stage("build image"){
+                steps{
+                    script{
+                        echo "Building the docker image..."
+
+                        withCredentials([
+                            usernamePassword(
+                                credentialsId: 'docker-hub-repo',
+                                usernameVariable: 'USER',
+                                passwordVariable: 'PASS'
+                            )
+                        ]){
+                            sh "docker build -t miteshch/demo-app:${IMAGE_NAME} ."
+                            sh "echo ${PASS} | docker login -u ${USER} --password-stdin"
+                            sh "docker push miteshch/demo-app:${IMAGE_NAME}"
+                        }
+                    }
+                }
+            }
+            stage("deploy"){
+                steps{
+                    script{
+                        echo "Deploying the application..."
+                    }
+                }
+            }
+        }
+    }
+
+Commit version bump from jenkins:
+    - If we increment version via CI/CD, it keep remains in jenkins local, it doesn't updated in our
+      git repository. 
+    - We need to commit new version to git repository.
+
+    set origin url with username and password:
+        - by default jenkins connect with origin url that we have given in git SCM field, and we 
+          provide credential separately there
+        - but we can also pass credential and password within url.
+            git remote set-url origin https://${USER}:${PASS}@github.com/Mitesh12ehd/java-maven-app.git
+
+    push commit behavior in multi-branch:
+        - in multi-branch pipeline no branch checked out directly
+        - HEAD is pointed to commit directly
+        - and if we do only git push via jenkins the it throw error,
+            fatal: You are not currently on a branch
+        - to push commit in specific branch 
+            git push origin HEAD:jenkins-practice
+
+    stage("Commit version update"){
+        steps{
+            script{
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'github-credential',
+                        usernameVariable: 'USER',
+                        passwordVariable: 'PASS'
+                    )
+                ]){ 
+                    // set configuration of user that commit the changes
+                    sh 'git config --global user.email "jenkins@example.com"'
+                    sh 'git config --global user.name "jenkins"'
+
+                    // for printing information
+                    sh "git status"
+                    sh "git branch"
+                    sh "git config --list"
+
+                    // to commit new version
+                    sh "git remote set-url origin https://${USER}:${PASS}@github.com/Mitesh12ehd/java-maven-app.git"
+                    sh "git add ."
+                    sh 'git commit -m "Jenkins: Application version update"'
+                    sh "git push origin HEAD:jenkins-practice"
+                }
+            }
+        }
+    }
+
+Ignore jenkins commit for triggering pipeline:
+
+    Problem:
+        - If we push updated version in pom.xml to github repo, 
+        - then github trigger jenkins pipeline for that commit
+        - and this continues infinite time.
+
+    Solution:
+        - Detect commit that is made by jenkins and ignore that commit while triggering pipeline
+
+        1. Install plugin:
+            - Ignore Committer Strategy
+    
+        2. Configure pipeline:
+            - Go to Branch Sources > Build strategies
+            - Add build strategy > choose Ignore Committer Strategy
+            - Enter email of author which we want to ignore commits from
+            - Check 'Allow builds when a changeset contains non-ignored author(s)'
