@@ -1,0 +1,126 @@
+EC2:
+    - Elastic compute cloud
+    - virtual server in AWS cloud.
+    - provide compute capacity
+    - we use EC2 to deploy our application
+
+Task:
+    1. Create EC2 instance
+    2. Connect EC2 instance via SSH
+    3. Install docker on EC2 instance
+    4. Run docker container
+    5. Configure EC2 firewall to access app externally from browser
+
+Create EC2 instance:
+    1. EC2 > Instances > Launch Instances
+
+    2. Set name and tag
+        - Set name
+        - Attach more tag (optional)
+
+    3. Select Application and OS Images
+        - Choose operating system
+        - Amazon Linux is optimized linux OS for AWS 
+
+    4. Select Instance type
+        - Choose t3.micro for just run docker container
+
+    5. SSH key pair
+        - AWS generate public and private key pair
+        - We can use same key pair for another instance
+
+        Create key pair
+            - Choose RSA
+            - Give name
+            - Select private key file format 
+                .pem for openssh (mac, linux, windows 10/11)
+                .ppk for putty (windows)
+            - On create, private will be downloaded in .pem or .ppk file
+    
+    6. Network settings:
+        - VPC:
+            - we have default vpc(given by aws) is selected
+            - choose other vpc if required
+
+        - Subnet:
+            - choose specific subnet if required (it required when we had configured firewall for each subnet
+              differently)
+            - Keep no preference if no such requirement
+
+        - Auto assign public IP
+            - if you don't want any external traffic to enter instance then disable
+            - else keep enable
+
+        - Security group (firewall)
+            - we can define firewall rule on subnet level or instance level
+            - We can choose existing Security group or can craete new group
+
+            Create firewall:
+            for ssh port:
+                - Port 22 is already set for ssh.
+                - Update source type:
+                    Anywhere: Allow anyone to ssh into our instance
+
+                    My IP: Detect our machine IP and allow only our machine IP
+                            - ip changes on each restart of our local machine
+
+                    Custom: We can enter ip of our choice
+
+            for other port:
+                - We can add other port for any application
+
+    7. Configure storage:
+        - Select storage size and type according to requirement
+    
+    8. Review summary and Launch instance
+
+Connect to EC2 instance:
+
+    1. Add private key to .ssh directory:
+        - We have downloaded private key while creating EC2 instance
+        - Move that .pem file to .ssh directory
+
+        - .ssh directory where all private key present of each server
+
+        - Make permission only read for user (to make secure)
+            chmod 400 .ssh/docker-server.pem
+
+    2. connect EC2 instance
+        -i to provide .pem file
+
+        ssh -i ~/.ssh/docker-server.pem ec2-user@13.201.190.56
+
+Install docker and run application on EC2 instance:
+
+    1. Update package manager
+        - sudo yum Update
+
+        (in Amazon linux image there is yum package manager, as it is Red Hat–family–based distribution
+        it is not debian based like ubuntu)
+
+    2. Install and start docker
+        sudo yum install docker
+        sudo service docker start
+
+        verify docker is running
+        ps aux | grep docker : we must see dockerd running
+
+    3. Add current user to docker group to execute docker command without sudo
+        sudo usermod -aG docker $USER
+
+        - exit and connect again to take effect.
+
+    4. Pull image from our docker hub private repository.
+        - login into docker hub
+            docker login
+            - enter username and password (PAT)
+
+        - pull image
+            docker pull miteshch/demo-app:1.0
+
+    4. Run image
+        docker run -d -p 3000:3080 miteshch/demo-app:1.0
+    
+    5. Allow ports through firewall
+        Instance > Security group > Edit inbound rule
+        Add rule > Custom TCP > Port 3000 > Choose ip 0.0.0.0/0

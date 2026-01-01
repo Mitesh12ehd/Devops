@@ -1,0 +1,70 @@
+IAM service:
+    - Identity and access management
+    - to manage access of aws service and resource
+    - it is global scope service
+
+    - Create and manage users and groups
+    - Assign policies (set of permissions)
+
+ROOT user:
+    - when we create aws account, ROOT user is created by default.
+    - ROOT user has unlimited privileges.
+
+Admin user:
+    - Best practice is create one admin user with less privileges than ROOT.
+    - admin user will manage whole aws account.
+    
+    Create admin user:
+        Users > Create user > Give name 'admin' 
+            > Choose access through AWS CLI console
+                > Select password method (autogenerate or custom)
+                > Choose 'Users must create a new password at next sign-in - Recommended' accordingly
+
+            > Select permission option 'Attach policies directly'
+                (because admin user are not in any groups)
+
+            > Select policies 
+                - for admin choose 'AdministratorAccess'
+
+            > Create user
+            > Download csv file for
+                - Account ID 
+                - username
+                - password
+                - console sing in url
+
+    Sign in with IAM user:
+        - Choose sign in via IAM
+        - set account id (present in console url in .csv file)
+        - give username and password
+        - Update password if needed
+
+    Give programmatic access to user aws console:
+        - sign in using IAM user
+        - Profile > security credentials > Access keys
+        - Create access key
+        - Choose CLI option
+        - Give tag if required
+        - Store Access key and secret access key or download csv file
+
+Users:
+    - we can assign policy to IAM users
+
+    - Access methods
+        UI access : through Username and password
+        Console access : through Access Key and Secret key
+
+    1. Human user:
+        - human user that need access of services
+
+    2. System user:
+        - jenkins to deploy container or push image
+
+Groups:
+    - for granting access to multiple IAM users
+    - ex. to give access to devops team by creating devops group
+
+Roles:
+    - we can assign policy to IAM role
+    - roles required when one service require some access of another service
+    - ex. EC2 require access of S3

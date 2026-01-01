@@ -1,0 +1,71 @@
+Run image on EC2 from docker hub repository using jenkins:
+
+    1. Install plugin 'ssh agent'
+
+    2. Make private key available in jenkins:
+        - multi branch pipeline have their pipeline scoped credential
+        - multi-branch pipeline > credential > Stores scoped to multibranch-pipeline > Add credential
+        - type 'ssh username with private key'
+
+        - give id 
+        - give username - ec2-user 
+            it will be same as we used in below command to connect ec2 from our local
+        - private key > enter directly
+            - paste the content of docker-server.pem file available
+            - save
+
+    3. Check jenkins:
+        - to check the syntax that how we can connect instance using shh
+        - multi-branch pipeline > Pipeline syntax 
+        - Sample step > ssh agent
+        - Select credential
+        - Generate pipeline script
+
+        - we got syntax like this
+            sshagent(['ec2-server-key']) {
+                // some block
+            }
+        - this syntax we can use in our Jenkinsfile
+
+    4. Add stages to ssh into EC2 and run image
+        stage("deploy"){
+            steps{
+                script{ 
+                    def dockerCommand = "docker run -p 3080:3080 -d miteshch/demo-app:nodeApp1.0"
+                    sshagent(['ec2-server-key']) {
+                        // -o flag to avoid popup that ask for yes when we connect using ssh
+                        sh "ssh -o StrictHostKeyChecking=no ec2-user@13.201.190.56 ${dockerCommand}"
+                    }
+                }
+            }
+        }    
+
+    5. Run image on EC2:
+        - docker login manually on EC2 or add within Jenkinsfile
+        
+
+    6. Allow ip of jenkins to ssh into our EC2 instance
+        - we can skip this step if we have allowed all the ip 0.0.0.0/0
+
+        - Add inbound rule:
+            - Type: ssh
+            - Protocol : TCP
+            - Port - 22
+            - source - custom - jenkins_ip
+
+    7. Allow application port 3080 through firewall/security groups of our EC2:
+        - Add inbound rule
+            - Type: custom TCP
+            - Protocol : custom TCP
+            - Port - 3080
+            - source - 0.0.0.0/0 or ip of machine we want to access our application
+
+    8. Run the application
+        - Build jenkins pipeline
+        - Check log that everything is fine
+
+        - Verify inside EC2 that image is pulled and container is running:
+            - ssh into EC2
+            - do docker images and docker paste
+        
+        - Go to ec2_ip:3080 and verify our application

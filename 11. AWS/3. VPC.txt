@@ -1,0 +1,84 @@
+VPC:
+    - Virtual private cloud
+    - VPC for each region
+    - VPC is own isolated network in the cloud
+    - VPC spans all AZs in that region
+
+Subnet:
+    - subnet for each availability zone
+    - each AZ have own subnet
+
+    Private and public subnet:
+        - Firewall rule configuration makes it either private or public subnet
+
+        Private subnet:
+            - We can configure that is firewall, and it becomes
+            private subnet.
+            - external traffic can't enter subnet
+            - use case: for database we block all external traffic and allow only application to send the query or
+                        request
+            - Other services inside VPC still have access.
+
+        Public subnet:
+            - external traffic can access
+            - use case: web application host in public subnet so everyone can access it.
+
+IP range:
+    CIDR block:
+        - In IP address we can see 'IPv4 CIDR'.
+        - '172.31.0.0/16'
+        - here 16 gives range instead of one ip address,
+        = here last 16 digit in 32 bit are dynamic.
+        - 16 is subnet mask
+
+    VPC range:  
+    - Internal IP ranges on VPC level
+    - range is defined by default
+    - to check range
+        > Go to VPC
+        > check range 'IPv4 CIDR 172.31.0.0/16'
+ 
+    - whenever we create instance(EC2 or other), IP address is assigned from this range
+    - this IP is for internal communication inside the VPC, not for outside web traffic
+
+    Subnet range:
+    - each subnet gets IP range from VPC range
+    - to check subnet range
+        > VPC
+        > go to subnet
+        > check range 'IPv4 CIDR'
+
+    How our instance get public and private IP address?
+        - When we create EC2 instance for web application, we want IP that accessible outside of VPC.
+        - While creating EC2, it gives public IP that we can access outside.
+
+Internet gateway:
+    - to connect VPC to outside internet.
+    
+Controlling access:
+    - we need to control access of our VPC.
+    - we need to control access to your individual server instances
+    - firewall type configuration for VPC.
+
+    Network ACLs:
+        - Network access control list
+        - VPC > Security > Network ACLs
+        - it allows to control access on subnet level
+
+    Security groups:
+        - VPC > Security > Security groups
+        - it allows to control access on instance level
+
+        Inbound rule:
+            - rule for incoming request that comes from outside
+            - example. we try to access application on 3000 port using web browser
+
+        Outbound rule:
+            - rule for request outgoing from machine
+            - ex. for docker install there yum request goes outside
+
+        ex.
+            - one EC2 instance require 
+                - port open 80 and 3000 for incoming request
+                - port open 7000 for outgoing request
+            - other EC2 require some other configuration

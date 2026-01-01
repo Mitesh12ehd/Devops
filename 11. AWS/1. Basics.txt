@@ -1,0 +1,33 @@
+AWS:
+    - AWS is iaas platform
+    - it is powerful cloud platform
+    - Netflix also use AWS as their cloud service provider
+    - It provide vast amount of services for various categories
+
+    We will use below services
+        - EC2: virtual machine
+        - S3: for storage
+        - IAM : for user, group and permission
+        - ECR : for containers
+        - EKS : for kubernetes
+
+AWS account and service scope:
+    - Different service are created in different scope
+    - 
+
+    1. Global scope (AWS account):
+        - IAM users are into global scope
+        - we get global scope by creating aws account
+        ex.
+            - IAM and billing service are in global scope.
+
+    2. Region:
+        - with aws account, we can create infrastructure in any region.
+        ex.
+            - S3, VPC, DynamoDB are region scope services
+
+    2. Availability zone:   
+        - Each region may have multiple availability zone.
+        - AZ is actual physical data center which run virtual machine
+        ex.
+            - EC2, EBS, RDS are in availability zone scope services

@@ -23,3 +23,5 @@ Stage view:
         1. Checking SCM  
         2. each stage 
         3. log of each stage individually
+
+    - Install plugin 'Stage view'
