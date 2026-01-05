@@ -1,0 +1,105 @@
+AWS CLI:
+    - programmatic access to creating services, configuring them
+    - write script for aws operations
+    - provide command for every AWS services and resources
+
+
+Create via AWS CLI:
+    - we can perform below things as we have done same with UI
+        - create EC2
+        - 1 security group
+        - ssh key pair 
+
+Configure AWS CLI to connect AWS account
+    - connect with aws user
+    - use ACCESS key ID and secret access key of user
+    
+    aws configure
+        AWS Access Key ID [****************N3HZ]: 
+        AWS Secret Access Key [****************ONA/]:
+        Default region name [ap-south-1]: ap-south-1
+        Default output format [json]: json
+
+    - verify aws configuration
+        ls ~/.aws      # two files config and credentials
+        cat ~/.aws/config   # verify configuration
+        cat ~/.aws/credentials  # verify credentials
+
+Command structure:
+    aws <command> <subcommand> [option and parameters]
+
+    <command> : aws service ex. EC2
+    <subcommand> : to specify which operation to perform
+        - run instances
+        - configure key pair
+        - create security group
+        - etc..
+
+Create ec2 instance
+    aws ec2 run-instances \
+    --image-id ami-00ca570c1b6d79f36 \
+    --count 1 \
+    --instance-type t3.micro \
+    --key-name MyKpCLI \
+    --security-group-ids <value> \
+    --subnet-id <value>
+
+
+    - check instances   
+        - we can also get public ip to ssh from this command
+
+        aws ec2 describe-instances
+
+    - connect ec2 instance using ssh:
+        - update permission of pem file
+            chmod 400 .ssh/MyKpCLI.pem
+
+        - connect 
+            ssh -i ~/.ssh/MyKpCLI.pem ec2-user@3.109.183.115
+
+Create security group:
+
+    - List available security groups
+        aws ec2 describe-security-groups
+
+    - List available VPC
+        aws ec2 describe-vpcs
+
+    - Create security group
+        - Security groups need to be created inside VPC
+        - VPC id required to create security group
+
+        aws ec2 create-security-group \
+        --group-name my-sg \
+        --description "My SG" \
+        --vpc-id <value>
+
+        - it give newly created security group id
+
+    - Check details of specific group id
+        aws ec2 describe-security-groups --group-ids <value>
+
+    - Add inbound rule
+        aws ec2 authorize-security-group-ingress \
+        --group-id <value> \
+        --protocol tcp \
+        --port 22 \
+        --cidr 0.0.0.0/0
+
+Create key pair:
+    - we can create new key pair or use existing key pair   
+
+    - default key pair type is rsa, we can give other type using option
+          --key-type ed25519
+
+    aws ec2 create-key-pair \
+    --key-name MyKpCLI \
+    --query "KeyMaterial" \
+    --output text > MyKpCLI.pem
+
+Get subnet id:
+    aws ec2 describe-subnets
+
+Get image id:
+    - we can get it from AWS UI (we can also get other value from UI too)
+    - EC2 > Launch instance > Browse more about image > Copy id

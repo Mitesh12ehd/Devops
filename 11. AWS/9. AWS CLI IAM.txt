@@ -1,0 +1,93 @@
+Create user groups:
+    aws iam create-group --group-name MyGroupCli
+
+Create user:
+    aws iam create-user --user-name MyUserCli
+
+Add user in groups:
+    aws iam add-user-to-group --user-name MyUserCli --group-name MyGroupCli
+
+Check group or user information:
+    aws iam get-group --group-name MyGroupCli
+    aws iam get-user --user-name MyUserCli
+
+Give user permission for EC2 to user groups:
+
+    - Get ARN for policy
+        AWS UI > IAM > Policies > search and select policy > copy arn
+
+    - Get ARN if we know name of policy
+        aws iam list-policies --query 'Policies[?PolicyName==`AmazonEC2FullAccess`].Arn' --output text
+
+    - attach policy to user or group
+    aws iam attach-user-policy --user-name MyUserCli --policy-arn arn:aws:iam::aws:policy/AmazonEC2FullAccess
+    aws iam attach-group-policy --group-name MyGroupCli --policy-arn arn:aws:iam::aws:policy/AmazonEC2FullAccess
+
+Validate attached policy:
+    aws iam list-attached-group-policies --group-name MyGroupCli
+
+Create password for new user:
+    - we need to set password and access key for UI and console access
+
+    - we can allow user to reset password on first login
+        --password-reset-required
+
+    - we can get account id by describing user
+        aws iam get-user --user-name MyUserCli
+
+        aws iam create-login-profile --user-name MyUserCli --password MyPassword! --password-reset-required
+    
+    - Allow user to reset password
+
+        1. Create json fields
+            vim changePwdPolicy.json
+            {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Effect": "Allow",
+                        "Action": [
+                            "iam:ChangePassword"
+                        ],
+                        "Resource": "arn:aws:iam::372641111498:user/${aws:username}"
+                    },
+                    {
+                        "Effect": "Allow",
+                        "Action": [
+                            "iam:GetAccountPasswordPolicy"
+                        ],
+                        "Resource": "*"
+                    }
+                ]
+            }
+
+        2. Create policy to allow reset password
+            aws iam create-policy --policy-name changePwd --policy-document file://changePwdPolicy.json
+
+        3. Assign policy to user or group
+            aws iam attach-group-policy --group-name MyGroupCli --policy-arn arn:aws:iam::372641111498:policy/changePwd
+
+Create access-key for new user
+    - access key required for console access
+
+    - Create access key-pair :
+        aws iam create-access-key --user-name MyUserCli
+
+    - Configure AWS CLI to user this new user
+
+        1. Update configuration permanently
+            aws configure set aws_access_key_id NEW_ACCESS_KEY
+            aws configure set aws_secret_access_key NEW_SECRET_KEY
+            aws configure set region ap-south-1
+            aws configure set output json
+
+        2. Update configuration temporary for only that session
+            export AWS_ACCESS_KEY_ID=xxxx
+        export AWS_SECRET_ACCESS_KEY=yyyy
+
+Delete AWS resource:
+    - we can delete resource like EC2, user, groups, security groups etc.
+
+    - to check command
+        aws ec2 help
+        aws iam help

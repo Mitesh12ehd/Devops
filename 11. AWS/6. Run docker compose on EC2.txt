@@ -61,6 +61,7 @@ Using docker compose for deployment:
 
         Jenkinsfile
             environment{
+                // here we can take image name by incrementing version each time using separate stage
                 IMAGE_NAME = "miteshch/demo-app:java-maven-1.0"
             }
             stage("deploy"){

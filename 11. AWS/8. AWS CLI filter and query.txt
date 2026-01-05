@@ -1,0 +1,41 @@
+Filter and query:
+    - to get data we can apply filter and query to get specific information only
+    - we can use query and filter individually or both.
+
+    - filter to locate specific data
+    - query to get only required fields
+
+
+    Example:
+
+    - To get t3.micro instance ids
+        aws ec2 describe-instances \
+        --filters "Name=instance-type, Values=t3.micro" \
+        --query "Reservations[].Instances[].InstanceId"
+
+    - To get instance id who have tag web-server-with-docker
+        aws ec2 describe-instances \
+        --filters "Name=tag:Type, Values=web-server-with-docker" \
+        --query "Reservations[].Instances[].InstanceId"
+
+    - To get instance who have image from any one which we have given
+        aws ec2 describe-instances \
+        --filters "Name=image-id, Values=ami-00ca570c1b6d79f36, linux-abc123"
+
+    - To get running instance
+        aws ec2 describe-instances \
+        --filters "Name=instance-state-name,Values=running"
+
+    - Apply multiple filter
+        aws ec2 describe-instances \
+        --filters \
+        Name=instance-state-name,Values=running \
+        Name=tag:Environment,Values=prod
+
+    - Query to get instance id and state
+        aws ec2 describe-instances \
+        --query "Reservations[].Instances[].{ID:InstanceId,State:State.Name}"
+
+    - Query to get public ip address 
+        aws ec2 describe-instances \
+        --query "Reservations[].Instances[].PublicIpAddress"
