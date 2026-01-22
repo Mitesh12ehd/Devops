@@ -1,0 +1,77 @@
+Check Mongo-express project
+
+Project:
+    - Deploy 2 application
+        mongo-db
+        mongo-express
+
+    - mongo-express is web app that request to mongo-db 
+
+    - 2 deployment/pod
+    - 2 service
+    - 1 config map
+    - 1 secret
+
+Create mongodb deployment, service and secret
+
+    1. Create mongo-db deployment configuration:
+        - Check image
+        - Check required ports
+        - Check required environment variable
+        - mongodb-deployment.yaml
+        - We need to store Username and password in secret and reference them in mongodb-deployment
+
+    2. Create secret:
+        - Check mongo-secret.yaml
+        - value of data must be base 64 encoded
+
+        - How to encode text into base 64?
+            - echo -n "username" | base64
+
+        - Apply secret before creating deployment
+            - kubectl apply -f secret.yaml
+            - it required as we refer secret value in deployment configuration file
+
+        - Check secret
+            kubectl get secret
+
+    3. Refer secret value in mongodb-deployment.yaml
+        - Check mongodb-deployment.yaml
+        - apply deployment
+
+    4. Create internal service
+        - create internal service so that other component can communicate with mongo-db
+        - we can define service withing deployment file with other yaml document separated by ---
+        - check mongodb-service.yaml
+
+        - verify 
+            kubectl get service
+            kubectl describe service mongodb-service
+
+Create mongo express deployment, service, and config map:
+
+    1. Create mongo-express deployment file
+        - check mongo-express-deployment.yaml file
+
+    2. Create config map
+        - check mongodb-configmap.yaml
+        - refer value in mongo-express-deployment.yaml
+
+    3. Apply configmap
+       Apply mongo-express-deployment 
+
+    4. Create external service:
+        - to access mongo-express from browser
+        - define type: LoadBalancer to create external service
+        - check mongo-express-service.yaml
+
+        - Define nodePort where this service can be accessed
+            - it has range between 30000-32767
+
+    5. Verify external service
+        - in actual kubernetes, external service has ip where we can access it
+        - we can see it in kubectl get services
+
+        - for minikube, it works differently
+        - command 
+            minikube service mongo-express-service

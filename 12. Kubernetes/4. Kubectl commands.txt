@@ -1,0 +1,75 @@
+Kubectl commands:
+
+Get status of nodes:
+    kubectl get node
+
+Get status of pod:
+    kubectl get pod
+
+Get status of services:
+    kubectl get services
+
+Create component:
+    - to create components like pod, service, deployment 
+    - check kubectl create -h
+
+Create pod / deployment:
+    - In real world, we are not working with pod, instead we create deployment
+    - deployment is abstraction of pods
+    - if we create deployment, it create pod too 
+
+    syntax:
+        kubectl create deployment [Name] --image=[image-name] -- [command] [args...] [options]
+
+    create nginx deployment:
+        kubectl create deployment nginx-depl --image=nginx
+
+    Check deployment
+        kubectl get deployment
+
+    Check pod   
+        kubectl get pod
+
+    Replica-set:
+        - it manage replica of pod
+        - we won't create, delete or update replica set in practice, work with deployment directly
+        - replica set is layer between deployment and pods
+        - replica set is created automatically while creating deployment
+        
+        - get replica set
+            kubectl get replicaset
+
+    Pod name and replica set name:
+        - Pod name : nginx-depl-5fcbf6fffd-8nzmm
+        - Replica set name: nginx-depl-5fcbf6fffd
+
+        - pod name is deployment-name , replica set id and its own id
+
+Update deployment:
+    - ex. update image of deployment
+
+    kubectl edit deployment nginx-depl
+
+    - update auto-generated configuration file,
+    - save changes
+
+    - new pod and replicaset is starts and old dies if we update deployment
+    - old pod dies and old replica set remains without any pod
+
+Check logs of pod:
+    kubectl logs [pod-name] nginx-depl-55d8799dd6-4pf2p
+
+Check details of pod:
+    - it shows details including events like
+        - image pulling
+        - start container etc. 
+
+    kubectl describe pod [pod-name]
+
+Go into container terminal:
+    kubectl exec -it [pod-name] -- bin/bash
+
+delete deployment:
+    kubectl delete deployment [deployment - name]
+
+    - it delete pod, replicaset too.

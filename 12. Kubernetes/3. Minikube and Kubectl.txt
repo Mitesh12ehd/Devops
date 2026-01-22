@@ -1,0 +1,28 @@
+Minicube:
+    - in production cluster we have multiple worker and control plane nodes
+    - it is difficult to test on local environment 
+    - minicube is tool where control plane and worker process run on single node
+    - it has docker container runtime pre-installed
+
+    - minikube can be start as container or virtual machine
+        - we can start minikube as docker container and inside that container we have pre-installed docker to 
+          run application
+
+kubectl:
+    - command line tool for k8s cluster
+    - it is client that interact with api server 
+
+    - install kubectl
+        curl -LO "https://dl.k8s.io/release/$(curl -Ls https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+        chmod +x kubectl
+        sudo mv kubectl /usr/local/bin/
+        kubectl version --client
+
+Install minikube:
+    - follow official documentation of minikube
+
+Start cluster:
+    - minikube start --driver=docker
+
+    verify status:
+        minikube status

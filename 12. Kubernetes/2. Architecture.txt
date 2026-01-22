@@ -1,0 +1,73 @@
+Kubernetes architecture:
+    2 type of node
+        1. control plane
+        2. worker node
+
+    example.
+        Node have 2 application pods
+            1. my-app 
+            2. DB
+
+Worker Node:
+    - each node has multiple pods on it
+    - worker nodes do the actual work
+    - 3 process must be installed on every worker node
+        1. Container runtime
+            - containerd, docker, cri-o
+            - containerd is mostly used
+
+        2. Kubelet
+            - it interact with container runtime and node
+            - kubelet start the pod with container inside
+
+        3. Kube proxy
+            - communication between 2 nodes happens via services
+            - services is basically load balancer, it catches the request and forward it to respective pod
+            - kube proxy is service that forward request
+            for ex.
+                if my-app in node1 request on db then kube proxy try to send request in same node to avoid 
+                network overhead
+
+Control plane node:
+    - How do you interact with cluster?
+        - How to schedule pod?
+        - How to monitor?
+        - How to re-schedule and restarts pod
+        - How to join a new node?
+
+    - All of this managed by control plane nodes
+    - Kubernetes cluster may have multiple control plane, api service is load balanced
+
+    - 4 processes that runs on every control plane node
+    - control plane node controls worker node
+
+    1. API server:
+        - entrypoint of cluster
+        - Interact with api server using client(UI or CLI)
+        - All components communicate only through kube-apiserver
+        - Validates requests (authn, authz, admission control)
+
+    2. Scheduler:
+        - decide node in which next pod is scheduled
+        - it only select the node, not run the pod directly (kubelet start the pod)
+        - it check the requirement of resource of pod and and resource of node available and 
+          assign respective node
+
+    3. Controller manager:
+        - detect cluster state changes like pod dies
+        - it detect pod state and reschedule via scheduler if died 
+
+    4. etcd:
+        - key value store data storage
+        - to store cluster state
+        - cluster change like (pod dies, pod schedules) are stored
+        - store which resource are available
+
+
+Example cluster setup
+
+    Control plane 1         Control plane 2
+    Node 1          Node 2          Node 3
+
+    - Control plane process are more important, it require low resources(CPU, RAM, Storage)
+    - worker node require more resource

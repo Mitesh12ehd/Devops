@@ -1,0 +1,142 @@
+Kubernetes service:
+
+What is service?
+    - Pod has its own ip address, when pod dies and recreated ip changes
+    - service has stable ip address
+    - service provides load balancing
+
+    Load balancing:
+        - When we have multiple replica, then service forward request to respective pod
+
+Type of services:
+
+1. ClusterIP services:
+    - default type of service
+
+    - Service takes request from ingress and forward it to microservice application
+    - Service type = cluster IP 
+    - Service has Ip address
+    - Service is accessible at certain port ex. 3200 (port field in service configuration)
+
+    - Service identify pods by selectors 
+    - Service identify port inside pod through targetPort field
+
+    - Service endpoint:
+        - When service is created, kubernetes create endpoint object which is same name as service
+        - Object map name with ip:port
+        - Check endpoint, 
+            - kubectl get endpoints
+        - we can refer this endpoint by direct name
+            ex. database_url: mongodb-service
+
+2. Multiport services:
+
+    use case:
+        - mongodb application running inside pod
+        - runs at port 8080
+
+        - mongodb-exporter for monitoring also running in same pod
+        - runs at port 9090
+
+        - we need separate port in service so that we can handle both request
+
+    - Multi port service syntax:
+        - we must define name for using multi port service
+
+        apiVersion: v1
+        kind: Service
+        metadata:
+            name: mongodb-service
+        spec:
+            selector:
+                app: mongodb
+            ports:
+            - name: mongodb
+              protocol: TCP
+              port: 27017
+              targetPort: 27017
+            - name: mongodb-exporter
+              protocol: TCP
+              port: 9216
+              targetPort: 9216
+
+3. Headless service:
+    use case:
+        - in multiple replica,
+        - when client want to communicate with specific pod, instead of random pod
+
+        - it will be required in stateful application like databases
+        - in stateful application, 
+            pod replica are not identical(same)
+        - only main instance is allowed to write to database
+        - rest replica are read-only
+
+    - headless service are not defined with service ip
+    - client direct gets pod ip
+
+    - How to define headless service?
+        - by clusterIP: None properties
+
+        example:
+            apiVersion: v1
+            kind: Service
+            metadata:
+                name: mongodb-service-headless
+            spec:
+                clusterIP: None
+                selector:
+                    app: mongodb
+                ports:
+                - protocol: TCP
+                    port: 27017
+                    targetPort: 27017
+
+        - verify cluster Ip is none for headless services
+            kubectl get services
+
+4. Node Port services:
+    - It makes external traffic access to fixed port on each worker node
+    - generally in service are within cluster, and ingress used to communicate via external traffic
+    
+    - Node port service has fixed port, where external traffic can communicate
+    - range of node port is 30000- 32767
+
+    - How to define node port service?
+        - by type: NodePort and providing nodePort
+
+        example:
+            apiVersion: v1
+            kind: Service
+            metadata:
+                name: ms-service-nodeport
+            spec:
+                type: NodePort
+                selector:
+                    app: microservice-one
+                ports:
+                - protocol: TCP
+                    port: 3200
+                    targetPort: 3000
+                    nodePort: 30008
+
+        - here internal service automatically created that get request at port 3200
+
+5. Load balancer services:
+    - LoadBalancer Service exposes your application to the internet using a cloud provider’s external load 
+      balancer, and routes traffic directly to Pods.
+    - It is NodePort  +  Cloud Load Balancer
+
+    How to define Load balancer service?
+        apiVersion: v1
+        kind: Service
+        metadata:
+            name: ms-service-loadBalancer
+        spec:
+            type: LoadBalancer 
+            selector:
+                app: microservice-one
+            ports:
+            - protocol: TCP
+                port: 3200
+                targetPort: 3000
+                nodePort: 30008

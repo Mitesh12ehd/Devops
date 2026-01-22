@@ -1,0 +1,92 @@
+Kubernetes:
+    - to manage multiple containers
+    - open source container orchestration tool
+    - help to manage containerized application in different environment
+
+    feature:
+        - high availability with no downtime
+
+        - scalability and performance
+        - backup and restore in some incident
+
+Kubernetes component:
+
+    Node:
+        - virtual or physical machine
+    
+    Pod:
+        - smallest unit in Kubernetes
+        - Pod is abstraction over containers 
+        - A Pod is a wrapper around one or more containers that:
+            - Run together
+            - Share the same network
+            - Share storage
+            - Are scheduled as a single unit
+        - Each pod have its own ip address
+            - container inside that pod shares same ip
+        - When pod dies and restarts new ip will generated for that pod
+
+    Service (SVC):
+        - It has permanent ip
+        - service is attached to pods
+        - each pods has its own service
+        - Lifecycle of pod and service is not connected, when pod dies, service and it's ip stays
+
+
+        Internal service:
+            - accessible only inside kubernetes cluster
+            - database or backend API's is use case of internal service
+
+        External service:
+            - accessible outside of the cluster
+            - if we want to access web application in browser that should be external service
+
+    Ingress(ing):
+        - Ingress is a Kubernetes resource that manages external HTTP/HTTPS access to services inside the cluster, 
+          using host-names (domains) and URL paths, and usually provides TLS (HTTPS).
+        - Ingress forward request to services
+
+    Config-map:
+        - for ex. my-app services communicate with mongodb service,
+        - we define mongodb url in properties file of my-app
+        - if endpoint of mongodb service changes, then we need to update in properties file of my-app
+        - then also we need to rebuild the application, push to repository, pull the new image in pod, then restarts
+        
+        - config-map is external configuration for our application,
+          and it avoids to follow whole cycle
+        - config-map is for non-credential properties
+    
+    Secret:
+        - to store secret data 
+        - data is stored in 64 base encoded
+        - also it is non-encrypted data, we can encrypt using third party tools
+        - reference secret in deployment/pod
+        - use it as environment variable or as properties file
+
+    Volume(vol):
+        - if pod restart, data will be gone
+        - we can persist with volume
+        - attach physical storage to pod
+
+    Deployment(deploy):
+        - if pod dies, and pod restarts user may have downtime
+        - so we have multiple nodes, in which all pod connected to same service(default ip)
+        - we define blueprint for pods, specify how many replica we have, it called deployments
+        - deployment is abstraction of pods
+        - we can't replicate DB via deployment as DB as state
+
+    StatefulSet:
+        - to avoid data consistencies, we need to define which pod is writing to storage DB and which pod is reading
+          data
+        - StatefulSet is for stateful application like mysql, elastic search, mongoDB etc.
+        - deploying StatefulSet is difficult, so it is better practice to deploy database outside of the cluster
+
+    DaemonSet:
+        - it we want to collect logs, we need to run log collector application on each node
+        - if we create deployment with replica count 2 to collect logs
+            - if we add new node we need to adjust replica count
+            - if we remove node we need to adjust replica count
+            - also we are not sure pods are equally distributed across replica(one node may have DB, other don't have)
+
+        - daemonset solve this problem
+        - daemonset calculate how many replicas are needed based on existing nodes

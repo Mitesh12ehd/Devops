@@ -1,0 +1,35 @@
+Create deployment via configuration file:
+    - Creating deployment via command is to complex 
+    - We can mention all the configuration in one file
+
+    nginx-deployment.yaml
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+        name: nginx-deployment
+        labels:
+            app: nginx
+        spec:
+        replicas: 2
+        selector:
+            matchLabels:
+            app: nginx
+        template:
+            metadata:
+            labels:
+                app: nginx
+            spec:
+            containers:
+                - name: nginx
+                image: nginx:latest
+                ports:
+                    - containerPort: 80
+
+        
+    - Create deployment 
+        kubectl apply -f nginx-deployment.yaml
+
+    - Update deployment
+        1. Update nginx-deployment.yaml file
+        2. apply file
+            kubectl apply -f nginx-deployment.yaml

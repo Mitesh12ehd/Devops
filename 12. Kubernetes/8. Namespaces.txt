@@ -1,0 +1,106 @@
+Kubernetes namespace:
+
+What is namespace?
+    - organize resource in namespace
+    - virtual cluster inside cluster
+    - cluster may have multiple namespaces
+
+    - There are 4 namespace default:
+        kubectl get namespace
+
+        1. kube-system:
+            - do not create or modify in kube-system 
+            - system process, control plane process and kubectl process are There
+
+        2. kube-public:
+            - contains publicly accessible data
+            - configmap which contain information about cluster
+
+        3. kube-node-lease:
+            - heartbeat of nodes
+            - each node has associated lease object in namespace
+            - determine the availability of zone
+
+        4. default:
+            - resource are created and located here.
+
+Use case of creating namespaces:
+
+    1. Group resources:
+        - creating all the resource in default namespace make difficult to overview what's There
+        - group resource in namespace
+        - ex.
+            - Database namespace
+            - Monitoring namespace
+            - Elastic stack
+            - Nginx-ingress
+
+    2. Multiple teams:
+        - if two team use same cluster, it may happen that both team deploy same name resources
+        - and if they deploy via automatic tool, they don't even know that resources are not created
+
+    3. Resource sharing:
+        - We can share resource of Elastic stack and Nginx-ingress across staging and development namespaces
+        
+        Blue/green deployment:
+            - production blue is current active version
+            - production green is next active version
+    
+    4. Access and resource limits on namespaces
+        - give access to required namespace
+        - we can limit resource on each namespace
+
+Characteristics of namespace:
+    1. we can't access all the resource from another namespace
+        ex. configmap, secret
+    
+    2. access service on another namespace:
+        - we have mongodb-service in database namespace
+        - we can access it in Project A namespace 
+            database_url: mongodb-service.database
+
+    3. Some component can't be created withing namespace:
+        - it created in cluster, we can't isolate them
+        - ex. volume, node
+
+        - List resource that can't be created within namespace
+            kubectl api-resources --namespaced=false
+
+Create namespace:
+
+    1. Command
+        kubectl create namespace my-namespace
+
+    2. Using configuration file
+        apiVersion: v1
+        kind: NameSpace
+        metadata:
+        name: my-namespace
+    
+    - verify namespace
+        kubectl get namespace
+
+Create component in specific namespace:
+    
+    1. Using Command:
+        kubectl apply -f mongo-configmap.yaml --namespace=my-namespace
+
+    2. Withing configuration file:
+        metadata:
+            name: mongo-configmap
+            namespace: my-namespace
+
+Change default namespace:
+    - if we want to change default namespace to some other namespace
+
+    1. using command 
+        kubectl config set-context --current --namespace=my-namespace
+
+    2. Kubens tool:
+        - Install kubectx and kubens:
+
+        - Check current default namespace and other namespace
+            kubens
+
+        - Update default namespace
+            kubens my-namespace
