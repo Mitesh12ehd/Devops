@@ -1,0 +1,37 @@
+Configuring TLS certificate:
+    - to configure https forwarding
+    - we can provide tls certificate and key for https forwarding
+
+    example:
+        dashboard-ingress.yaml
+            apiVersion: networking.k8s.io/v1
+            kind: Ingress
+                metadata:
+                name: dashboard-ingress-tls
+            spec:
+                tls:
+                - hosts:
+                    - dashboard.com
+                    secretName: dashboard-secret-tls
+                rules:  
+                - host: dashboard.com
+                    http:   
+                    paths:
+                    - path: /
+                        pathType: Prefix 
+                        backend:
+                        service:
+                            name: kubernetes-dashboard
+                            port:
+                            number: 80
+
+        tls-secret.yaml
+            apiVersion: v1
+            kind: Secret
+            metadata:
+                name: dashboard-secret-tls
+                namespace: default
+            data:
+                tls.crt: base64 encoded cert
+                tls.key: base64 encoded key
+            type: kubernetes.io/tls

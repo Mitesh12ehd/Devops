@@ -1,0 +1,121 @@
+Kubernetes volumes: 
+    - How to persist data in Kubernetes using volumes?
+        - persistent volumes (pv)
+        - persistent volume claim (pvc)
+        - storage class (sc)
+
+Need of volume:
+    - ex. my-app use mysql db
+          if pod dies data will be gone
+          there is requirement of persistent storage
+          that storage must available on all nodes
+
+Storage requirement:
+    1. storage doesn't depend on the pod lifecycle
+    2. storage must be available on all nodes
+    3. storage need to be survive even if cluster crashes
+
+Persistent volume:
+    - it is kubernetes component to persist storage
+    - it is cluster resource 
+
+    example:
+        apiVersion: v1
+        kind: PersistentVolume
+        metadata:
+            name: sample-pv
+        spec:
+            capacity:
+                storage: 5Gi
+            volumeMode: Filesystem
+            accessModes:
+                - ReadWriteOnce
+            persistentVolumeReclaimPolicy: Retain
+            storageClassName: manual
+            hostPath:
+                path: /mnt/data
+
+    - it need actual physical storage where this volume is created
+        ex. local disk storage, 
+            nfs storage, 
+            cloud storage
+
+    - Where actual storage comes from ?
+        - we need to create and manage physical storage by yourself
+        - kubernetes give interface where we can use persistent storage in our component
+
+    - Check storage type:
+        - on kubernetes documentation, we can see storage backends supported by kubernetes
+        - more than 25 storage type supported
+
+    - Persistent volume are not namespaced, they are not in any namespace
+    - it accessible in whole cluster 
+
+    - Local vs Remote volume type:
+        - local volume violate 2nd and 3rd requirement
+
+Persistent volume claim(PVC):
+    - it is kubernetes component
+    - application need to claim the persistent volume
+
+    - PVC is namespace
+    - Pod and pvc that used in pod must be in same namespace
+
+    example:    
+        apiVersion: v1
+        kind: PersistentVolumeClaim
+        metadata:
+            name: pvc-name
+        spec:
+            accessModes:
+                - ReadWriteOnce
+            resources:
+                requests:
+                storage: 5Gi
+
+    - it try to find PV with this criteria, and that PV is used
+
+    - Use PVC in pod configuration:
+        apiVersion: v1
+        kind: Pod
+        metadata:
+            name: pvc-demo-pod
+        spec:
+            containers:
+            - name: app-container
+                image: nginx
+                volumeMounts:
+                - name: storage-volume
+                mountPath: /usr/share/nginx/html
+            volumes:
+            - name: storage-volume
+                persistentVolumeClaim:
+                claimName: pvc-demo
+
+Storage class:
+    - when there is multiple application running, it is complex to create pv and pvc manually
+    - StorageClass enables dynamic provisioning of storage
+
+    example:
+        apiVersion: storage.k8s.io/v1
+        kind: StorageClass
+        metadata:
+            name: standard
+        provisioner: k8s.io/minikube-hostpath
+        parameters:
+            type: io1
+            iopsPerGb: "10"
+            fsType: ext4
+
+    - storage backend is defined in SC component
+        - via provisioner attribute
+        - each storage backend has own provisioner
+        - internal provisioner - "kubernetes.io"
+        - external provisioner
+
+    - configure parameters for storage we want to request for PV
+
+    - Claim volume created by storage class:    
+        - pod claim storage from PVC
+        - pvc request storage from SC
+        - SC create PV that meets the need of claim

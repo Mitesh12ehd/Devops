@@ -1,0 +1,139 @@
+External service vs Ingress:
+    - we can access our application by creating external service by Ip address and port
+    - http://124.89.101.2:35010
+
+
+    - in actual application we want https and domain name
+    - https://my-app.com
+    - ingress is required for that
+
+How ingress works?
+    - Request --> my-app-ingress --> my-app-service (internal service) --> my-app
+
+External service configuration:
+    apiVersion: v1
+    kind: Service
+    metadata:
+        name: mongo-express-service
+    spec:
+        selector:
+            app: mongo-express
+        type: LoadBalancer
+        ports:
+        - protocol: TCP
+            port: 8081
+            targetPort: 8081
+            nodePort: 30000 # port where external service available
+
+Ingress configuration:
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+        name: my-app-ingress
+    spec: 
+        rules:  
+        - host: myapp.com # at this route request will be forwarded to specified internal service
+            http:      # this not means that our my-app.com is http
+                       # this is protocol for incoming request forwarded to internal service
+                paths:
+                    - path: /   # everything after base url is path
+                        pathType: Prefix
+                        backend:
+                            service:
+                                name: my-app-service     # internal service name
+                                port:
+                                number: 8080          # internal service port 
+
+How to configure ingress into cluster?
+    - install ingress controller to configure ingress in our cluster
+
+    Ingress controller:
+        - function of ingress controller is to evaluate all the rules manage redirection
+
+    - we can choose ingress controller
+    - there many ingress control available
+    - ex.   K8s Nginx ingress controller
+
+How ingress gets request?
+
+        my-app.com --> proxy server --> ingress-controller --> further things 
+
+    - There is proxy server which gets direct request from my-app.com
+    - Request goes to ingress controller and then all further things happen
+
+Configure ingress in minikube:
+
+    - Install nginx ingress 
+        minikube addons enable ingress
+
+Create ingress rule to access kubernetes dashboard externally:
+
+    - Add dashboard for minikube:
+        minikube dashboard
+
+        - it opens internally at given url, but it is accessible externally
+        - it also create namespace kubernetes-dashboard  
+        - it also create service kubernetes-dashboard
+
+            kubectl get ns
+
+    - Check all components of kubernetes-dashboard
+        kubectl get all -n kubernetes-dashboard
+
+    - Create ingress rule:
+        dashboard-ingress.yaml
+
+        apiVersion: networking.k8s.io/v1
+        kind: Ingress
+        metadata:
+            name: dashboard-ingress
+            namespace: kubernetes-dashboard
+        spec: 
+            rules:  
+            - host: dashboard.com
+                http: 
+                    paths:
+                    - path: /
+                        pathType: Prefix 
+                        backend:
+                        service:
+                            name: my-app-service
+                            port:
+                            number: 8080
+
+    - Verify ingress    
+        kubectl get ingress -n kubernetes-dashboard
+
+        o/p:
+            NAME                CLASS   HOSTS           ADDRESS        PORTS   AGE
+            dashboard-ingress   nginx   dashboard.com   192.168.49.2   80      22h
+
+        - Address is mapping of dashboard.com with ip
+
+    - Add mapping in host file for minikube:
+        - in actual kubernetes environment mapping is not required, 
+        - but in minikube works differently
+
+        - map localhost address (127.0.0.1) to dashboard.com
+            - sudo vim /etc/HOSTS
+            - add line 
+                127.0.0.1       dashboard.com
+
+        - for windows + wsl setup 
+            update C:\Windows\System32\drivers\etc\hosts file
+
+    - run minikube tunnel:
+        - minikube tunnel
+        - it is specific to minikube only
+        - it fakes cloud load balancer
+        - Gives a Service/Ingress an external IP on your local machine
+
+Ingress default backend:
+    
+    - kubectl describe ingress dashboard-ingress -n kubernetes-dashboard
+        - we can see Default backend is <default>
+
+    - it helps when request comes that not maps to any backend,
+      then we can send custom message
+    - there is not rule to map request to any service
+            dashboard.com/test
