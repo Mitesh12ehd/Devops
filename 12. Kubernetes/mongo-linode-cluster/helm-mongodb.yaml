@@ -1,0 +1,6 @@
+architecture: replicaset
+replicaCount: 3
+persistence:
+  storageClass: "linode-block-storage"  # it create physical storage on linode
+auth:
+  rootPassword: "mitesh1234567"

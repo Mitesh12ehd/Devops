@@ -1,0 +1,128 @@
+Helm package manager:
+
+What is helm:
+    - package manager for k8s
+    - to package yaml file and distribute them in public and private repositories
+
+    Use case:
+        - my-app is deployed in k8s cluster
+        - we want to deploy elastic search, that used by our application
+        - we need below components for elastic search
+            - Stateful set 
+            - Configmap 
+            - secret
+            - k8s use with permissions
+            - services
+
+        - creating k8s configuration file for all this components is time-taking.
+        - as elastic search deployment is same across all the application
+        - we can use k8s configuration file that is created by someone and available online
+ 
+    - Bundle of yaml files called Helm charts
+
+Helm charts:
+    - Bundle of yaml files
+    - Create your own helm charts with helm
+    - Push them to help repository
+    - Download and use existing helm charts
+
+    Search helm charts:
+        1. using command 
+            helm search <keyword>
+
+        2. using website like 
+            artifacthub.io
+
+Helm registries:
+    - public and private registries
+
+Other functionalities of helm:
+    
+    1. Templating engine:
+        - if we have to deploy microservice application and there is different configuration file
+        - most values in file are same except few
+
+        - using helm, We can define common blueprint 
+        - dynamic value are replaced by placeholders
+
+        example:
+            Template yaml config:
+
+                apiVersion: v1
+                kind: Pod
+                metadata:
+                    name: {{ .Values.name }}
+                spec:
+                    containers:
+                    - name: {{ .Values.container.name }}
+                      image: {{ .Values.container.image }}
+                      port: {{ .Values.container.port }}
+
+            Values file:
+                name: my-app
+                container:
+                    name: my-app-container
+                    image: my-app-image
+                    port: 9001
+
+    2. Deploy same application across different environments
+        like Development, Staging, Production
+
+Helm chart structure:
+
+    mychart/
+        Chart.yaml
+        values.yaml
+        charts/
+        templates/
+
+    - mychart : name of chart 
+    - Chart.yaml : meta info about chart
+    - values.yaml : values for the template file
+    - charts folder: chart dependencies
+        - if this chart is depend on another chart
+    - templates folder: actual template folder
+
+    helm install:
+        - command to deploy yaml files
+        - helm install [chart name]
+         
+Value injection in helm template:
+
+    1. using values file:
+
+        values.yaml 
+            imageName: myapp
+            port: 8080
+            version: 1.0.0
+        
+        my-values.yaml
+            version: 2.0.0
+
+        - provide my-values.yaml file to replace value in values.yaml file
+        - it override value in values.yaml file
+        
+        helm install --values=my-values.yaml <chart-name>
+
+    2. using command line:
+        values.yaml 
+            imageName: myapp
+            port: 8080
+            version: 1.0.0
+
+        helm install --set version=2.0.0
+
+Release management:
+    - to keep track of all chart execution
+
+    ex.
+        revision 1: Installed chart
+            helm install [chart name]
+
+        revision 2: Upgraded to v2.0.0
+            helm upgrade [chart name]
+
+        revision 3:
+            - if something goes wrong we can rollback
+
+            help rollback [chart name]

@@ -1,0 +1,29 @@
+What is StatefulSet?
+    - component used for stateful application like databases
+    - stateless application deployed using deployment component
+    - stateful application deployed using StatefulSet component
+
+StatefulSet:
+    - can't be created and deleted multiple at same time
+    - can't be randomly addressed
+    - replica pods are not identical
+        - one pod may write 
+        - another may read only
+
+    - Stateful set can be used with persistent volume
+
+    - StatefulSet has fixed ordered names
+        ex. mysql-0 , mysql-1
+    
+    - StatefulSet create new pod if, previous is up and running
+    - deletion happens in reverse order, starting from last pod
+
+    - when pod restarts ip address changes, 
+        - pod name and endpoint remain same
+
+Scaling database application:
+    - 1 Main pod and other replica pod
+    - Main pod will be used for reading and writing
+    - Other pod used for reading
+    - when write happens on main pod, other replica synchronize data from them
+    - when new replica is created, it create copy from previous replica     

@@ -1,0 +1,167 @@
+Linode:
+    - in linode we don't need to manage control plane node 
+
+Deploy managed k8s cluster on Linode k8s engine :
+
+    Requirement:
+
+        - Deploy mongodb using helm
+        - 3 replica using Stateful set
+        - configure data persistence with Linode's cloud storage
+
+        - Deploy UI client mongo-express
+        - Configure nginx ingress to handle browser request
+
+1. Create K8s cluster on LKE(linode k8s engine):    
+    Linode > Kubernetes Create > Enter details > Create 
+
+    - for mongodb database and ui client we need 4gb ram for 2 node 
+        to run smoothly
+
+2. Access cluster:
+
+    1. Download config file
+        - Need access file 
+        - download clustername-kubeconfig.yaml file from linode ui
+
+    2. Set file permission to read for particular user only
+        - so that no one can change anything in cluster
+        - chmod 400 mongo-cluster-kubeconfig.yaml
+
+    3. Set file as environment variable:
+        export KUBECONFIG=mongo-cluster-kubeconfig.yaml
+
+    4. Check node
+        kubectl get node
+        
+        - we must able to see number of node that we have set while creating cluster
+
+3. Deploy stateful set for mongodb:
+    - we can deploy using two ways:
+        - create configuration file for mongodb your own
+        - use helm chart created by someone and tested
+
+    1. Install helm
+
+    2. Add helm chart repository
+        - helm repo add bitnami https://charts.bitnami.com/bitnami
+
+    3. Search helm chart
+        - helm search repo bitnami/mongodb
+
+    4. Check chart documentation 
+        - mongodb chart provide default values that we can override
+        - check at https://github.com/bitnami/charts/tree/main/bitnami
+
+        - open mongodb
+        - scroll to parameters
+
+    5. Create values file to override parameters
+        helm-mongodb.yaml
+
+    6. Install chart
+        helm install mongodb --values helm-mongodb.yaml bitnami/mongodb
+
+        - we can see our number of replica in output of command
+
+    7. Check components that created using helm:
+
+        - check pod
+            kubectl get Pod
+            - we must see number of replica pod
+
+        - check all
+            kubectl get all
+
+            - we can see mongodb headless services
+            - we can see number of replica stateful set
+
+        - Check secret
+            kubectl get secret
+
+            - it contains root password
+
+    8. Check persistent volumes 
+        - we must have 3 persistent volume as mentioned in 3 replica of stateful set 
+        - Go to linode site > volumes section
+
+4. Deploy mongo-express UI 
+    - we deploy 1 pod and 1 service only
+    - we use our own configuration
+
+    Flow of request:
+        mongodb <-- internal service <-- ingress controller <-- Node balancer <-- browser
+                    (mongo-express)
+
+    1. Create deployment and service
+        helm-mongo-express.yaml
+        
+        Password:
+            - password is used from secret
+            - check name of password 
+            - kubectl get secret mongodb -o yaml
+
+        Server values:
+            - mongodb-0.mongodb-headless 
+            - pod_name.service_name
+
+    2. Create ingress controller to access mongo-express from browser:
+
+        - Add helm repository   
+            helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+            helm repo update
+
+        - Install helm
+            - enable parameter to allow public ip address
+            helm install nginx-ingress ingress-nginx/ingress-nginx --set controller.publishService.enabled=true
+
+    3. check ingress pod 
+        kubectl get pod
+            nginx-ingress-ingress-nginx-controller-746bf85cd7-nv5rl
+
+    4. Check node balancer in linode:
+        - in linode web ui 
+        - we can see the load balancer, which dynamically created while creating ingress controller
+            - ip at which at this ingress controller accessible also present
+
+        - this node balancer is entry-point of cluster 
+
+    5. Check ip at which, node balancer accessible
+        1. at linode web UI
+        2. kubectl get services > Check external ip
+            - we can see that service type is load balancer
+
+    6. Create ingress rule :
+        - to access mongo-express from browser
+
+        - check file helm-ingress.yaml
+
+        1. Configure host:
+            - we need host url
+            - get it from linode UI > Load balancer
+            - 172-105-46-60.ip.linodeusercontent.com
+            - it actual application, it is something like my-app.com
+            - add host it yaml
+
+        2. Apply file
+
+        3. Check ingress 
+            kubectl get ingress 
+
+Scale replica:
+    - we can increase/decrease replicas of stateful set 
+    - kubectl scale --replicas=0 statefulset/mongodb
+
+   - 0 remove all replicas, data persist if pv and pvc configured
+        
+    - kubectl scale --replicas=3 statefulset/mongodb
+        capture persistent volume and attach same data
+
+Check all the charts:
+    helm ls
+
+Delete charts and components:
+    helm uninstall [chart name]
+
+    - it delete all the component that created by this chart 
+    - if we created manually, then we need to find and delete them 
