@@ -1,0 +1,21 @@
+Kubernetes operator:    
+    - to mange stateful application, there is need of operator(human)
+    - as it stateful application may have its own way to maintain states across all the replicas
+    - operator is software operator that replace human operator
+
+    Operator contains logic of
+        - How to deploy app?
+        - How to create cluster of replica?
+        - How to recover?
+
+How operators works?
+    - It has same mechanism like control loop for kubernetes
+        (Control loop: to manage pod dies and restarts etc..)
+    - Operators have domain application specific knowledge
+    - there is separate operator for separate applications
+
+Who create these operators?
+    - there are various operators available for some of the application (created by community)
+        (check operatorhub.io)
+    - to create operator 
+        (check operator sdk)

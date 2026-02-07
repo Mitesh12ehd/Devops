@@ -1,0 +1,33 @@
+Microservices:
+    - kubernetes emerged as platform for microservices application
+
+    Microservice:
+        - from monolith to microservices
+        - microservice is big application made up using multiple small application, 
+            so that small application can deployed independently
+        - change in one microservice don't affect other microservice
+        - each microservice can be developed by separate developer team
+
+    How microservice communicate?
+        - using API inside microservice (we don't need to manage them)
+
+        - using Message broker:
+            - message based communication through request from MS1 to MS2
+            - example of message broker are redis, RabbitMQ
+
+        - using Service-mesh architecture
+            - each microservice have proxy program to handle communication
+            - example. Istio
+
+How to deploy microservice?
+    - We need below information
+        - What microservice you need to deploy
+        - which microservice is talking to which microservice
+        - How they are communicating
+        - which database are using, is it third party
+        - on which ports each microservice runs
+
+    - Prepare K8s environment
+        - deploy any 3rd party apps
+        - create secrets and configmaps for microservices
+        - create deployment and service for each microservice

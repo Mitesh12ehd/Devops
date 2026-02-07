@@ -1,0 +1,89 @@
+Steps to pull image from private repository and use that in deployment:
+
+1. Create secret component:
+    - this secret will be referred in deployment
+
+    - command to docker login into repository:
+        echo "YOUR_PASSWORD" | docker login YOUR_REGISTRY_URL --username YOUR_USERNAME --password-stdin
+
+        - for docker hub
+            echo "myDockerHubPassword" | docker login -u myusername --password-stdin
+
+        - for other type of repository
+            echo "mySecretPassword" | docker login myregistry.example.com --username myuser --password-stdin
+
+            Note: there might be different command to print password 
+                  check aws command to print password
+
+    - login into repository create config.json file, 
+        where credential is stored
+        cat .docker/config.json
+
+    - in our own system, credential will be stored in credential store and referred in config.json file 
+      so that, we can't use this config.json file in our secret
+
+
+    - Create config.json file:
+        - go inside minikube vm
+            minikube ssh
+
+        - docker login 
+            echo "myDockerHubPassword" | docker login -u myusername --password-stdin
+
+        - move file config.json from minikube to outside 
+            - so that we can use it with kubectl command
+
+            minikube cp minikube:/home/docker/.docker/config.json /home/mitesh/.docker/config.json
+
+        - config.json file present at 
+            /home/mitesh/.docker/config.json
+
+        - base64 encode
+            cat .docker/config.json | base64
+
+    - Create secret component
+        apiVersion: v1
+        kind: Secret
+        metadata:
+            name: my-registry-key
+        data:
+            .dockerconfigjson: [base 64 encode config.json file]
+        type: kubernetes.io/dockerconfigjson   
+
+    - using kubectl command (alternative to create secret using kubectl command directly)
+        kubectl create secret generic my-registry-key \
+        --from-file=.dockerconfigjson=.docker/config.json \
+        --type=kubernetes.io/dockerconfigjson
+
+    - check created secret 
+        kubectl get secret -o yaml
+   
+2. Create deployment:
+    - to run our image
+
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+        name: my-app
+    labels:
+        app: my-app
+    spec:
+        replicas: 1
+        selector:
+            matchLabels:
+                app: my-app
+        template:
+            metadata:
+                labels:
+                    app: my-app
+            spec:
+                imagePullSecrets:
+                - name: my-registry-key
+                containers:
+                - name: my-app
+                    image: docker.io/miteshch/demo-app:nodeApp1.0     
+                    imagePullPolicy: Always   # to pull image from repository always, instead of using from local machine
+                    ports:
+                    - containerPort: 3000
+
+Note: Secret and deployment should be in same namespace
