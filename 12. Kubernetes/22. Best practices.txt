@@ -1,0 +1,129 @@
+Best practices while writing deployment configurations:
+
+    1. Always use specific image version
+
+    2. Liveness prob for each container:
+        - if container dies, and pod remains then application is not accessible and pod don't restart
+        - Liveness prob is tiny program that run inside pod that check health of container 
+          at certain time 
+        - we need to specify which protocol application uses to return status of container  
+
+        - in e-shop app we have one program called health-check 
+
+        ex. to add liveness probe
+        - spec:
+            containers:
+            - name: service
+                image: gcr.io/google-samples/microservices-demo/emailservice:v0.8.0
+                ports:
+                - containerPort: 8080
+                env:
+                - name: PORTS
+                  value: "8080"
+                livenessProbe:
+                    grpc:
+                        port: 8080
+                    periodSeconds: 5
+
+    3. Readiness probe on each container:
+        - Liveness prob check only after application is started
+        - How can we know application is started and ready to receive requests
+        - provide protocol
+
+        Protocols:
+            1. grpc
+                readinessProbe:
+                    grpc:
+                        port: 8080
+                    periodSeconds: 5
+
+            2. TCP
+                readinessProbe: 
+                    tcpSocket:
+                        port: 8080
+                    periodSeconds: 5
+
+            3. HTTP
+                livenessProbe:
+                    httpGet:
+                        path: /health
+                        port: 3550
+                    periodSeconds: 5
+
+        ex1. to add readiness probe
+        - spec:
+            containers:
+            - name: service
+                image: gcr.io/google-samples/microservices-demo/emailservice:v0.8.0
+                ports:
+                - containerPort: 8080
+                env:
+                - name: PORTS
+                  value: "8080"
+                readinessProbe:
+                    grpc:
+                        port: 8080
+                    periodSeconds: 5
+
+        ex2. 
+            readinessProbe: 
+                initialDelaySeconds: 5 # Start checking after initial 5 seconds
+                tcpSocket:
+                    port: 8080
+                periodSeconds: 5
+
+    4. Configure request on each container
+        - some application may need more CPU and Memory compare to other container
+
+        spec:
+            containers:
+            - name: service
+                image: gcr.io/google-samples/microservices-demo/emailservice:v0.8.0
+                ports:
+                - containerPort: 8080
+                env:
+                - name: PORT
+                  value: "8080"
+                resources:
+                    requests:
+                        cpu: 100m       # milli cores
+                        memory: 63Mi    # Mega byte
+
+    5. Resource limit:
+        - What if running container require more resource than it requested?
+        - container consume all the required memory, may consume whole memory and cpu of node
+        - we can limit container memory 
+
+            resources:
+                requests:
+                    cpu: 100m       # milli cores
+                    memory: 63Mi    # Mega bytes
+                limits:
+                    cpu: 200m
+                    memory: 128Mi 
+
+    6. Don't expose NodePort
+        - Nodeport service opens port in each worker node
+        - it may risk to traffic attack
+        - so we should use internal service as entry point of each node
+        - this internal service accessible from Cloud load balancer or ingress controller
+
+    7. More than 1 replica for deployment:
+        - to avoid downtime, when one of the pod dies in any node
+
+    8. More than 1 worker node in cluster
+        - single point of failure with just 1 node
+        - each replica should be on different node, otherwise replica don't make much sense 
+
+    9. Use label for all resources:
+        - label attaches to k8s resource
+        - with label resource can be referenced
+         
+    10. Use namespace:
+        - use namespace to isolate resource
+        - use namespace to manage permission in better way
+
+Security best practices:
+    - ensure all the image in cluster are free of vulnerabilities 
+    - ensure that we don't have container with root access
+    - use kubernetes to its latest version
