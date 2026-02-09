@@ -1,0 +1,116 @@
+Deploy online shop:
+    - https://github.com/Mitesh12ehd/microservices-demo
+    - each microservice is within application inside src folder
+    - frontend is entrypoint of all the microservices
+
+    - we have connection graph (received from developer)
+    - check images/shop-app-structure.png
+    
+    - for cart, require redis( in memory database)
+    - ignore Load generator microservice( it is to test frontend load)
+
+    - Which image for which microservice ?
+    - What environment variable each microservice expects?
+    - On which port microservice starts?
+
+    - Deploy all microservice in same namespace as it developed by single developer
+
+    1. Create config files
+
+        Redis cart service:
+            - need to volume mount to store data
+
+            emptyDir:
+                - Volume type
+                - initially empty when pod starts
+                - exists as long as pod is running
+                - container crashing doesn't remove pod from node
+                - data is safe if container crashes and pod remains
+
+    2. Spin up kubernetes cluster 
+
+        - create kubernetes on linode
+        - download  kube config.yaml
+        - export KUBECONFIG=online-shop-microservices-kubeconfig.yaml
+
+    3. Create separate namespace:
+        kubectl create ns microservices
+
+    4. Apply config file
+        kubectl apply -f configs/config.yaml
+
+        - check pods
+        - check services
+
+    5. Access frontend
+        - We can access front end at 
+            [IP of any node]:30007
+
+Deploy using helm charts:
+    - we have similar configuration for all microservices
+    - can we use helm charts?
+
+    1. Initialize helm chart
+        - helm create microservice
+        - it initialize chart structure
+
+        - Chart.yaml contains metadata about chart
+        - charts/ : it contains any chart dependencies that this chart have
+                    - empty as we don't have any dependencies as of now
+        - .helmignore:
+            - files that you don't want to include in helm chart
+        - template:
+            - where actual k8s configuration template file created
+
+    2. Define variable in deployment and service file
+
+        way1: {{ .Values.appName }}, {{ .Values.appReplicas }}  # best practice
+        way2: {{ .Values.app.name }}, {{ .Values.app.replicas }}    # hierarchical
+
+        - To define multiple variable, use range
+
+    3. values.yaml
+        - define common values in values.yaml file
+
+    4. custom value files:
+        - pass value of each microservice through custom value file
+
+    5. How to validate template and its values
+        helm template -f email-service-values.yaml microservice
+
+        or 
+
+        helm lint -f email-service-values.yaml microservice
+
+        or 
+
+        helm install --dry-run -f [custom_value_fila path] [chart name or path]
+    
+    6. How to deploy?
+
+        Way1:
+            - install for each microservice
+            - helm install -f [custom_value_file_path] [release_name] [chart_name]
+
+        Way2: 
+            - create shell script
+            - execute
+
+Helmfile:
+    - declarative way for deploying helm charts
+
+    1. Create helm file
+        helmfile.yaml
+
+    2. Install helmfile tool
+        (separate installation on each platform )
+
+    3. Execute helmfile
+        helmfile sync
+
+    3. Uninstall all release
+        helmfile destroy
+
+How to host helm charts:
+    - using git 
+    - we can bind with application repository or in separate repository
