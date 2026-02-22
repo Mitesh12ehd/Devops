@@ -1,0 +1,137 @@
+7. Configure auto-scaling:
+
+    How auto scaling works?
+        - After creating node group, auto-scaling groups created
+        - Check auto-scaling service group
+            Our EKS cluster > Compute > Node-group > Autoscaling group name
+
+        Autoscaling group:
+            - it has information of minium, maximum limit of instance
+            - to scale up and down
+            - it is just group, it doesn't auto-scale our resources
+        
+        - we need to configure K8s auto-scaler that is running inside k8s cluster, that auto-scale our 
+          resources
+    
+        Example:
+        - if we have 10 EC2 instance in our cluster, and auto-scaler sees most of the EC2 instance under
+          utilized, 
+          then it will take pod from 2 EC2 instance and distribute it to rest of them and stop these 2
+          EC2 instance
+        - If we have 5 EC2 instance and resource run out,
+          next pod that to be scheduled can't schedule on any current EC2 instance
+          in that case, auto-scaler check our maximum EC2 instance size and start new EC2 instance
+
+    What is required to setup auto-scaler?
+        - auto-scaling group
+        - create custom policy and attach to Node group IAM role
+        - deploy k8s autoscaler
+    
+    1. Create custom policy:
+        - IAM > Policies
+        - Create policy
+        - JSON
+        {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                "Effect": "Allow",
+                "Action": [
+                    "autoscaling:DescribeAutoScalingGroups",
+                    "autoscaling:DescribeAutoScalingInstances",
+                    "autoscaling:DescribeLaunchConfigurations",
+                    "autoscaling:DescribeTags",
+                    "autoscaling:SetDesiredCapacity",
+                    "autoscaling:TerminateInstanceInAutoScalingGroup",
+                    "ec2:DescribeLaunchTemplateVersions"
+                ],
+                "Resource": "*"
+                }
+            ]
+        }
+        
+        - set name
+            node-group-autoscale-policy
+
+    2. Attach policy to existing node-group iam role:
+        - Role > node-group role
+        - Permissions policies > Add permissions
+        - search our custom policy
+        - Add
+
+    3. Check tag of auto-scaling group:
+        - Auto-scaler group
+        - tags
+        - here below tags are used by auto-scaler to communicate with auto-scaling group
+
+            k8s.io/cluster-autoscaler/eks-cluster-test
+            k8s.io/cluster-autoscaler/enabled
+
+    3. Deploy auto-scaler:
+        - kubectl apply -f https://raw.githubusercontent.com/kubernetes/autoscaler/master/cluster-autoscaler/cloudprovider/aws/examples/cluster-autoscaler-autodiscover.yaml
+
+        - it is deployment component.
+        - it is created in kube-system namespaces
+
+        - Edit auto-scaler configuration:
+            1. Add annotation:
+                annotation:
+                    cluster-autoscaler.kubernetes.io/safe-to-evict: "false"
+
+            2. Update clustername:
+                 spec:
+                    containers:
+                        - command:
+                             - --node-group-auto-discovery=asg:tag=k8s.io/cluster-autoscaler/enabled,k8s.io/cluster-autoscaler/<YOCLUSTER NAME>
+
+                - here update <YOCLUSTER NAME> with our cluster name
+                  eks-cluster-test
+
+            3. Add command 
+                - Add command below section
+                    spec:
+                        containers:
+                            - command:
+
+                - Add
+                    - --balance-similar-node-groups
+                    - --skip-nodes-with-system-pods=false
+
+            4. Update kubernetes version:
+                - match the version of auto-scaler image with k8s version of our cluster
+
+                - Get out k8s cluster version from AWS EKS UI
+                    1.35
+
+                - spec:
+                        containers:
+                            - command:
+                                registry.k8s.io/autoscaling/cluster-autoscaler:v1.35.0
+
+                - here to get exact tag version of image
+                    refer https://github.com/kubernetes/autoscaler/tags
+
+    
+    - Check pod of auto-scaler application:
+        kubectl get pod -n kube-system
+
+        - we have multiple nodes and kube-proxy for each node 
+        - kube-proxy is worker process running on each node
+        - we have 2 core-dns for any number of nodes
+
+    - Check logs that application scale up and downs
+        kubectl logs -n kube-system cluster-autoscaler-c9755bb7-dxknh > as-logs.txt
+
+        - we can see log like 
+            Starting scale down:
+
+        Note:
+            - there might be issue of role and policy for auto-scaler in newer kubernetes version
+            - TODO: find new method for roles
+
+    - We can edit maximum and minium size and see logs that is has removed instances and scaled down
+    - We can also see pod is moved into other instance while scaling down
+
+    Note: 
+        - it may possible that while scaling down, EC2 instance where auto-scaler pod present, is removed and goes into another instance
+          then pod name may change

@@ -1,0 +1,59 @@
+Fargate:
+    - serverless
+    - no EC2 instance required
+    - aws manage compute task
+    - 1 pod per virtual machine
+
+    Limitation:
+        - no support for stateful application
+        - no support for daemonsets yet.
+
+1. EKS cluster:
+    - we can use existing cluster
+
+2. Create IAM role for fargate:
+    - IAM > Role > Create Role
+    - Service or Use case: EKS > EKS - Fargate pod
+    - Check policy 
+    - set name
+        eks-fargate-role
+
+3. Create fargate profile:
+
+    What is fargate profile?
+        - Pod selection rule
+        - specifies which pod should use fargate when they are launched
+
+    - EKS > Our cluster > Add fargate profile
+    - set name 
+    - select fargate role
+    - subnets:
+        - we need to use worker node vpc even we are not using EC2 instance
+        - because our ip range of pod will be ip range of subnets
+        - select both private subnet as fargate only need to create pod in private subnet
+        - external component like aws load balancer can be created in public subnet
+        - internal component like pod can be created in public subnet
+
+    - Pod selectors:
+        - we need some type of selector that tell fargate that, this pod is meant to be scheduled by fargate
+        - Namespace: dev
+            - while deploying deployment, it check if it is deployed in 'dev' namespace
+            - then it is deployed in fargate 
+            - we can add multiple namespace
+
+        - Match labels:
+            - we can also add label, 
+            - if our deployment match this label, then it will deployed in fargate
+            - we can leave empty also.  
+            - Add key pair
+                profile: fargate
+            - we can add multiple key pairs
+
+4. Deploy application through fargate:
+    - check nginx-config-fargate.yaml
+
+    1. Create namespace dev
+    2. deploy file
+
+    - check nodes in dev namespace
+        fargate-ip-192-168-233-185.ap-south-1.compute.internal

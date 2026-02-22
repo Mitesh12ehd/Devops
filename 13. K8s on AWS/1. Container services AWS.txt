@@ -1,0 +1,71 @@
+Container services on AWS:
+
+Container orchestration tools:
+    - to manage, scale and deploy container
+    - ex. Docker swarm, k8s, Mesos, Nomad, AWS ECS (Elastic container service)
+
+ECS:
+    - container orchestration service
+    - manage the whole container lifecycle
+    - start container, reschedule container, load balance
+
+    How ECS work?
+        - create ECS cluster
+        - ECS cluster contains all the services used to manage containers
+        - manage actual and desired state of container
+        - ECS cluster is control plane
+
+    Where actual container hosted?
+        - container require virtual machine where it runs
+        - this virtual machines are EC2
+        - EC2 instance is connected with ECS cluster
+        - we need to manage virtual machine
+        - full access and control of our infrastructure
+
+    Which services running in EC2 instance?
+        - Container runtime
+        - ECS agent - for control plane communication
+
+ECS hosted on AWS Fargate:
+    - Fargate is alternative to EC2
+    - ECS cluster connects with Fargate
+    - Fargate is serverless way to launch containers
+    - scale and up down 
+    - cost is based on invocation
+    - using fargate, infrastructure and containers both managed by AWS
+
+How to use kubernetes?
+    - EKS(Elastic kubernetes service)
+
+    EKS vs ECS:
+        1. ECS specific to AWS, 
+           EKS is specific to kubernetes
+
+        2. if we use ECS, migration is difficult
+           EKS, easier to migrate
+
+        3. ECS is great choice for less complex application
+
+How EKS works?
+    - EKS deploys and manages kubernetes control plane nodes
+    - k8s control plane services is already installed in them
+    - High availability: 
+        control plane nodes replicated across availability zones
+
+    Worker nodes:
+        - worker nodes is EC2 instances called Compute Fleet
+        - worker nodes have k8s process to communicate with EKS control plane nodes
+        
+        self-managed:
+            - EKS with EC2 instances
+            - we need to manage infrastructure worker nodes
+
+        semi-managed:
+            - EKS with Nodegroup
+            - Creates, deletes EC2 instance for you,
+                but we need to configure it
+
+        fully-managed:
+            - EKS with Fargate
+        
+        - we can also use combinations

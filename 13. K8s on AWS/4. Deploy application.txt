@@ -1,0 +1,25 @@
+Deploy nginx application and create load balancer:
+    - Kubernetes cluster is up and running
+
+1. Create nginx deployment and service (type loadbalancer):
+    - check nginx-config.yaml file
+    - here service type is loadbalancer external service,
+        it has aws load balancer attached to it
+
+    - Check service internal ip and external ip where it is accessible 
+        kubectl get service
+
+        - internal 10.100.177.172
+        - external 
+            - a597d26c022d24724839a41eb39eafa5-595919120.eu-central-1.elb.amazonaws.com
+            - Port: 80:32088/TCP
+
+    Note: 
+        - EKS auto mode:
+            - it prevent EC2 load balancer, and try to manage load balancer on it's own 
+            - and it is difficult to turn off auto mode
+            - TODO: Find alternative to do
+
+    - check load balancer ports:
+
+        browser --> cloud load balancer (port 80) --> node port (32008) --> service (port 80) --> target port (80)

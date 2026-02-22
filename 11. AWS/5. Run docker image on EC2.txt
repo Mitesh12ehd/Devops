@@ -15,7 +15,7 @@ Run image on EC2 from docker hub repository using jenkins:
             - save
 
     3. Check jenkins:
-        - to check the syntax that how we can connect instance using shh
+        - to check the syntax that how we can connect instance using ssh
         - multi-branch pipeline > Pipeline syntax 
         - Sample step > ssh agent
         - Select credential
