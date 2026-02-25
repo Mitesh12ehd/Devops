@@ -1,0 +1,37 @@
+Deploy to Linode cluster using jenkins pipeline:
+
+1. Install kubectl:
+    - install kubectl cli tool inside jenkins container
+
+    curl -LO "https://dl.k8s.io/release/$(curl -Ls https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+    chmod +x kubectl
+    mv kubectl /usr/local/bin/
+    kubectl version --client
+
+2. Connect to Linode cluster from local:    
+    - download kubeconfig file 
+    - export KUBECONFIG=test-kubeconfig.yaml
+
+3. Add credential on jenkins:
+    - Jenkins > Add credential
+    - type: Secret file
+
+4.. Install kubernetes CLI jenkins plugin
+    - to execute kubectl with kubeconfig credential
+    - Kubernetes CLI plugin
+
+5. Create pipeline and add jenkins file:
+    stage("deploy") {
+        steps {
+            script {
+                echo "Deploying the application..."
+
+                withKubeConfig(
+                    credentialsId: "Linode_credential",
+                    serverUrl: "https://d5ac8edc-ee9a-4502-a7f1-ddf4e34f102d.ap-west-2-gw.linodelke.net:443"
+                ) {
+                    sh "kubectl create deployment nginx-deployment --image=nginx"
+                }
+            }
+        }
+    }    

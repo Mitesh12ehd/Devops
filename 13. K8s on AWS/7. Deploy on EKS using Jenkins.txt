@@ -1,0 +1,107 @@
+Deploy to EKS cluster using jenkins pipeline:
+
+1. Install kubectl:
+    - install kubectl cli tool inside jenkins container
+
+    curl -LO "https://dl.k8s.io/release/$(curl -Ls https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+    chmod +x kubectl
+    mv kubectl /usr/local/bin/
+    kubectl version --client
+
+2. Configure AWS credential:
+    
+    - install authenticator
+        curl -L -o aws-iam-authenticator \
+        https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v0.6.14/aws-iam-authenticator_0.6.14_linux_amd64
+
+        chmod +x aws-iam-authenticator  
+        mv aws-iam-authenticator /usr/local/bin/    
+
+    - verify 
+        aws-iam-authenticator version
+
+3. Create kube-config file to connect to EKS cluster:
+    - create file outside of jenkins container (because container is lightweight and vim editor is not present there)
+
+    - template:
+        apiVersion: v1
+        kind: Config
+        clusters:
+        - cluster:
+            certificate-authority-data: /etc/kubernetes/pki/ca.crt
+            server: <endpoint-url>
+        name: kubernetes
+        contexts:
+        - context:
+            cluster: kubernetes
+            user: aws
+        name: aws
+        current-context: aws
+        users:
+        - name: aws
+        user:
+            exec:
+            apiVersion: client.authentication.k8s.io/v1beta1
+            command: /usr/bin/aws-iam-authenticator
+            args:
+                - "token"
+                - "-i"
+                - <cluster-name>
+
+    - Below things need to be replaced:
+        1. Cluster name: our EKS cluster name
+        2. server endpoint:
+            - we need our cluster API server endpoint url (we can get it from EKS AWS UI)
+
+        3. certificate-authority-data:
+            - in our local we have this file, as we have already connected to cluster in our machine
+            - cat .kube/config, copy content
+            - paste in this file
+
+    - create config file in our cloud machine
+        vim config
+        # paste content
+
+    - Go into container
+        cd ~            # go to home directory of container
+        mkdir .kube
+
+    - From our cloud machine
+        docker cp config f4a62189d66b:/var/jenkins_home/.kube/
+
+    - Now, we have out config file inside docker container of jenkins
+        - it has url where k8s cluster is hosted
+        - it has aws credential certificate to authenticate on aws.
+        - it has iam authenticator application path 
+            command: /usr/bin/aws-iam-authenticator
+
+4. Create credential on jenkins:
+    - Credential > Add credential
+    
+    - we can get credential from our local 
+        cat .aws/credentials
+    
+    1. Add credential for access key:
+        type: secret text
+
+    2. Add credential for secret access key
+        type: secret text
+
+5. Create multi-branch pipeline:
+    - Add git repo
+    - Add jenkins file
+        stage("deploy"){
+            environment{
+                AWS_ACCESS_KEY_ID = credentials("jenkins_access_key_id")
+                AWS_SECRET_ACCESS_KEY = credentials("jenkine_aws_secret_access_key")
+            }
+            steps{
+                script{
+                    echo "Deploying the application..."
+                    sh "kubectl create deployment nginx-deployment --image=nginx"
+                }
+            }
+        }
+
+    - Check https://github.com/Mitesh12ehd/java-maven-app.git and "deploy-on-k8s" branch
+    - trigger pipeline and check.

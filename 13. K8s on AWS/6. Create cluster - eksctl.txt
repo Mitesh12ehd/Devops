@@ -1,0 +1,51 @@
+EKS cluster manually:
+    - difficult to replicate again
+
+eksctl:
+    - Command line tool for working with eks cluster that automate individual task 
+    - Execute just one command
+    - Necessary component get crated and configured in background
+    - cluster will be created with default parameters 
+    - with options we can customize our cluster
+    
+Note: Check documentation for any command or configuration related
+
+Install eksctl:
+    - https://github.com/eksctl-io/eksctl
+    - follow steps for unix
+
+Configure AWS credential:
+    - it is exact same process as we configure aws credential for aws cli tool.
+
+Create cluster:
+    - we can update or upgrade configuration later even if cluster is created
+
+    1. Using file:
+        - check eksctl-cluster.yaml
+        - eksctl create cluster -f eksctl-cluster.yaml
+        - we can write configuration within command or with configuration file
+
+    2. Using command:
+        eksctl create cluster \
+        --name demo-cluster \
+        --version 1.34 \
+        --region ap-south-1 \
+        --nodegroup-name demo-nodes \
+        --node-type t3.small \
+        --nodes 2 \
+        --nodes-min 1 \
+        --nodes-max 3
+
+    - Check created resources in AWS:
+        - Role: cluster-role and nodegroup-role created there, 
+            also custom create policy attached there
+        - VPC:
+            - vpc is also created
+            - also there is ip range for pod, services etc.
+            - 2 subnet in each availability zone is created
+        - EKS:
+            - cluster is created
+            - node-group with 2 node there
+
+Delete cluster:
+    eksctl delete cluster --name demo-cluster --region ap-south-1

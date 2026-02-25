@@ -1,0 +1,20 @@
+ECR:
+    check java-maven-app jenkins-practice branch
+
+1. Create ecr credential in jenkins:
+    type: username with password
+    username: AWS
+    password: output of aws ecr get-login-password --region ap-south-1 
+
+2. Create secret for AWS ECR:
+    - to pull image from ECR repo
+    - repository url can be found from AWS UI.
+    
+    kubectl create secret docker-registry aws-registry-key \
+        --docker-server=372641111498.dkr.ecr.ap-south-1.amazonaws.com \
+        --docker-username=AWS \
+        --docker-password=xyz
+
+3. Update jenkins file:
+    - build image 
+    - to tag image use URI of ecr repo

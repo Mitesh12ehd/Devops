@@ -31,7 +31,7 @@ Add tools in jenkins:
     - Go to tool section
     - There are tools available like (Maven, JDK, Git, Gradle, Ant)
     
-    - If tools is not available here we can add it via Plugin section
+    - If tools is not avail able here we can add it via Plugin section
 
     Add maven:
         - Maven > Add Maven

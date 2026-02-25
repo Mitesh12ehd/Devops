@@ -1,0 +1,16 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: demo-cluster
+  region: ap-south-1
+  version: "1.34"
+
+managedNodeGroups:
+  - name: demo-nodes
+    instanceType: t2.micro
+    desiredCapacity: 2
+    minSize: 1
+    maxSize: 3
+    volumeSize: 20
+    amiFamily: AmazonLinux2
