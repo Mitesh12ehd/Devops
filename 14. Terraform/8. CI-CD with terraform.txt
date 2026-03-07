@@ -1,0 +1,21 @@
+code:
+    https://github.com/mitesh12ehd/java-maven-app
+    branch: terraform-provision
+
+In existing java-maven-app CI/CD, 
+    we need to provision ec2 instance using terraform,
+    before we deploy into EC2 instance
+
+Steps to do:
+
+    1. Create ssh key pair
+        - Create ssh key pair on EC2 or use existing key pair
+        - Add credential with type ssh with username in jenkins
+
+    2. install Terraform inside jenkins container
+  
+    3. Terraform configuration to provision server:
+        - we need to create aws key and secret credential with type secret text in jenkins
+        - we use this credential in jenkins file
+
+    4. Update jenkins file for this steps

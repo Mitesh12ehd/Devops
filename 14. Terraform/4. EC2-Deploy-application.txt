@@ -1,0 +1,106 @@
+Reference:
+    - Check code https://github.com/Mitesh12ehd/terraform 
+    - branch: ec2-deploy-application
+
+Task:
+    - provision EC2 instance on AWS
+    - Run nginx docker container in EC2 instance
+
+    1. Create custom vpc
+
+    2. Create subnet
+
+    3. Create route table and internet gateway
+        - to allow traffic "to" and "from" vpc
+
+        route table:
+            - it forward traffic inside vpc
+            - it automatically created by aws when we create vpc
+            - check our created vpc > route-table
+            - we can see there is only one route, 
+              which is local, traffic control within inside vpc
+            
+        Create new route table:
+            - create new route table to allow traffic control from internet
+            - create route inside that route table
+
+        Create internet gateway:
+            - create internet gateway and reference them in route table
+
+        subnet association:
+            - subnet is associated with default route table in newly create vpc
+
+        Note:
+            - here we can avoid to create new route table
+            - create internet gateway in same way
+            - add gateway in aws_default_route_table_resource
+            - in this case, we don't need to define subnet association, as it directly associated with 
+              default route table
+
+    4. Create security group (firewall) 
+        - we can create new security group or we can use default security group of our vpc
+
+        - we need below port open
+        1. Port 22:
+            - for ssh 
+        2. Port 8080:   
+            - for out nginx application
+
+    5. Provision EC2 instance:
+        - create instances
+
+        - create key pair:
+            - we have 2 option
+
+            1. Use AWS generated key pair:
+                - create or use existing one
+                - we don't create key pair using terraform
+                - create manually
+                - download pem file
+                - put at correct location .ssh/key_pair_name.pem
+                - add +x permission of pem file
+
+                - associate that key pair in terraform configuration
+                - ssh into ec2 instance
+                ssh -i ~/.ssh/server-key-pair.pem ec2-user@65.1.94.196
+
+            2. Use our own generated key pair:
+                - generate key pair in local 
+                - create aws_key_pair resource
+                    resource "aws_key_pair" "ssh-key" {
+                        key_name   = "server-key"
+                        // use public key from specific file
+                        public_key = file(var.public_key_location)
+                    }
+
+                - associate key in ec2 instance attribute
+                    key_name = aws_key_pair.ssh-key.key_name
+
+    6. Deploy nginx docker container:
+
+        user_data:
+            - to run script inside ec2 instance 
+            user_data = <<EOF
+                    #!/bin/bash
+                    sudo yum update -y  # for auto-confirm prompts
+                    sudo yum install -y docker
+                    sudo systemctl start docker
+                    sudo usermod -aG docker ec2-user   # add ec2-user to docker group, so we can run docker command without sudo
+                    docker run -p 8080:80 nginx
+                EOF
+
+            - to use file directly
+                user_data = file("entryscript.sh")
+            
+        - user_data_replace_on_change
+            // it destroy and create ec2 instance, if we update script in user_data
+            user_data_replace_on_change = true
+
+        - script will not execute again if we make other changes than script
+          script executes once only
+
+Note:
+    - he we can see that terraform in not tool to manage application
+    - we can do initial setup, but can't manage application
+    - use other tools like
+        ansible etc..   

@@ -1,0 +1,69 @@
+Provisioners in terraform:
+    
+    - to execute cmds on virtual server, we use user_data attribute
+    - initial data when launching the instance
+    - passed to cloud providers
+
+    What happens when we pass user_data?
+        - terraform hand over it to cloud provider (aws)
+        - cloud provider executes it when our server is created
+        - terraform do not have any control on that script once hand over
+        - if any command fails, we need to ssh into server and need to debut it
+
+    - Using Provisioners we can execute cmds on virtual server
+    - we can mention provisioner in resource block
+    
+    - There are 3 provisioner:
+    
+        1. file:    
+            - to copy file from local machine to remote machine
+            provisioner "file" {
+                source = "entryscript.sh"
+                destination = "/home/ec2-user/entryscript.sh"
+            }
+        
+        2. remote-exe:
+            - to execute command on remote server once resource is created
+            - provisioner "remote-exec" {
+                inline = ["entry-script.sh"]
+            }
+
+            - but to execute on remote we must have connection on remote first
+                connection {
+                    type = "ssh"
+                    host = self.public_ip // self refer to current object (here ec2 instance)
+                    user = "ec2-user"
+                    private_key = file(var.private_key_location)
+                }   
+
+            - we can perform copy and execute in single command:
+                provisioner "remote-exec" { 
+                    inline = ["entry-script.sh"]
+                }
+
+        3. local-exec:
+            - to execute command in local 
+            ex.
+                provisioner "local-exec" {
+                    command = "echo ${self.public_ip} > output.txt"
+                }
+
+    Note:
+        - terraform not recommend to use provisioner to execute cmds
+        - there are better alternative
+        - use user_data if available
+
+        why terraform not recommend to use provisioner?
+            - terraform not understand what we are execute
+            - it might break current and desired state comparison   
+
+        Alternatives:
+            - Use configuration management tool
+                ex. Ansible, puppet, CHEF
+
+        Alternatives to local-exec provisioner:
+            - use local provider  
+
+    Provisioner failure:
+        - if command fails to execute
+        - terraform marks whole resource as failed

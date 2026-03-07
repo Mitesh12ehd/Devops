@@ -1,0 +1,114 @@
+Terraform:
+    - Developed by Hashicorp
+    - Automate infrastructure creation and management
+    - Use code to create and manage infrastructure 
+    - Terraform is tool for infrastructure provisioning
+
+Difference between Ansible and Terraform:
+    - both tools are infrastructure as code tool
+    
+    - Terraform is mainly infrastructure provisioning tool
+        Creates servers, VPCs, load balancers, EKS, etc.
+    - Ansible in mainly configuration tool
+        Installs software, updates configs, deploys apps
+
+Use case:
+    - Manage existing infrastructure:
+        - change to infrastructure, adding resource, removing resource
+    - Replicating infrastructure:
+        - we have infra setup for dev environment, we want to create same in production
+
+Terraform architecture:
+    How terraform works?
+    How terraform connect with platform provider? ex. AWS
+
+    1. 2 input source
+        - TF-config:
+            - user defines what need to create and configure
+        - State:
+            - current state of setup
+            - what is created
+            - it store state in terraform.tfstate file in our terraform directory 
+
+    2. Core:
+        - it takes 2 inputs 
+        - figure outs plan
+        - use providers to executes the plan
+
+        plan:
+            - what need to be created/updated/destroyed?
+            - it check what is current state and what need to created/deleted and make a plan
+            - current state --> Desired state
+
+    3. Providers:
+        - provider of specific technology
+        - for ex. cloud providers like AWS, GCP, (Infrastructure as service provider)
+        - kubernetes is also provider (Platform as a provider)
+        - Fastly (Software as a services)
+        - Terraform has over 3000 provider
+
+Example configuration files:
+    - Define resource and its attributes
+
+    terraform {
+        required_providers {
+            aws = {
+                source = "hashicorp/aws"
+                version = "6.34.0"
+            }
+        }
+    }
+
+    # Configure the AWS provider
+    provider "aws" {
+        region = "ap-south-1"
+    }
+
+    # Create VPC
+    resource "aws_vpc" "example"{
+        cidr_block = "10.0.0.0/16"
+    }
+
+    # Configure to Kubernetes Provider
+    provider "kubernetes" {
+        config_context_auth_info = "ops"
+        config_context_cluster  = "mycluster"
+    }
+
+    resource "kubernetes_namespace" "example" {
+        metadata {
+            name = "my-first-namespace"
+        }
+    }
+
+Declarative syntax vs imperative syntax:
+    - we define end state in config file 
+    - in imperative syntax, we give instruction 
+    - terraform use declarative syntax
+
+Terraform commands for different stages:
+    
+    1. refresh:
+        - query infrastructure to get current state
+
+    2. plan:
+        - create an execution plan
+
+    3. apply:
+        - execute the plan
+        - terraform apply -auto-approve
+
+    4. destroy:
+        - destroy the resource/infrastructure
+    
+    5. validate:
+        - validate our terraform files
+
+Install terraform:
+    - follow docs
+    - verify 
+        terraform --version
+
+    - VS code plugin 
+        - to syntax highlight
+        - HashiCorp Terraform by official Hashicorp

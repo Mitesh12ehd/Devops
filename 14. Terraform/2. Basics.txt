@@ -1,0 +1,89 @@
+Reference:
+    - Check code https://github.com/Mitesh12ehd/terraform branch: terraform-learning
+
+Providers:
+    - Provider exposes resources for specific infrastructure platform (ex. AWS)
+    - Responsible for understanding API of that platform
+    - Use docs for any provider and how to use that
+    - to use provider we need to install particular provider
+
+    - after adding provider in required_provider block in code,
+        we can use resource of that provider
+
+    Install provider:
+        - write providers in provider.tf or main terraform file
+        - terraform init
+
+        - Location:
+            - installed terraform will be present at .terraform/providers/registry.terraform.io/hashicorp
+
+    - Type of providers:
+        1. Official:
+            - hosted by hashicorp
+            - ex. AWS, GCP
+            - it is not mandatory to define this type of provider in required_providers block
+        
+        2. Verified (partner) and Community:
+            - we need to define required_providers block to use provider in code
+
+Resource:
+    - we can create resource 
+    - follow docs of particular provider to create resource using that provider
+
+    resource "aws_vpc" "deployment-vpc" {
+        cidr_block = "10.0.0.0/16"
+        tags = {
+            Name: "development-vpc"
+            vpc-env: "dev"
+        }
+    }
+
+Data sources:
+    - Allow data to be fetched, for use in terraform configuration
+    - we can also see how to use data source for any resource
+    - we can filter existing resource by its attribute  
+
+    ex.
+        data "aws_vpc" "existing_vpc"{
+            default = true
+        }
+
+Context of programming language:
+    - provider == importing library
+    - resource/data == function call of library
+    - argument == parameter of that function
+
+Removing resource:
+    1. Remove from tf file and apply
+
+    2. Destroy command:
+        terraform destroy -target [resource][resource_name]
+        terraform destroy -target aws_subnet.dev-subnet-2
+
+    Prefer removing using tf file:
+        - because if we remove by destroy and applying again in future it creates again
+
+Terraform state:
+    terraform.tfstate : it store state
+    terraform.tfstate.backup : store backup
+
+    commands:
+        list:
+            terraform state list
+            - list all the resources that are in state
+
+        show:
+            terraform state show [resource_name- get from list command]
+            - using show command we can find attribute name and its value for specific resource
+
+Outputs:
+    - outputs are used to display useful information after Terraform creates or updates infrastructure.
+    - values that Terraform shows you after terraform apply
+    - 1 output block have only 1 value
+
+    ex.
+        output "dev-vpc-id" {
+            # We can print any attribute, we can see other attribute in plan
+            # for vpc, we have cidr_block, arn, region, tags, main_route_table_id, ipv6_cidr_block etc.
+            value = aws_vpc.deployment-vpc.id
+        }

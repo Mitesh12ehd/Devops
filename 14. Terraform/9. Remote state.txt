@@ -1,0 +1,34 @@
+Remote state:
+    - if we integrate terraform in CI/CD or in team, we don't have terraform state 
+      across all the users
+
+    - using remote state:
+        - Terraform writes data to this remote data store
+        - different remote storage option possible
+
+Define remote storage:
+    
+    terraform {
+        backend "s3" {
+            bucket = "myapp-miteshch-s3-bucket"
+            key = "myapp/state.tfstate" // folder myapp stores state.tfstate file
+            region = "ap-south-1"
+        }
+    }
+
+Create s3 bucket:
+    - S3 > Create bucket
+    - block all public access
+    - leave other settings default
+
+How remote state will be used:
+
+    - anywhere this tf configuration executed,
+      it use this remote state file to store terraform state
+
+    - we can do terraform init anywhere to fetch current state
+        terraform init
+        terraform state list 
+
+    - we can destroy resource from anywhere
+        terraform destroy --auto-approve

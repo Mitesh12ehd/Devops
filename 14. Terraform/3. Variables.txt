@@ -1,0 +1,135 @@
+Reference:
+    - Check code https://github.com/Mitesh12ehd/terraform branch: terraform-learning
+
+Variables:
+    - we need to define, assign and use value of variable
+
+    - Define variable:
+        variable "subnet_cidr_block" {
+            description = "subnet cidr block"   
+        }
+
+    - Use variable:
+        resource "aws_subnet" "dev-subnet-1" {
+            vpc_id = aws_vpc.deployment-vpc.id
+            cidr_block = var.subnet_cidr_block
+            availability_zone = "ap-south-1a"
+            tags = {
+                Name: "dev-subnet-1"
+            }
+        }
+
+    - Assign value
+
+        1. Through use prompt
+            - we can assign value while terraform apply
+
+        2. Through Command line argument:
+            terraform apply -var "[name_of_variable]=[value]"
+    
+        3. Through variable file
+            - file name must be terraform.tfvars
+            - write value in that file 
+                subnet_cidr_block = "10.0.40.0/24"
+            - terraform automatically read value from that file
+
+            - pass custom variable file while apply:
+                - to use variable file with other name than terraform
+                - terraform apply -var-file terraform-dev.tfvars
+
+    - Use case of variables:
+        - to replicate same infrastructure for multiple environment
+
+    - Default values:
+        variable "subnet_cidr_block" {
+            description = "subnet cidr block" 
+            default = "10.0.10.0/24"
+        }
+
+        - default value used if given variable value not found in variable files
+
+    - type of variable:
+        - we can restrict type of variable while defining it
+        - if we pass something other than that type, terraform throws error
+
+        - type can be
+            - string
+                # define
+                variable "env_name" {
+                    type = string
+                }
+                # variable file
+                env_name = "dev"
+
+            - number
+                # variable file 
+                instance_count = 3
+
+            - bool
+                # variable file 
+                enable_monitoring = true
+
+            - list
+                # define
+                variable "availability_zones" {
+                    type = list(string)
+                }
+
+                # variable file
+                availability_zones = [
+                    "ap-south-1a",
+                    "ap-south-1b"
+                ]
+
+                # use
+                var.availability_zones[0]
+
+            - map (object):
+
+                # define
+                # if we have simple object, we can only define object
+                type = list(object({
+                    cidr_block = string
+                    name = string
+                }))     
+
+                # variable file
+                cidr_blocks = [
+                    { cidr_block = "10.0.0.0/16", name = "dev-vpc"},
+                    { cidr_block = "10.0.10.0/24", name = "dev-subnet"}
+                ]
+
+                # use
+                resource "aws_vpc" "development-vpc" {
+                    cidr_block = vars.cidr_blocks[0].cidr_block
+                    tags = {
+                        Name: var.cidr_blocks[0].name
+                    }
+                }
+
+Environment variables:
+    - it works like we use in simple terminal 
+    - variable of current terminal session used directly
+
+    example:
+    - to use AWS credential from environment variable:
+        - we don't need to mention anything in tf file, if we have env variable
+
+        1. terminal:
+            - export it in terminal
+            - terraform use directly from there
+
+        2. Permanently setup variable:
+            - for ex. for aws access key and secret key, credential is stored in below file 
+            via aws configure command.
+            ~/.aws/credentials
+
+    - Use custom variables:
+
+        # Add it in terminal session
+        # here name of variable should be TF_VAR*, so it can be used in tf files
+        export TF_VAR_avail_zone = "ap-south-1a"
+
+        # use in tf files
+        # name should be suffix after TF_VAR
+        variable avail_zone {}

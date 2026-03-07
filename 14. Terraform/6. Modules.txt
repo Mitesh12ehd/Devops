@@ -1,0 +1,43 @@
+Modules:
+    - without module complex configuration, large file
+    - organize and group configuration
+    - encapsulate  into distinct logical component
+    - reusability
+    - modules makes code clear
+
+    - we can create module
+    - we can use existing module
+        https://registry.terraform.io/ > Browse module
+    - check docs of any module to check its input, output, dependency, resources
+
+    terraform init:
+        - after creating module, we must need to do 
+          terraform init
+
+Project structure:
+    - main.tf
+    - variables.tf
+    - outputs.tf
+    - providers.tf
+
+    - we don't need to reference file in each other 
+    - terraform automatically finds them
+    - also file name can be different, terraform merge all the code
+
+    - /root module:
+        - terraform project is root module
+    - children module
+        - other module are children module
+
+Check code
+    https://github.com/Mitesh12ehd/terraform
+    branch: modules
+
+Existing module:
+    - if we use existing module,
+    - we need to take care of below things:
+        - module require some inputs 
+        - module gives some outputs by default, we can directly use them
+    
+    - we can check docs of that module to check each info, output, inputs anything
+    - we can readme of module to see example how to use

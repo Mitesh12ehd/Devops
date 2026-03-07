@@ -1,0 +1,34 @@
+Best practices for remote state:
+
+    1. Manipulate tfstate file through only tf commands:
+        - do not edit tfstate manually
+        - otherwise state will be fumbled and we need to do manual work to destroy resource
+
+    2. Always setup remote storage for state file
+
+    3. Lock state file
+        - what happens if two user perform terraform apply at same time
+        - how tfstate file will be maintained?
+
+        Lock state file to avoid such issue:
+            - we need to configure lock in storage backend
+            - no all storage backend support locking
+            - so check that where we store out state file, choose only lock supported files
+
+    4. Backup state file:
+        What happens if 
+            - by any incident, anything happens to remote storage
+            - or someone overwrites data accidentally
+            - or data get corrupted
+
+        Backup state file:
+            - enable versioning on storage buckets
+            - storage provider supports versioning
+
+Best practice to manage tf code:    
+
+    1. Host tf code in git repository:
+        - to collaborate with team
+        - to have versioning of code
+
+    2. Apply infra change only through CD pipeline

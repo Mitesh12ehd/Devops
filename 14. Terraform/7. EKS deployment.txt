@@ -1,0 +1,71 @@
+Check code:
+    https://github.com/Mitesh12ehd/terraform
+    branch: eks-deployment
+
+EKS cluster setup using terraform:
+
+1. Create EKS IAM role
+2. Create VPC for worker node
+3. Create EKS cluster (control plane nodes)
+4. Connect kubectl with EKS cluster
+5. Create EC2 IAM role for Nodegroup
+6. Create Nodegroup and attach to EKS cluster
+7. Configure auto-scaling
+8. Deploy application to EKS cluster
+
+Using terraform
+
+    1. Use module VPC
+    2. Use module EKS
+
+    Notes:
+        - eks module take care of IAM policy required for EKS and Nodegroup
+
+Check created resource:
+    - EKS cluster
+    - Node groups
+    - Resources running on node groups
+        - kubernetes resources like pod, kube proxy etc..
+    
+    - IAM role:
+        - eks cluster role created and policy also attached 
+
+    - VPC:
+        - vpc created, cidr blocks 
+    
+        - route table:
+            - default, public and private route tables created
+            - public route table:
+                - created with internet gateway
+                - internet gateway allows vpc to talk with internet
+            - private route table:
+                - nat routing
+                - it allow worker nodes to connect with control plane nodes
+                - as worker and control plane nodes both are in different vpc
+
+        - subnets:
+            - we have 3 public and 3 private subnets
+            - distributed across azs
+
+        - security groups:
+            my-app-eks-cluster-node:
+            my-app-eks-cluster-cluster:
+                - those two have rules to communicate control plane nodes and worker nodes
+
+            eks-cluster-sg-myapp-eks-cluster:
+                - it allow all component on any port within the cluster
+
+Connect cluster and deploy app:
+
+    Connect cluster:
+        - aws eks update-kubeconfig --name my-app-cluster --region ap-south-1
+
+    Deploy app:
+        - kubectl apply -f filename.yaml
+
+    Access application:
+
+        check load balancer:
+            - EC2 > Load balancer
+            - we can see load balancer with all 3 public subnets
+            - we can see DNS names, which we can use to access our application
