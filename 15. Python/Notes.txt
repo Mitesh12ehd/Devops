@@ -1,0 +1,37 @@
+Build in functions:
+
+    Standalone built in functions:
+        - print(): print the output
+        - input(): takes use input
+        - set(): return new set
+        - int(): convert value to integer
+
+    function called on value:
+        - str.split(",")
+        - each data type have its own built in function
+        - num.isdigit()
+        - my_list.append(6)
+
+Modules:
+    - Built in modules and third party modules
+    - third party modules are not part of python installation
+
+    module:
+        - it is python file contains function and variables
+
+    package:
+        - collection of modules
+    
+Python package index (PyPI):
+    - it is a repository (storage) for third party python packages
+    - people can public their package to this repository
+    - search package on PyPI and use that
+
+Pip: Preferred Installer Program
+    - package manager for python
+    - to install package
+    - pip install [package_name]
+    - pip uninstall [package_name] 
+    
+API request using python:
+
