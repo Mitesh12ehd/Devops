@@ -1,0 +1,49 @@
+Automate maintenance task on AWS:
+    - automate infrastructure provisioning process with terraform
+    - automate creating EC2 instance
+    - automated EKS cluster creation
+
+    Manually overhead of tasks:
+        - doing regular backup
+        - doing clean up on server
+        - configuration on existing server
+        - doing health checkup and monitoring 
+
+Boto3:
+    - AWS SDK for python
+    - we can do operation on AWS
+
+Task:
+    - Connect to AWS account
+    - Create VPC
+    - Create subnet
+
+Setup python project
+    - Create project
+    - Create virtual environment
+        python3 -m venv venv
+    - activate
+        source venv/bin/activate
+
+Install boto3 into project
+    pip install boto3 
+
+Resource vs client:
+    - in boto3 client is much low level API 
+    - resource: provide resource objects to access attributes and perform actions   
+
+
+Python vs Terraform:
+    - TF manage state of infra
+    - TF is idemptent(get the same result every time)
+    - in TF we can delete resource easily
+
+    - Python execute script regardless of condition of infra state  
+    - Need to write code for delete or manually delete
+
+Use case of Boto:
+    - we can do complex logic because of programming language
+    - we can do more things because it is low level API
+    - monitoring
+    - backups
+    - scheduled task
