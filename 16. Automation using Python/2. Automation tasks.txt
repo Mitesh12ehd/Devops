@@ -1,0 +1,70 @@
+Task1: 
+    - List all vpc in current region
+    - python/list_vpc.py 
+
+Task2:
+    - Create vpc and subnet inside that vpc
+    - python/create_vpc_subnet.py
+
+Task3: 
+    - Monitor ec2 instances
+    - which instances are in which state
+    - python/monitor_ec2_instances.py
+
+Task4:
+    - schedule Task3
+    - python/schedule_monitor_ec2.py
+
+Task5:
+    - Add tags to EC2 instances
+    - we have multiple server in multiple regions, we want to add tags on all the server using automation
+    - python/attach_tags_to_ec2.py
+
+Task6:
+    - Cluster information:
+        - EKS cluster status?
+        - Which k8s version?
+        - Cluster endpoint?   
+
+    - python/cluster_info.py
+
+Task7:
+    - Automate data back of EC2 instances
+
+    - Create snapshot of volumes
+    - Volumes are AWS storage component = store EC2 instance data
+
+    - we can see snapshot of our EC2 machines 
+      EC2 > Snapshots
+
+    Prereq:
+        - when we create ec2 instance, volume of that ec2 instance created
+        - we can check volumes using describe_volume functions
+
+    - We need to create snapshot by scheduler
+        - so that we can take backup on time
+        - scheduling is depends on our requirement, how data important is
+        - need schedule accordingly
+
+    - Follow up:
+        - we need to create snapshots of backup ec2 server only
+        - we need to filter volumes based on tags
+
+    - python/create_snapshot.py
+
+Task8:
+    - Clean old snapshots
+    - if scheduler runs every to create snapshots, we end up with to many snapshots
+    - need to write cleanup scheduler
+
+    - python/clean_snapshots.py
+
+Task9:
+    - Restore EC2 volume
+    - When our EC2 data got corrupted, we need use the backup snapshot to restore EC2 volume
+
+        - Create new volume with most recent snapshot
+        - when volume is available, 
+            - attach new volume to EC2 instances
+
+    - python/restore_volume.py
