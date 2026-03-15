@@ -1,0 +1,19 @@
+Project: website monitoring
+
+Preparation steps:
+    - Create server on linode cloud platform
+    - Install docker on server
+    - Run nginx container
+        docker run -d -p 8080:80 nginx
+
+Tasks:
+    - Write python program to check application
+    - Send email when website is down
+
+    - Automate fixing the problem:
+        - Restart docker container
+        - Restart server
+
+Allow python to use our email to send email
+
+Code: python/monitor_website.py
