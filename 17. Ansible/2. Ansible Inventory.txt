@@ -1,0 +1,80 @@
+Ansible inventory:
+    - it is list of all the machines that involved in task execution
+    - An Inventory is a file that contains the list of servers (hosts) that Ansible will manage.
+
+Ansible inventory file:
+    - containing data about ansible client server
+    - hosts meaning the managed servers
+    - default location for the file /etc/ansible/hosts
+
+Ansible ad-hoc commands:
+    - command are not stored for future use
+    - fast way to interact with desired severs
+
+    ansible [pattern] -m [module] -a "[module options]"
+
+    [pattern]:
+        - target hosts and groups
+        - all is default groups contains every host
+
+    ping module:
+        - the ping module is a built-in module in Ansible used to test connectivity between the 
+          Ansible control machine and the target hosts.
+        - if ssh success, and python is available on target server, 
+        - it returns "ping": "pong"
+
+Connect multiple server using ansible inventory:
+
+    - Create "hosts" file 
+        172.105.56.88 ansible_ssh_private_key_file=~/.ssh/id_rsa ansible_user=root
+        172.105.39.242 ansible_ssh_private_key_file=~/.ssh/id_rsa ansible_user=root
+
+        Note:
+            - instead of ip we can write DNS name also 
+            - for ex. for EC2 machines
+                ec2-25-180-120.ap-south-1.compute.amazonaws.com
+
+    - Connect all the server in host file
+        ansible all -i hosts -m ping
+
+Group the server:
+    - group the host in hosts file
+
+    [linodes]
+    172.104.207.248 ansible_ssh_private_key_file=~/.ssh/id_rsa ansible_user=root
+    172.105.40.87 ansible_ssh_private_key_file=~/.ssh/id_rsa ansible_user=root
+
+    [ec2-machines]
+    172.105.39.242 ansible_ssh_private_key_file=~/.ssh/id_rsa ansible_user=root
+
+    - Target only linodes server
+        ansible linodes -i hosts -m ping
+
+Create group for same type of configuration
+
+    - Create group:
+        [linodes]
+        172.104.207.248
+        172.105.40.87
+
+        [linodes:vars]
+        ansible_ssh_private_key_file=~/.ssh/id_rsa
+        ansible_user=root
+
+Target only specific server
+    ansible 172.105.39.242 -i hosts -m ping
+
+Python3 interpreter override: 
+    - python3 is required on target server to function ansible properly
+    - if python3 is not available, or another version of python3 is available 
+    - then 
+
+    1. Install python3 on target server
+    2. Override python3 interpreter in "hosts" file
+        [ec2]
+        ec2-15-188-239-5.eu-west-3.compute.amazonaws.com
+        ec2-35-180-204-130.eu-west-3.compute.amazonaws.com ansible_python_interpreter=/usr/bin/python3
+
+        [ec2:vars]
+        ansible_ssh_private_key_file=~/Downloads/ansible.pem
+        ansible_user=ec2-user

@@ -1,0 +1,36 @@
+Configure hostkey check prompt automatically:
+
+    1. We can do once manually, and it won't ask again
+
+    2. known hosts file:
+        - when we type "yes", it store entry of server into 
+            ~/.ssh/known_hosts file
+
+        - Add entry of server in known_hosts file
+            ssh-keyscan -H 111.22.333.444 >> ~/.ssh/known_hosts
+
+    3. Disable hostkey checking:
+        - choose this option if we have ephemeral infrastructure
+        - where servers are dynamically created and destroyed
+
+        - Config file default locations:
+            - /etc/ansible/ansible.cfg
+            - ~/.ansible.cfg
+
+        - Create config file at any default locations   
+            vim ~/.ansible.cfg
+
+        - Add hostkey check disable property
+            [default]
+            host_key_checking = False
+
+        - if we connect server using ansible, we don't get ssh hostkey check
+
+        Note: if we create .ansible.cfg in current directory, it works only when we execute ansible command
+              in current directory
+
+
+Copy our public ssh key into target server if ssh is not Configured:
+    - ssh-copy-id root@111.22.333.444
+    - it will ask for root password and add our public key into 
+      ~/.ssh/authorized_keys

@@ -1,0 +1,53 @@
+Project: automate nexus deployment  
+    - create droplet
+    - ssh into server
+    - download nexus binary and unpack
+    - run nexus application using nexus user
+
+    We have to perform below steps: 
+        apt update
+        apt install openjdk-8-jre-headless
+        apt install net-tools
+
+        cd /opt
+        wget https://download.sonatype.com/nexus/3/latest-unix.tar.gz
+        tar -zxvf latest-unix.tar.gz
+
+        adduser nexus
+        chown -R nexus:nexus nexus-3.28.1-01
+        chown -R nexus:nexus sonatype-work  
+
+        vim nexus-3.28.1-01/bin/nexus.rc
+        run_as_user="nexus"
+        
+        su - nexus
+        /opt/nexus-3.28.1-01/bin/nexus start
+
+        ps aux | grep nexus
+        netstat -lnpt
+
+Module to add content into file:
+
+    1. blockinfile:
+        - add given block in give file 
+
+        - ex.
+            blockinfile:
+            path: /opt/nexus/bin/nexus.rc
+            block: |
+            run_as_user="nexus"
+
+    2. lineinfile:  
+        - ensure particular line in file
+        - replace existing line using regex
+        - useful when we want to change single line in file
+
+Waits:  
+    - if we start application, and immediatly check netstate -lnpt
+    - it might be possible that our process and port not shows on the list
+    - we need to wait 
+
+    module to wait:
+        1. Pause
+        2. Wait for: 
+            - we can add condition till it waits for

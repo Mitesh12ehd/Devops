@@ -1,0 +1,20 @@
+Deploy node app:    
+    
+    - async and poll:
+        - to keep running task in background 
+        - poll a time period when ansible check status
+
+    - terminal vs shell:    
+        - terminal don't allow operators like |, &, >, >> etc.
+        - shell executes command in actual shell, and allow all the operators
+        - shell allows environment variables
+        - terminal is more secure, so that shell is used only when required
+
+    Note:
+        - command and shell modules are not idempotent
+        - it runs every time when we execute playbook
+        - it doesn't check previous and current state
+
+Check code:
+    https://github.com/Mitesh12ehd/ansible
+    branch: deploy-node-app

@@ -1,0 +1,24 @@
+Playbook:
+    - Playbook can have multiple files
+    - play is group of task
+
+    - Execute ansible playbook:
+        ansible-playbook -i hosts my-playbook.yaml
+
+    - Find nginx version:
+        - https://launchpad.net/ubuntu/
+        - search ubuntu
+
+    - Specify version:  
+        - we can give specific version
+        - we can also use regex
+            nginx=1.18*
+
+Check code:
+    https://github.com/Mitesh12ehd/ansible
+    branch: ansible-playbook
+
+Default host file:
+    - if we don't want to pass -i hosts file each time while running command
+    - we can configure it in ansible.cfg file of project
+        inventory = hosts

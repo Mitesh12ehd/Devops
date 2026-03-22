@@ -1,0 +1,53 @@
+Ansible:
+    - Tool to automate IT tasks
+    - use YAML
+
+    Requirement:
+        - when we have complex IT infra with multiple server
+        - if we need to perform below task:
+            - Update docker version on all the server
+            - Creating user, assigning groups
+            - Updates and backup server
+
+        Solution:
+            - manually ssh into all the server, and perform all the task
+            - to avoid mistakes, we need to create documents
+
+    Solution using ansible:
+        - Execute all the tasks from our machine
+        - Configuration, Installation and deployment steps in single file
+        - Reuse same files multiple times and for the different environments
+
+    Agentless:  
+        - ansible requires only ssh access of all the server, 
+        - it doesn't require any agent
+
+How ansible works?
+    - modules are pushed to target server
+    - modules do their work and get removed
+    - one module do one task
+
+Ansible playbooks:
+    - An Ansible Playbook is a file written in YAML format that contains a list of tasks used to 
+      automate configuration, deployment, and management of systems.
+    - we can execute multiple module with arguments
+
+Ansible inventory list:
+    - it is list of all the machines that involved in task execution
+
+Ansible for docker:
+    - using docker, we can write docker file and create docker container
+    - using ansible, we can write ansible playbook, and we can create docker container, cloud instance,
+      bare metal server
+
+Alternative tools:
+    Puppet and chef:
+        - these tool use ruby programming language
+        - agent needed, installation need on each server
+
+Install ansible:
+    - Install ansible on control node
+    - control node manage target server
+
+    - ansible is written in python, so it need python interpreter
+    - python is also installed with ansible

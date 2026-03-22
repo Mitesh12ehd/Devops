@@ -1,0 +1,37 @@
+Variables in ansible:
+
+    Registering variables:
+        - create variables from the output of an ansible task
+        - this variable can be used in any later tasks in your play
+
+    Accessing variable:
+        {{app_status.stdout_lines}}
+
+        - if we write curly brace just after the semi colon, we need to put {{variable_name}} in 
+          double ""
+
+        - we can print variable for debug purpose:  
+            - print at task level
+            - debug: msg={{var_name}}
+
+    Define variable value within playbook:
+        - vars:
+            - version: 1.0.0
+
+    Define variable value outside playbook:
+        - ansible-playbook -i hosts deploy-node.yaml --extra-vars "version=1.0.0 location=/home/mitesh/node-app"
+        - ansible-playbook -i hosts deploy-node.yaml -e version=1.0.0 location=/home/mitesh/node-app"
+
+    External variable file:
+        - we can name file without extension or filename.yaml
+        - file follow yaml syntax
+        - version: 1.0.0 
+
+        specify variable file in playbook:
+            - create file
+            - refer file in playbook
+            - we can refer different file for different play
+
+Check code:
+    https://github.com/Mitesh12ehd/ansible
+    branch: deploy-node-app

@@ -1,0 +1,47 @@
+modules:
+    - we can use module to perform our task 
+    - using modules, we can existing code to perform our task, instead of writing code ourself
+    - we can check ansible docs to find modules
+        - search module and check how to use, which parameter to pass
+
+    ex. File, Network, Cloud, Storage categories
+    ex. packaging modules
+    ex. os modules
+        ex. apt
+
+Collection in ansible:
+    - Before ansible 2.9 
+        - all modules were included
+        - single repository ansible/ansible
+        - single package called ansible
+
+    - After ansible 2.10 and later
+        - ansible/ansible repo contains core ansible programs
+        - modules and plugins moved into various "collections"
+    
+What is collection?
+    - collection is packaging format for bundling and distributing ansible content
+    - can be released and installed independent of other collection
+    
+    - Collection:
+        - Playbook
+        - plugins
+        - modules
+
+    - collection is single bundle
+    - apt and service modules are part of "built in collection"
+    - collection may created and maintained by community
+
+    - Check collection list using command:
+        - ansible-galaxy collection list
+
+Ansible plugins:
+    - piece of code that add to ansible functionality or modules
+    - we can write our own plugins
+
+Ansible galaxy:
+    - ansible galaxy is where code of modules and plugins are hosted
+    - we can download module and use that
+
+    - we can download module using given command of any module in ansible galaxy
+        ex. ansible-galaxy collection install amazon.aws
