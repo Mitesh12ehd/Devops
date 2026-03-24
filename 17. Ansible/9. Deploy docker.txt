@@ -1,0 +1,92 @@
+Automate docker deployment:
+
+    1. Create EC2 instance using terraform
+        - just create ec2 instance, do not initialize with entryscript
+
+    2. Install docker and docker compose
+    3. Add user to docker group
+    4. Start docker container using docker compose 
+
+Docker community collection:
+    - includes many modules and plugins to work with docker
+
+Fully qualified name (FQCN):    
+    - community.docker.docker_image
+        - "community" is namespace
+        - "docker" is collection
+        - "docker_image" is module/plugin
+
+    - ansible.builtin is default namespace and collection name that ansible assumes
+    - module other than built in require fully qualified name 
+
+    What happens if we don't specify fully qualified name?
+        - example:
+            - name: Pull an image
+                docker_image:
+                    name: pacur/centos-7
+                    source: pull
+                    pull:
+                        platform: amd64
+
+        - run this playbook using to show additional meta information
+            ansible-playbook my-playbook.yaml -vv
+
+        - we can see redirection
+            ansible.builtin.docker_login to community.general.docker_login
+            community.general.docker_login to community.docker.docker_login
+            ansible.builtin.docker_compose to community.general.docker_compose
+            community.general.docker_compose to community.docker.docker_compose
+
+        - so redirection may go wrong if we some modules have same name in multiple collection,
+          so should use fully qualified name
+
+Install python module for ansible:
+    - for some modules, we need to install python ansible modules
+    - it depends on machine type (in old ami it required, now it not required )
+
+    - ex.
+        docker, docker-compose
+
+    - name: Install docker python module
+        pip:
+            name: 
+                - docker
+                - docker-compose
+
+Exception: 
+    - sometimes, based on server type, there is python3 is not installed by default
+    - there is python2 / python installed 
+    - so ansible will give warning about python interpreter version
+        as there python2 on ec2 machine, but ansible requir
+        
+    2. Install docker and docker composeed python3
+
+    Define python3 as ansible python3 interpreter:
+        - we need to configure that ansible should use python3 as interpreter
+        - we can specify it in ansible.cnf file
+            interpreter_python = /usr/bin/python3
+
+    Use python2 interpreter where required:
+        - if we add python3 in cnf file, then it might not work with new machine
+        - as there is no python3, because of 
+            1. We installed python3 using ansible code 
+            2. while running this code we don't have specified python3 in cnf file
+        - but if we use this code for future machine we got error that 
+            /usr/bin/python3 not found
+
+        1. Use python3 installation task using python2 interpreter
+        2. Old yum ansible module also don't support python3,
+            so there is also we should use python2 interpreter
+
+    How to use python3 as global and python2 in specific task only?
+
+        tasks:  
+            - name: Install python3 and docker
+            vars:
+                ansible_python_interpreter: /usr/bin/python
+            yum: 
+                name: 
+                - python3
+                - docker
+                update_cache: true
+                state: present
