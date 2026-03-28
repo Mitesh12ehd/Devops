@@ -1,0 +1,24 @@
+Ansible + terraform:
+    - execute ansible playbook after ec2 provisioning in terraform
+    - use provisioner 
+    - use local-exec provisioner as we need to execute ansible command on our local
+
+    Key points:
+        - we need to provide inventory, private key location, and user in ansible command
+            command = "ansible-playbook --inventory ${self.public_ip}, --private-key ${var.ssh_key_private} --user ec2-user deploy-docker.yaml"
+            - comma after inventory value is must
+            - comma treat hosts as list, without comma it treat as files
+
+        - use hosts: all in ansible configuration yaml file 
+            - to avoid issue of specified host name, as we are providing hosts through command
+
+        - after provisioning ec2 server, we wan't directly connect via ssh
+          (ansible can't connect direct via ssh)
+          (we need to wait until ssh port available)
+
+Check code:
+    https://github.com/Mitesh12ehd/ansible
+    branch: ansible-from-terraform
+
+    https://github.com/Mitesh12ehd/terraform
+    branch: execute-ansible-playbook
