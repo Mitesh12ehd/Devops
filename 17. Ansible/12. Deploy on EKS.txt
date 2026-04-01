@@ -1,0 +1,55 @@
+
+Task:
+    Automate k8s deployment:
+        - Create k8s cluster on aws
+        - configure ansible to connect to eks cluster
+        - Deploy deployment and service component
+
+TODOs:
+
+    1. Create eks cluster using 
+        - eks terraform or linode
+        - download kube-config file
+
+    2. Create namespace in cluster:
+        - use hosts: localhost
+        - as we want to execute command in our local
+
+        Which cluster to connect to?
+        How to connect?
+            - using kubeconfig file
+
+    3. Requirement
+        - below 3 requirement should be present on machine where we execute ansible command
+
+        python >= 3.9
+        kubernetes >= 24.2.0
+        PyYAML >= 3.11
+        jsonpatch
+
+        - Create env
+            python3 -m venv k8s-env
+        - activate
+            source k8s-env/bin/activate
+        - Install package
+            pip install "kubernetes>=24.2.0" "PyYAML>=3.11" jsonpatch
+
+        - We need to install ansible inside venv, so that it takes package from them
+          we use interpreter inside venv
+        
+    4. Verify namespace created
+        export KUBECONFIG=~/Documents/GitHub/ansible/k8-cluster-kubeconfig.yaml
+        kubectl get ns
+
+    5. Deploy deployment and service 
+        - verify application by accessing external ip on browser
+
+    
+    - Use kube-config from environment:
+        - so that we don't need to define in each play
+        - export K8S_AUTH_KUBECONFIG=k8-cluster-kubeconfig.yaml
+        - now we can remove in each task and execute play
+
+Check code:
+    https://github.com/Mitesh12ehd/ansible
+    branch: deploy-on-k8s

@@ -1,0 +1,61 @@
+Ansible integration in jenkins pipeline:
+    1. Create server and start jenkins container
+    2. Create dedicated server for ansible
+    3. Install ansible on dedicated server
+    4. Execute ansible playbook from jenkins pipeline to configure 2 EC2 instances
+        - Install docker and docker compose on EC2 instances
+
+1. Create ansible server and install ansible on them:  
+    apt update
+    apt install ansible
+
+    # Install requirements for aws ec2 ansible module
+    # Install inside venv   
+        boto3 >= 1.34.0
+        botocore >= 1.34.0
+        pip3 install boto3 botocore
+
+        Note: here we execute playbook via jenkins, so we can't create env
+              install boto3 via apt
+              - apt install python3-boto3 python3-botocore -y
+
+    # Configure aws credential
+        mkdir .aws
+        cd .aws
+        vim credentials 
+    
+
+2. Create ec2 instance manually or using terraform
+
+3. Setup jenkins:
+    - Create jenkins server
+    - Start jenkins container
+    
+    - Add credential (ssh with private key) for ansible-server
+        - we can't add our normal id_rsa key as credential to connect ansible control node from 
+          jenkins
+        - as jenkins not support key that start with 
+            -----BEGIN OPENSSH PRIVATE KEY-----
+        
+        - convert into standard format
+            ssh-keygen -p -f ~/.ssh/id_rsa -m pem -P "" -N ""
+
+            - it convert our key that start from 
+              -----BEGIN RSA PRIVATE KEY-----
+
+        - use this converted key to create credential in jenkins
+
+    - Add credential for ec2-machines
+        - type ssh with private key
+        - follow standard format of key
+
+ssh agent:
+    - plugin
+    - to ssh via jenkins
+
+SSH Pipeline Steps plugin:
+    - to execute command on remote server via ssh
+
+Check code:
+    https://github.com/Mitesh12ehd/ansible
+    branch: jenkins-pipeline

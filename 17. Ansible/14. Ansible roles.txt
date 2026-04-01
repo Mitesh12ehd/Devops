@@ -1,0 +1,32 @@
+Ansible roles:
+    - When we automate out infrastructure and automate tasks
+    - there is large and complex ansible code
+    - code may become not maintainable
+
+    - we can create roles
+    - roles is like packages of our tasks
+    - extract task from playbook, and package them in bundle called role
+
+    - reusability
+    - parameterize your role
+    - able to define default variable value
+
+    Community:
+        - we can use role from community 
+        - ex.
+            - setup mysql on ubuntu machine
+            - setup nginx application
+
+        - platform to find roles:
+            - ansible-galaxy
+            - git repository
+
+    - we can also package files in role using folder named "files"
+
+Example:
+    - create role to setup docker and run docker container using docker compose
+    - we need to create common role that should work for droplet and ec2 machines
+
+Check code:
+    https://github.com/Mitesh12ehd/ansible
+    branch: ansible-roles
