@@ -1,0 +1,65 @@
+Monitor your own application:
+    - no exporter available for our own application
+    - we have to define metrics
+
+    - we need to use client libraries
+    - choose prometheus client library that match your language in which application is 
+      written
+    - abstract interface to expose your metrics
+    - libraries implements the prometheus metrics types like
+        counter, gauge, histogram, summary
+
+Example:
+    1. Expose metrics for nodejs application using nodejs client library
+    2. Deploy nodejs app in the cluster
+    3. Configure prometheus to scrap new target (servicemonitor)
+    4. visualize scraped data in grafana dashboard
+
+    Measure 2 metrics:
+        1. Number of request
+        2. Duration of request
+
+Check code:
+    node_app
+
+How metrics added in application:   
+    
+    1. Add prometheus endpoint and its login in application
+        - developer add prometheus library in the code
+        - in nodejs there is npm package "prom-client"
+        - check code of application project
+        - application expose metrics at its /metrics endpoint
+
+    2. Build docker image of application:
+        - so that we can deploy it on kubernetes
+        - build docker image
+        - login docker hub
+        - push image
+
+    3. Deploy app in k8s cluster:
+        
+        - create secrets for docker login:
+            kubectl create secret docker-registry my-registry-key \
+            --docker-server=https://index.docker.io/v1/ \
+            --docker-username=miteshch \
+            --docker-password=xxx
+
+    4, Create deployment and service of cluster
+
+    5. Check application/metrics endpoint is exposing metrics or not:
+        kubectl port-forward svc/nodeapp 3000:3000 &
+
+    6. create servicemonitor to scrap application/metrics endpoint
+
+        - verify it in prometheus UI > targets
+
+        - verify metrics in expression input field
+            - http_request_connection_total
+            - http_request_duration_seconds
+
+    7. Add grafana dashboard for application monitor:
+        
+        - Create first panel with 
+            rate(http_request_connection_total[2m])
+        - Create second panel with 
+            rate(http_request_duration_seconds_sum[2m])

@@ -1,0 +1,41 @@
+Create our own alert rules:
+    - Create rules for below 2 condition
+    - Alert: when cpu usage is above 50%
+    - Alert: when pod cannot start
+
+    - check code
+        configs/alert-rules.yaml
+
+rules_files:
+    - check configuration section of prometheus ui
+    - check rules_files
+        rule_files:
+        - /etc/prometheus/rules/prometheus-monitoring-kube-prometheus-prometheus-rulefiles-0/*.yaml
+        - /etc/prometheus/rules/prometheus-monitoring-kube-prometheus-prometheus-rulefiles-1/*.yaml
+        - /etc/prometheus/rules/prometheus-monitoring-kube-prometheus-prometheus-rulefiles-2/*.yaml
+
+    - this folder is where all alert rules are there
+
+Prometheus operator:
+    - if we have setup prometheus on k8s cluster
+    - prometheus operator extends k8s API, and allows to create custom rules like alert
+    - so we don't need to modify rulefiles
+    - it also reload configuration when we add new alerts
+
+Apply and verify alert
+    - kubectl apply -f alert-rules.yaml
+    - kubectl get PrometheusRule -n monitoring
+
+    - also check newly created alert rules in prometheus UI
+
+Test alert:
+
+    1. Increase CPU usage by 50%:
+        kubectl run cpu-test \
+        --image=containerstack/cpustress \
+        --restart=Never \
+        -- --cpu 8 --timeout 5m --metrics-brief
+
+    2. Check Alert is in firing state in prometheus UI
+
+    3. When CPU use go normal alert is back in inactive state

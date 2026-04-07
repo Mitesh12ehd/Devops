@@ -1,0 +1,91 @@
+Monitor third party application:
+    
+Monitor redis application:
+    - too much load
+    - too many connection
+    - redis is down?
+
+Exporter:
+    - used to monitor third party application
+    - Exporter connect to service and get metrics data from service
+    - Exporter translate these service specific metrics to prometheus understandable metrics
+    - Exporter exposes these translated metrics at /metrics endpoint
+
+How prometheus will consider exporter?
+    - we need to tell prometheus about new exporter
+    - use ServiceMonitor (custom k8 resource) needs to be deployed
+
+Redis exporter helm chart:
+    - https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-redis-exporter
+
+    - check values we can override in this chart
+
+Values to override:
+
+    1. Enable service monitor
+
+    2. Add label release: monitoring
+        - using this label, prometheus register this exporter to monitor
+
+        - all servicemonitor in cluster have this label 
+            kubectl get servicemonitor -n monitoring
+            kubectl get servicemonitor -n monitoring monitoring-kube-prometheus-alertmanager -o yaml | less
+
+    4. redis address:
+        redisAddress: redis://myredis:6379
+
+        - here myredis should be redis service name
+
+    5. redis credential as environment variable
+        - required only if redis is protected
+
+Install helm chart:
+    helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+    helm repo update
+
+    # Install helm with our value
+    helm install redis-exporter prometheus-community/prometheus-redis-exporter -f redis-values.yaml
+
+Check components:
+    - check helm charts:
+        helm ls 
+
+    - check redis exporter pod:
+        kubectl get pod
+
+    - check servicemonitor component for redis
+        kubectl get servicemonitor
+
+Check targets in prometheus UI:
+    - in prometheus UI > target section
+    - we can see serviceMonitor/default/redis-exporter-prometheus-redis-exporter/0
+
+Check metrics:
+    - now prometheus have redis metrics that we can use it prompt ql queries
+    - search redis in expression input field
+
+Create alerts:  
+    - when redis is down?
+    - when redis have too many connection?
+
+Awesome prometheus alert:
+    - documentation where we can find already created alert rules
+
+Test alert:
+    1. Test redis down alert:
+        - edit deployment redis-cart 
+        - set replica to zero
+
+Create redis dashboard in grafana:
+    - we can create dashboard,
+    - or we can use existing dashboard from grafana labs
+
+    Use Redis Dashboard for Prometheus Redis Exporter 1.x dashboard:
+        - copy id from online docs
+        - grafana ui > Create dashboard > import > paste id > load
+        - give name
+        - choose data source prometheus
+    
+Check code:
+    configs/redis-alert-rules.yaml
+    configs/redis-values.yaml

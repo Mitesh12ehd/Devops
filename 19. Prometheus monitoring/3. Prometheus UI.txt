@@ -1,0 +1,36 @@
+What is your goal? What do you want to monitor?
+    - we want to notice when something unexpected happens
+    - observer anomalies
+        - CPU spikes
+        - insufficient storage
+        - high load
+        - unauthorized request
+    - analyze and react accordingly
+
+Prometheus UI:
+
+    How to access it?
+        - we need do port forwarding of below service
+          service/monitoring-kube-prometheus-prometheus
+
+        - by port forwarding we can access at localhost
+
+        - kubectl port-forward service/monitoring-kube-prometheus-prometheus 9090:9090 -n monitoring &
+
+        - access at localhost:9090 
+    
+    - Check targets:
+        Status > Targets
+        - we check internal endpoint where /metrics stored
+    
+    - Check metrics(data) that prometheus collect?
+        - ex. CPU usage , memory usage, request count
+
+Jobs in prometheus:
+    - in our target node prometheus have endpoint /metrics
+    - job is collection of multiple endpoint with same purpose
+
+    - we can see jobs in each endpoint of components
+    - for ex.
+        for kubelet component, there is 2 endpoint so job of these 2 point is same
+            job = "job="kubelet"

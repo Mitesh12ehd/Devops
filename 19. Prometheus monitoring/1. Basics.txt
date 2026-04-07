@@ -1,0 +1,127 @@
+Task:
+    1. Create cluster with EKS
+
+    2. Deploy microservice app
+        - Online shop microservice app
+
+    3. Deploy prometheus monitoring stack
+        - Understand the create component
+
+    4. Monitor cluster nodes
+        - Monitor CPU, RAM storage of node
+
+    5. Monitor k8s component
+        - all pods are running?
+        - are all microservices are accessible
+
+    6. Monitor third party application (redis)
+        - Deploy redis exporter
+
+    7. Monitor application
+        - How many request application getting?
+        - How many errors? 
+
+    8. Access prometheus UI
+
+    9. Data visualization with Grafana:
+        - most of time everything is fine
+        - monitor is for exceptional cases
+        - we want to be notified when something goes wrong
+        
+        - Configure alerts in prometheus
+
+What is prometheus?
+    - it is monitoring tool
+    - monitor and alert when crash
+    - identify problems before
+    - can monitor network load 
+
+Architecture of prometheus:
+    
+    Prometheus server:
+        Storage:
+            - time series database
+            - store metrics data
+            
+        Data retrieval worker:
+            - pull metrics data
+            - retrieve data from applications, services, servers
+            - it collect data and push into database
+
+        Accept PromQL queries:
+            - accept queries to get stored data for monitor
+            - HTTP server
+            - Prometheus web UI get data through query
+
+What does prometheus monitor?
+    - its called target that prometheus monitor
+
+    - server
+    - application
+    - services like database
+
+Which units are monitored of those targets?
+    - its called metrics
+        - CPU status
+        - Monitor Memory/Disk space usage
+        - Exception count
+        - request count
+        - request duration
+    
+    - metrics format is human readable text based
+    - metrics entries: TYPE and HELP attributes
+        HELP: description of what the metrics is
+        TYPE: 3 types
+            1. Counter:
+                - how many time x happened?
+
+            2. Gauge:
+                - What is current value of x now?
+
+            3. Histogram:
+                - How long or how big?
+
+How does prometheus collect those metrics from the targets?
+    - it pull over http from targets
+    - pulls from HTTP endpoint, 
+    - endpoint is typically hostaddress/metrics
+
+Target endpoint and Exporters:
+    - some servers/components already exposes prometheus endpoints so no extra exporter required
+    - Many servers/components require extra component
+      that component is called exporter
+
+    - Exporter:
+        - it is script that collect info from target and convert that info into format that 
+          prometheus can understand
+        - and expose that data on /metrics endpoint, where prometheus can scrap it
+
+        Monitor linux server:
+            - download node exporter using tar file repository
+            - untar and execute
+            - convert metrics of the server
+            - expose /metrics endpoint
+            - configure prometheus to scrap this endpoint
+
+        - exporter is also available as docker image
+
+    - How to create exporter for our own application?
+        - Using client libraries(depend on each application tech stack)
+        - we can expose endpoint 
+
+Pull mechanism: 
+    - prometheus use pull mechanism unlike aws cloudwatch use push mechanism
+
+    - in push mechanism, application and server are responsible for pushing their data to 
+      centralized collection platform
+    - in pull mechanism, prometheus instance can pull metrics data from server and application
+
+Drawback of prometheus:
+    - it is not scalable with large number of nodes 
+    - we can setup nested prometheus, prometheus to collect data of prometheus to make it 
+      scalable
+
+Prometheus with docker and kubernetes:
+    - Fully compatible
+    - prometheus component available as docker image
+    - can easily be deployed in container environment like kubernetes

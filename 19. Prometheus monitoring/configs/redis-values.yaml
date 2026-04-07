@@ -1,0 +1,8 @@
+serviceMonitor:
+  # When set true then use a ServiceMonitor to configure scraping
+  enabled: true
+  labels:
+    release: monitoring
+
+# If serviceMonitor.multipleTarget is enabled, this configuration is actually not used
+redisAddress: redis://redis-cart:6379

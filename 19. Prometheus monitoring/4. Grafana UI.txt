@@ -1,0 +1,60 @@
+Grafana: 
+    - data visualization tool
+
+    Access Grafana UI:
+        - with prometheus deployment it deployed Grafana ui too.
+        - expose Grafana port to local access
+
+        - kubectl port-forward service/monitoring-grafana 8080:80 -n monitoring &
+
+        kubectl get secret --namespace monitoring monitoring -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+
+        - Credential
+            username: admin
+            password: found via below command
+                kubectl get secret monitoring-grafana -n monitoring -o jsonpath="{.data.admin-password}" | base64 --decode
+                
+Dashboard:
+    - grafana have default dashboard
+    - we can also create our own dashboard.
+      we need to write our own prompt-ql query
+
+Manually hitting anomaly (cpu or memory spike) to verify it dashboard:
+    - we hitting frontend service in loop
+    
+    - Create pod inside cluster that hits frontend request
+        
+        # Create pod with give image
+        # go into container
+        # remove the pod when we are done
+        kubectl run curl-test \
+        --image=curlimages/curl \
+        -it --rm \
+        --restart=Never \
+        -- sh
+    
+    - endpoint of application is 
+        http://45.79.120.84:30007/
+        node_external_ip:nodeport
+
+    - create script vi test.sh
+        for i in $(seq 1 10000)
+        do
+            curl http://45.79.120.84:30007/ > test.txt
+        done
+    
+    - execute
+        chmod +x test.sh
+    
+    - observer the cpu spikes in grafana UI
+
+Users:
+    - if we have team, we can create more users and manage permissions
+
+How to grafana knows that it need to talk with prometheus?
+    - it is mentioned in "data sources" section
+    - connections > data sources
+    - we can monitoring UI from other sources also
+    - we can add data sources
+
+    - query will different based on each data sources

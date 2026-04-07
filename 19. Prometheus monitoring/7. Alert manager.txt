@@ -1,0 +1,28 @@
+Alert manager:
+    - alert rules send alert to alert manager
+    - alert manager need to send notifications
+
+Alert manager UI:
+    - kubectl port-forward service/monitoring-kube-prometheus-alertmanager 9093:9093 -n monitoring &
+
+receivers:
+    - check status > Config > receivers
+    - it is null
+    - for each alert there might be different receiver,
+      for that we use routes
+
+Configure email notifications:
+    - create alert manager Config
+
+    - verify our receiver added in config in UI
+
+    Check code:
+        configs/alert-manager-configuration.yaml
+        configs/email-secret.yaml
+
+Test alert notification:
+     
+    1. Spike CPU    
+
+    2. Check crash loop back off alert
+        kubectl run crash-test --image=busybox --restart=Always -- sh -c "exit 1"

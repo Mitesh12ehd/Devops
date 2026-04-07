@@ -1,0 +1,43 @@
+# Explanation of expression of alert
+#   (rate(node_cpu_seconds_total{mode="idle"}[2m])) gives how many seconds per seconds cpu remain idle
+#   if it value 0.82 means 82% of the time cpu remains idle
+
+#   avg by(instance)
+#   find average of all core is one cpu 
+#   give avg of each node separately
+
+#   multiple by 100 to get percentage
+#   to find cpu usage deduct this result(ideal time) from 100
+
+#   to check usage is above 50% add condition
+
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: main-rules
+  namespace: monitoring
+  labels:
+    app: kube-prometheus-stack
+    release: monitoring
+spec:
+  groups:
+  - name: main.rules
+    rules:
+      - alert: HostHighCpuLoad 
+        expr: 100 - ((avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[2m]))) * 100) > 50
+        for: 2m
+        labels:
+          severity: warning  
+          namespace: monitoring
+        annotations:
+          description: "CPU load on host is over 50%, Value = {{ $value }}\n Instance = {{ $labels.instance }}"
+          summary: "Host CPU load high"
+      - alert: KubernetesPodCrashLooping 
+        expr: kube_pod_container_status_restarts_total > 5
+        for: 0m
+        labels:
+          severity: critical
+          namespace: monitoring
+        annotations:
+          description: "Pod {{ $labels.pod }} is crash looping\n Value = {{ $value }}"
+          summary: "Kubernetes pod crash looping"

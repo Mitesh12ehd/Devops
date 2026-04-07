@@ -1,0 +1,64 @@
+Alerting in prometheus:
+    - Configure monitoring stack to notify us whenever something unexpected happens
+    - ex.
+        - CPU usage more than 50%
+        - pod can't start
+        - app not accessible
+
+Existing alert rules:
+    - some of the rules already provided by prometheus
+    - check alert in prometheus ui
+
+Understand basic prompt-ql:
+    Ex. alert:
+        name: AlertManagerFailedRecord
+        expression: max_over_time(alertmanager_config_last_reload_successful{container="alertmanager",job="monitoring-kube-prometheus-alertmanager",namespace="monitoring"}[5m]) == 0
+
+    - alertmanager_config_last_reload_successful is metrics
+      check same metrics in metrics section
+
+    - filters:
+        - metrics have various properties
+        - we can see all properties, when we search all properties
+        - alertmanager_config_last_reload_successful{container="alertmanager", endpoint="http-web", instance="10.2.0.151:9093", job="monitoring-kube-prometheus-alertmanager", namespace="monitoring", pod="alertmanager-monitoring-kube-prometheus-alertmanager-0", service="monitoring-kube-prometheus-alertmanager"}
+
+    - function:
+        - max_over_time is function
+        - check same function in online docs
+
+    - [5m] is time for max_over_time function
+    - if we perform
+        max_over_time(alertmanager_config_last_reload_successful{container="alertmanager",job="monitoring-kube-prometheus-alertmanager",namespace="monitoring"}[5m])
+    - we get result if is reloaded in last 5 minute
+    - if it equals 0, means it doesn't reloaded
+    - so trigger alerts
+
+severity:
+    - severity="critical"
+    - define urgency to notice issue 
+    - ex. warning, critical, 
+
+label:
+    - we can label alert to group multiple alerts
+    - by grouping labels, we can configure who to send alerts based on groups
+
+for:
+    - when alert condition met, 
+    - we send alert directly or wait for some time to satisfy condition again,
+      so that condition become normal
+    - for is time to wait send alert
+
+    ex.
+        - for kubernetes, due to its self healing method, it might possible that it works fine
+          after 5 minutes
+
+alert content:
+    - what to send in alert
+    
+    ex.
+    description	Configuration has failed to load for {{ $labels.namespace }}/{{ $labels.pod}}.
+    runbook_url	https://runbooks.prometheus-operator.dev/runbooks/alertmanager/alertmanagerfailedreload
+    summary	Reloading an Alertmanager configuration has failed.
+
+    - $labels.namespace comes from metrics and its attributes    
+    - runbook url point the url where we find reference of this type of issues

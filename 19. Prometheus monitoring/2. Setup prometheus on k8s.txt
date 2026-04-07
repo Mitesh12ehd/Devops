@@ -1,0 +1,68 @@
+How to deploy parts in k8s cluster?
+    - There are 3 ways
+
+    1. Create all configuration file yourself for,
+        - prometheus
+        - grafana
+        - alert manager
+
+    2. Using an operator 
+        - manager of all prometheus components
+
+    3. Using helm chart
+        - maintained by prometheus community
+
+1. Create k8 cluster:
+    
+2. Deploy microservice deployments and service on cluster:
+    - configs/config.yaml
+
+3. Deploy prometheus stack using helm
+
+    - Add repository
+      helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+
+    - Create namespace
+      kubectl create namespace monitoring
+
+    - Install chart(Deploy prometheus)
+      helm install monitoring prometheus-community/kube-prometheus-stack -n monitoring
+
+    - Check all components of prometheus
+      kubectl get all -namespace prometheus
+
+    What is deployed for prometheus?
+    
+        1. stateful sets 2  
+            - statefulset.apps/prometheus-monitoring-kube-prometheus-prometheus
+            - it is main prometheus server
+
+            - alert manager stateful sets
+
+        2. deployments 3
+            - prometheus operator
+            - grafana 
+            - kube state metrics:
+        
+        3. daemonset:
+            - daemonset.apps/monitoring-prometheus-node-exporter
+            - daemonset runs on every worker node
+
+            - it connect to prometheus server
+            - translate worker node metrics to prometheus metrics
+        
+        4. services
+        5. pods
+
+        6. configmaps
+            - kubectl get configmap -n monitoring
+        
+        7. secrets
+            - kubectl get secret -n monitoring
+
+    - we can also check what image are running in components?
+        - kubectl get statefulset -n monitoring
+        - kubectl describe statefulset prometheus-monitoring-kube-prometheus-prometheus -n monitoring
+
+        - likewise we can check for each components
+        
