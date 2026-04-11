@@ -1,0 +1,64 @@
+Non-serverless arch:
+    - need 1 server (cloud or premises)
+    - decide resource on our own
+    - configure how to scale up, scale down on our own
+    
+Serverless arch:
+    - no need to configure server
+    - no resource predication
+    - no scale up and down on our own
+    - everything managed by cloud provider
+
+    Benefits:
+        Pricing:
+            - in non-serverless we get fixed bill, even if our server don't get request from outside
+            - in night time, requests are few  
+            - our code is up and running all the time
+
+            - in serverless, it billed based on invocation
+            - code is not up and running all the time
+
+        Scaling:
+            - serverless auto scales, based on request
+
+    Drawback:
+        - can't deploy stateful application
+
+Lambda:
+    - AWS Lambda is a serverless compute service that lets you run code without provisioning or managing servers.
+
+    Create lambda function:
+        1. Create function
+        2. Configure code index.mjs
+
+        3. Add trigger
+            - to assign url where this function can be triggered
+            - select API gateway
+            - select REST API
+
+    Note: 
+        - we can call different lambda function on different route
+
+Nodejs application using serverless:
+
+serverless framework:
+    - we can't write all the code in web ide
+    - so use serverless framework
+
+Install serverless globally
+    npm install serverless -g
+
+
+1. Write js code into local
+    hello.js
+
+2. Write serverless configuration
+    serverless.yaml
+
+3. Deploy into aws account 
+    serverless deploy
+
+4. Check function in aws
+    - Go to Lambda
+    - Check function
+    - newly created function must there
