@@ -48,10 +48,36 @@ Linux have hierarchical tree structure.
     - apps and driver access this folders. not users.
     - contains file that are needed by system to interact with devices.
 
+    special virtual devices:
+        - /dev/null
+            - black hole device
+            - anything written in this file disappears
+
 /var 
     - contains files user by system while performing their operation.
     - used for runtime data.
     - contain cache and logs
+
+    - logs:
+        - /var/log/syslog
+        - /var/log/auth.log
+        - /var/log/kern.log
+
+    - /var/lib/apt:
+        - store package manager data
+        - store package metadata
+
+    - /var/lib/docker:
+        - store docker data
+        - contains images, containers, volumes, networks
+    
+    - many database also store data at /var/lib/mysql and /var/lib/postgresql
+
+    - temporary runtime files:
+        - /var/run
+
+        1. /var/run/docker.sock
+            - Docker clients use this socket to communicate with the Docker daemon.
 
 /tmp  
     - contain temporary files for application
