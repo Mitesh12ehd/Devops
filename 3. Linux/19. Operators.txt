@@ -8,7 +8,7 @@
         run ping google.com in background and github.com in terminal
 
     Note:
-    - we can't not kill command that is running on background by CRTL + CRTL
+    - we can't not kill command that is running on background by CTRL + C
     - we can do it by   
         1. find process id using ps command
         2. kill pid

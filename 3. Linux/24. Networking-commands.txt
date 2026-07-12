@@ -1,0 +1,165 @@
+Networking:
+
+ping:
+    - to check server, computer, router, website, etc. is reachable over the network.
+    - ping <hostname-or-ip>
+
+netstat or ss:
+    - both are same command
+    - it shows all active internet connections on system
+
+ifconfig:
+    - interface configuration
+    - shows ipv4 and ipv6 address for each network interface
+    - also shows other information
+
+    - ex.
+        - if docker is running, it has own network interface
+        - if machine is ec2, there is eth network interface
+            which is used to connect ec2 to network
+
+        - lo
+            - loopback
+            - it is network which is used to enable localhost
+            - ip of lo network interface is 127.0.0.1
+
+traceroute and tracepath:
+
+    How we will receive response from server?
+        - client --> ISP --> DNS server,it resolve the youtube.com to ip address --> youtube server
+        - so it is route
+
+    - traceroute command is used trace that route
+    
+    ex. traceroute youtube.com
+        - we can see the ip in output , in which one of the ip is data center of google/youtube
+
+mtr:
+    - my trace route
+    - it do ping and also shows path
+    - ex. mtr youtube.com
+
+nslookup:
+    - name server lookup
+    - find ip address of domain name
+
+    example:
+        mitesh@mitesh-ubuntu-pc:~/Desktop/linux$ nslookup trainwithshubham.com
+            Server:		127.0.0.53
+            Address:	127.0.0.53#53
+
+            Non-authoritative answer:
+            Name:	trainwithshubham.com
+            Address: 15.197.225.128
+            Name:	trainwithshubham.com
+            Address: 3.33.251.168
+            Name:	trainwithshubham.com
+            Address: 64:ff9b::fc5:e180
+            Name:	trainwithshubham.com
+            Address: 64:ff9b::321:fba8
+
+        - first server and address is related to dns server that resolved our query
+        - then all the ipv4 are ip of server where response comes from
+        - due to url is hosted at multiple server we receive multiple answer.
+
+    - it also shows private ip, which we can't connect with telnet command
+
+telnet:
+    - telnet is a network utility used to establish a TCP connection to a remote host on a 
+      specific port.
+    - syntax:
+        telnet <host> <port>
+
+    ex. telnet trainwithshubham.com 80
+        telnet trainwithshubham.com 443
+    
+    - 443 vs 80:
+        - 443 is https port
+        - 80 is http port
+
+hostname:
+    - used to find hostname of machine
+    - also used to change hostname
+        sudo hostname new-hostname              # reset after reboot
+        sudo hostnamectl set-hostname new-hostname             # permanent
+
+    /etc/hosts:
+        - it is file that map ip to hostnames
+        - ex. 
+            127.0.0.1 localhost
+            127.0.1.1 mitesh-ubuntu-pc
+
+        - it we want to change localhost to example.com, we do it in locally
+
+ip:
+    - ip addr show
+    - to show ip
+
+iwconfig
+    - to show wireless device connected
+
+dig:
+    - DNS lookup tool used to query DNS servers and retrieve DNS records.
+
+whois:
+    - to show details related to domain name
+    - domain, registry, where it is purchased from, date, expiry 
+
+curl:
+    - to hit api endpoints
+
+    options:
+        X:
+            - to specify request type
+            - GET is default type
+
+        H:
+            - to send header with request
+        
+        d:
+            - to send body with request
+
+        s:
+            - silent mode
+            - to avoid progress bar
+
+        L:
+            - it show redirected response 
+            - without this option we see response that is show redirection
+
+        o:
+            - to save output to file
+            - curl -sL https://deb.nodesource.com/setup_22.x -o nodesource_setup.sh
+
+
+    - jq tool:
+        - to format json
+        - <output> | jq
+        - use silent mode while using with curl, because curl progress bar output is also given to 
+          jq and it leads to error
+
+wget : 
+    - to download files from servers(URLs)
+
+    ex. 
+
+    1. wget https://ontheline.trincoll.edu/images/bookdown/sample-local-pdf.pdf
+        # download pdf in current directory
+
+    2. give our choice name
+        wget -o myPDF1.pdf https://ontheline.trincoll.edu/images/bookdown/sample-local-pdf.pdf
+
+watch:
+    - to show output of command every 2 second
+    - configure time
+        watch -n 5 top
+
+    ex.
+        watch top
+
+nmap:
+    - to scan the website 
+    - it shows which ports are open on that ip or domain
+
+    ex.
+        nmap trainwithshubham.com

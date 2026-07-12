@@ -93,6 +93,14 @@ chmod : Change permission of file
 
         Examples: 
             chmod 755 file.txt    # rwxr-xr-x (owner: rwx, group: rx, others: rx)
-            chmod 6 44 file.txt    # rw-r--r-- (owner: rw, group: r, others: r)
+            chmod 644 file.txt    # rw-r--r-- (owner: rw, group: r, others: r)
             chmod 600 file.txt    # rw------- (owner: rw, no access for others)
             chmod 777 file.txt    # rwxrwxrwx (full access for everyone)
+
+umask:
+    - It defines default permission of file and directories when file is created
+    - default value of umask in linux is 0002
+    - 0002 means 
+        - users have all access
+        - groups have all access
+        - others have execute access and read access

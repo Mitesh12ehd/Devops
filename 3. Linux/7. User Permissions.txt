@@ -62,17 +62,19 @@ Commands:
         sudo adduser mitesh2
         sudo useradd mitesh2    # 
 
+        sudo useradd -m mitesh2  # Create user and home directory also.
+
     Update password
         sudo passwd mitesh2
 
     Switch user
         su - mitesh2
         su -        # login as root user.
-
+ 
     Create group
         sudo groupadd devops
 
-    See group
+    See group and their members
         cat etc/group 
 
     Delete user 
@@ -116,6 +118,13 @@ Groups:
 
     Add new groups in user's secondary groups
         sudo usermod -aG group1,group2,group3 username
+
+    gpasswd:
+        - command to add users in groups
+            sudo gpasswd -a username2 group1
+
+        - Add multiple user at once
+            sudo gpasswd -M username3,username4,username5 group1
 
 More commands : 
 

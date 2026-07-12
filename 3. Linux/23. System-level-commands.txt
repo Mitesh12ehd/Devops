@@ -1,0 +1,79 @@
+System level commands:
+
+    - uname:
+        - to know platform of our os 
+        - for ubuntu is linux
+
+    - uptime:
+        - give time from when machine is up
+        - give number of user
+
+    - who:
+        - shows user logged in and their activity 
+        - ex. when used logged in etc.
+
+    - whoami:
+        - shows current logged in username
+
+    - which:    
+        - to find out location of program or application 
+
+        ex.
+            which bash
+            which python3
+
+    - id:
+        - shows details of current user's 
+            - user and user id
+            - group and group id
+            - user is part of which groups 
+
+    - sudo:
+        - super user do
+        - it execute command with administrator permissions
+
+        - sudo is group
+        - any user which is part of sudo group can execute command with sudo level permissions
+
+        - id command shows current user is part of sudo group or not
+
+    - shutdown, reboot:
+        - to perform its tasks
+        - we can also schedule by giving time parameter
+
+User and group management:
+    
+    umask:
+        - It defines default permission of file and directories when file is created
+        - default value of umask in linux is 0002
+        - 0002 means 
+            - users have all access
+            - groups have all access
+            - others have execute access and read access
+
+rsync:
+    - remote sync
+    - to keep file in sync in between two directory in same machine or different machine
+
+    - to sync single file:
+        rsync file.txt newdir/
+
+    - copy directory:
+        rsync -r project/ backup/project/
+
+    - archive mode:
+        - to preserve permissions
+        - rsync -av project/ /backup/project/
+
+    - sync on remote server:
+
+        1. Using default ssh private key
+            rsync -avz /local/path/ ubuntu@192.168.1.100:/remote/path/
+
+        2. using custom ssh private key
+            rsync -avz -e "ssh -i ~/documents/prod-server-key.pem" \
+                ./project/ ubuntu@192.168.1.100:/home/ubuntu/project/
+
+    - copy from remote to local
+        rsync -avz -e "ssh -i /home/mitesh/keys/prod-server.pem" \
+            ubuntu@192.168.1.100:/home/ubuntu/project/ ./project/

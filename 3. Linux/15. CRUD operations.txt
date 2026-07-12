@@ -60,6 +60,7 @@ rm : Remove file and directories,
 
     Delete directory
         rm -R dir1
+        rmdir dir1
     
     (look various option available in rm command)
     ex. 

@@ -12,8 +12,4 @@ uname: to get system information
 lscpu : 
     shows CPU detail
 
-free : shows system memory usage
-    free
-    free -h         # display in human readable format
-
 vmstat : Shows virtual memory status

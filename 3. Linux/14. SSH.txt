@@ -90,6 +90,8 @@ Connect remote server:
 Execute script on remote server:
 
     1. Create shell script file on local 
+
+
     2. Copy it into remote server
         - use scp (secure copy)
         
@@ -99,3 +101,41 @@ Execute script on remote server:
         # this function also take default private key as parameter
         # to configure private key use below command 
         scp -i .ssh/id_rsa  test.sh root@64.225.108.160/root
+
+SCP:
+    - secure copy
+    - to copy file from local to remote and remote to local.
+
+    1. Copy file/directory from local to remote
+
+        scp -i private-key.pem tasklist.txt ec2-user@1.1.1.1:/home/ec2-user/
+
+    2. Copy file/directory from remote to local
+        scp -i private-key.pem -r ec2-user@1.1.1.1:/home/ec2-user/customdir .
+
+rsync:
+    - remote sync
+    - to keep file in sync in between two directory in same machine or different machine
+
+    - to sync single file:
+        rsync file.txt newdir/
+
+    - copy directory:
+        rsync -r project/ backup/project/
+
+    - archive mode:
+        - to preserve permissions
+        - rsync -av project/ /backup/project/
+
+    - sync on remote server:
+
+        1. Using default ssh private key
+            rsync -avz /local/path/ ubuntu@192.168.1.100:/remote/path/
+
+        2. using custom ssh private key
+            rsync -avz -e "ssh -i ~/documents/prod-server-key.pem" \
+                ./project/ ubuntu@192.168.1.100:/home/ubuntu/project/
+
+    - copy from remote to local
+        rsync -avz -e "ssh -i /home/mitesh/keys/prod-server.pem" \
+            ubuntu@192.168.1.100:/home/ubuntu/project/ ./project/

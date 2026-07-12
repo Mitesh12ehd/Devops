@@ -2,20 +2,6 @@ whoami :
     find current user:
         whoami > it print current user.
 
-df : disk free
-    - displays information about disk space usage on mounted filesystems
-    - it shows how much space is used and available on your storage devices
-
-    df command shows in kbs
-
-    - to show in mbs
-        df -m
-
-    - in human readable format
-        df -h
-
-    (explore more option on internet or man command)
-
 du : disk usage
     - displays the disk space used by files and directories
 
@@ -61,22 +47,11 @@ sort :
 jobs : 
     show the process start by shell
 
-wget : to download files from servers(URLs)
-
-    ex. 
-
-    1. wget https://ontheline.trincoll.edu/images/bookdown/sample-local-pdf.pdf
-        # download pdf in current directory
-
-    2. give our choice name
-        wget -o myPDF1.pdf https://ontheline.trincoll.edu/images/bookdown/sample-local-pdf.pdf
-
-
-top : Shows all the process that are running on system
-
 kill :
     kill PID
     ex. kill 789
+
+    - kill -9 [pid]
 
 uname:
     give current os 
@@ -132,3 +107,73 @@ Input and output
     ex.
         ls -l doesnotexist.txt
         # output it giving is error message
+
+Commands for hardware:
+
+    1. top: 
+        - to show running processes 
+    
+    2. df:
+        - df -h
+        - show disk space usage
+
+    3. free -h 
+        - show ram usage 
+
+wc:
+    - word count
+    - to count words, character, lines of the file content
+    - wc file1.txt
+
+cut:
+    - to get specific part from file content
+
+    - get first 5 character
+        cut -c 1-5 filename.txt
+
+    - get specific character:
+        cut -c 1,3,5 original.txt
+
+    - extract by delimiter and field(-d and -f)
+
+        Suppose /etc/passwd contains:
+            root:x:0:0:root:/root:/bin/bash
+            ubuntu:x:1000:1000:Ubuntu:/home/ubuntu:/bin/bash
+
+        Get usernames:
+            cut -d ':' -f1 /etc/passwd
+
+            -f1 extract first field
+
+            Output:
+                root
+                ubuntu
+
+        Get Home Directories
+            cut -d ':' -f6 /etc/passwd
+
+            Output:
+                /root
+                /home/ubuntu
+
+        Extract Multiple Fields:
+
+            file: data.csv
+                John,25,Ahmedabad
+                Alice,30,Mumbai
+
+            cut -d ',' -f1,3 data.csv
+            cut -d ',' -f1-3 data.csv       # to get range of field
+
+tee:
+    The tee command reads input from stdin, writes it to stdout (your terminal), and 
+    simultaneously writes it to one or more files.
+
+
+nohup:
+    - it used to store output of command 
+    - it also append output
+         
+    ex.
+        nohup free -h 
+        # it create nohup.out file

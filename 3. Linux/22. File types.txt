@@ -1,0 +1,56 @@
+File types:
+
+    - stat sample.txt : to show detailed metadata of the file
+
+    1. Regular file 
+        - symbol is -
+
+    2. Directory:
+        - symbol is d
+
+    3. Symbolic Link
+        - Create link, ln -s regular.txt softlink
+        - symbol is l
+
+    4. Block device
+        - /dev/sda
+        - nvme0n1
+
+        - symbol is b
+
+    5. Character device:
+        - to stream data byte by byte
+
+        - /dev/tty
+            - example terminal use /dev/tty chracter device 
+                echo "Hello" > /dev/tty
+            - it directly print hello on terminal
+        
+        - /dev/null
+            - to throw data away
+            - blackhole
+
+    6. Named pipe (FIFO):
+        - symbol is p
+
+        - create 
+            mkfifo mypipe
+        
+        - terminal 1
+            cat mypipe
+
+        - terminal 2
+            echo "Hello" > mypipe
+
+    7. Socket
+
+    Hard links:
+        - create hardlink
+            ln original.txt hard.txt
+
+        - Same inode but different file name
+
+Hard link and soft links:
+
+    Soft link:
+        - it is symbolic links

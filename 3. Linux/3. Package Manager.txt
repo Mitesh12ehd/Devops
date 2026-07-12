@@ -46,7 +46,7 @@ Uninstall software
 What is apt-get ?
     - it is another package manager
     - apt-get is also available on Ubuntu
-    - also used for install, update and uninstall softwares.
+    - also used for install, update and uninstall softwares.    
 
     what is difference?
         - apt is more user friendly.

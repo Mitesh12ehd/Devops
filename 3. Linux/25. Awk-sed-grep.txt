@@ -1,0 +1,138 @@
+awk:
+    - text processing tool
+    - to filtering data
+    - extract columns
+    - searching patterns
+    - process csv,
+
+    syntax:
+        awk 'pattern { action }' file
+
+    example:
+    2026-07-12 09:15:01 INFO  auth-service       User login request received for user_id=1024
+    2026-07-12 09:15:02 DEBUG auth-service       Validating JWT token signature
+    2026-07-12 09:15:03 INFO  auth-service       User authenticated successfully user_id=1024
+    2026-07-12 09:15:10 INFO  order-service      New order created order_id=ORD1001
+    2026-07-12 09:15:11 DEBUG order-service      Fetching product details from inventory-service
+    2026-07-12 09:15:12 INFO  inventory-service  Product stock verified product_id=P101
+    2026-07-12 09:15:15 INFO  payment-service    Payment initiated transaction_id=TXN5001
+    2026-07-12 09:15:17 ERROR payment-service    Payment gateway timeout transaction_id=TXN5001
+    2026-07-12 09:15:18 INFO  payment-service    Retrying payment request transaction_id=TXN5001
+    2026-07-12 09:15:20 INFO  payment-service    Payment completed successfully transaction_id=TXN5001
+    2026-07-12 09:15:25 DEBUG notification-svc   Preparing email notification for order_id=ORD1001
+    2026-07-12 09:15:26 INFO  notification-svc   Order confirmation email sent to customer
+    2026-07-12 09:15:30 INFO  api-gateway        Request received GET /api/orders
+    2026-07-12 09:15:31 DEBUG api-gateway        Forwarding request to order-service
+    2026-07-12 09:15:32 INFO  order-service      Returning order details order_id=ORD1001
+    2026-07-12 09:15:40 WARN  inventory-service  Stock level low product_id=P101 remaining=5
+    2026-07-12 09:15:45 DEBUG scheduler          Running scheduled cleanup task
+    2026-07-12 09:15:47 ERROR database           Connection pool exhausted
+    2026-07-12 09:15:49 INFO  database           New database connections established
+    2026-07-12 09:15:50 INFO  scheduler          Cleanup task completed successfully
+
+    1. Print all lines:
+        awk '{print}' app.log
+
+    2. Get first column or multiple column
+        awk '{print $1}' app.log
+        awk '{print $1,$3,$4}' app.log
+    
+    3. Get all line that have INFO statement
+        awk '/INFO/ {print}' app.log
+    
+    4. Count INFO statement
+        awk '/INFO/ {count++} END {print count}' app.log
+        awk '/INFO/ {count++} END {print "The count of INFO is", count}' app.log
+
+    5. Get log between 09:15:12 to 09:15:45
+        awk '$2 >= "09:15:12" && $2 <= "09:15:45" {print}' app.log        
+
+    6. Print line 2 to 10
+        awk 'NR >= 2 && NR <= 10 {print}' app.log
+
+awk vs sed:
+    - awk require formatted data
+    - awk require comma separated value, tab separated value
+    - while sed works line by line, no structured data required
+
+sed:
+    - stream editor
+    - It is used to search, replace, insert, delete, and transform text without opening a file in an editor.
+
+
+    1. Get INFO logs
+        - p is for print
+        - -n is to match pattern
+
+        sed -n '/INFO/p' app.log
+    
+    2. Replace INFO with INFORMATION
+        - s is for subreplace
+        - g is for global match
+
+        sed 's/INFO/INFORMATION/g' app.log
+
+    3. Get line number in which we have INFORMATION
+        - e is for expression
+        - = is for showing line number
+
+        sed -n -e '/INFO/=' app.log
+
+    4. Get line number and its content in which we have INFORMATION
+        sed -n -e '/INFO/=' -e '/INFO/p' app.log    
+
+    5. Replace INFO with INFORMATION in first 15 lines
+        sed '1,15 s/INFO/INFORMATION/g' app.log
+
+        # Print only first 10 line
+         sed '1,15 s/INFO/INFORMATION/g; 1,10p; 11q' app.log
+
+
+grep:
+    - global regular expression pattern
+    - It allow use to search in content of text
+
+    1. Print lines with INFO statement
+        grep INFO app.log
+        grep -i info app.log        # case insensitive
+
+    2. print count of info
+        grep -i -c info app.log
+
+    3. grep "Mites" names.txt
+       grep "Mitesh" names.txt company.txt
+        # search for "Mitesh" in names.txt and return if something found.
+
+    4. Search complete word
+        grep -w "Mitesh" names.txt
+
+    5. Case insensitive
+        grep -i "mitesh" names.txt
+
+    6. Show with line number where given text is present
+        grep -n "Poojan" names.txt
+
+    7. combination
+        we can do combination of option also
+        grep -wi "mitesh" names.
+        grep -win "mitesh" names.txt
+
+    8. Show previous 3 line before given text
+        grep -B 3 "arpit" names.txt
+
+    9. Search in multiple files
+        grep -win "mitesh" ./*.txt
+
+    10. Search recursively(search inside directory also inside likewise)
+        grep -r "mitesh" .
+
+    11. check file which contain given text
+        grep -rl "Mitesh" .'
+
+    More examples:
+        history | grep sudo     # give all previous command with 'sudo'
+        history | grep rm    # find all previous command with 'rm'
+        history | grep rm >> sudo-rm-commands.txt       # append content into file.
+
+    12. Get process id running by 'mitesh user'
+        ps aux | grep mitesh | awk '{print $2}'
