@@ -1,0 +1,131 @@
+Cron job:
+    - it is scheduled task in linux that run automatically at specified time
+
+    Examples:
+        Run a backup every day at midnight.
+        Delete old log files every Sunday.
+        Restart a service every month.
+        Send monitoring reports every 5 minutes.
+        Trigger a shell script every hour.
+
+Cron components:
+    1. cron daemon:
+        - background service that execute scheduled jobs
+        - check it is running or not
+            sudo systemctl status cron
+
+    2. crontab:
+        - file containing scheduled rules
+    
+Syntax:
+    * * * * * command_to_execute
+    │ │ │ │ │
+    │ │ │ │ └── Day of Week (0-7)
+    │ │ │ └──── Month (1-12)
+    │ │ └────── Day of Month (1-31)
+    │ └──────── Hour (0-23)
+    └────────── Minute (0-59)
+
+    # Day of week, sunday=0,7
+
+Example:
+    # 2:30 AM run daily
+    30 2 * * * /home/mitesh/backup.sh
+
+    # Run at minute 0 every hour
+    0 * * * * 
+    
+    # Run every day at 10:00 AM
+    0 10 * * *
+
+    # 10:00 AM on 15th of every month
+    0 10 15 * *
+
+    # 10:00 AM every day in June
+    0 10 * 6 *
+
+    # 10:00 AM every Monday
+    0 10 * * 1
+
+    # Every minute
+    * * * * * /home/mitesh/script.sh
+
+Symbol:
+    - astrict(*) means every
+    
+    - Comma(,) multiple values
+        ex. 0 9,18 * * *    
+            # Run at 09:00 and 18:00
+
+    - Range(-)
+        ex. 0 9-17 * * *
+            # Runs every hour from 9 AM to 5 PM
+    
+    - Step(/)
+        The / operator in cron means "increment by N" or "every N units".
+
+        # every 5 minutes
+        */5 * * * *
+
+        0 */2 * * *
+        # every 2 hour
+        # 00:00, 02:00, 04:00 ..... 22:00 likewise
+
+Common example:
+
+    1. Run every minute
+        * * * * * /home/mitesh/script.sh
+
+    2. Run every 5 minute
+        */5 * * * * /home/mitesh/script.sh
+
+    3. Every hour
+        0 * * * * /home/mitesh/script.sh
+    
+    5. Daily at midnight
+        0 0 * * * /home/mitesh/script.sh
+
+    6. Daily at 2:30 AM
+        30 2 * * * /home/mitesh/script.sh
+
+    6. Every Sunday
+        0 0 * * 0 /home/mitesh/script.sh
+    
+    7. Every month on the 1st
+        0 0 1 * * /home/mitesh/script.sh
+
+Useful Cron Shortcuts:
+    @reboot	Run at system startup
+    @yearly	Once a year
+    @monthly	Once a month
+    @weekly	Once a week
+    @daily	Once a day
+    @hourly	Once an hour
+
+    ex.
+        @reboot /home/mitesh/startup.sh
+
+Schedule job:
+    - cronjob is run at their time even if user is logged in or not
+    - avoid relative path inside cron job
+    
+    1. crontab -e
+        - add job
+
+    2. List job
+        crontab -l
+
+System wide cron:
+    - System administrators can schedule jobs for any user.
+
+    Method 1:
+        - sudo vi /etc/crontab 
+        - command 
+            * * * * * root /home/setup.sh
+            * * * * * USER /home/setup.sh
+    
+    Method 2:
+        /etc/cron.d
+
+        1. Create file 
+            sudo vi /etc/cron.d/jenkins-monitoring
