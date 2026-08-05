@@ -1,0 +1,40 @@
+- Add addons
+    minikube addons enable ingress
+
+- Verify pod is running
+    kubectl get pods -n ingress-nginx
+
+    expected:
+        ingress-nginx-controller-xxxxx    Running
+
+- Create hostname
+
+    1. Get minikube ip  
+        minikube ip
+
+    2. Modify hosts file
+        sudo vim /etc/hosts
+        add: 192.168.49.2 ledger.local
+
+- Create Ingress resource:
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+    name: ledger-api
+    namespace: payments
+
+    spec:
+    ingressClassName: nginx
+    rules:
+    - host: ledger.local
+        http:
+        paths:
+            - path: /
+            pathType: Prefix
+            backend:
+                service:
+                name: ledger-api
+                port:
+                    number: 8080
+    
+- verify ingress and endpoint is working

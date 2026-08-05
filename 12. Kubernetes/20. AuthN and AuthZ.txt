@@ -65,7 +65,7 @@ Authorization for application users:
         - k8s component that represent application user
         - link service account to applications
         - link service account to human user
-                        - we can link service account to role and role binding
+        - we can link service account to role and role binding
         - link service account to cluster role with cluster binding
 
 Role configuration file:    

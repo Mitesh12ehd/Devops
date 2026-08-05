@@ -26,3 +26,12 @@ Start cluster:
 
     verify status:
         minikube status
+
+Load image in minikube:
+    minikube image load ledger-api:latest 
+
+    verify:
+        minikube image ls
+
+    remove image
+        minikube image rm <image-id>

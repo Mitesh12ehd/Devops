@@ -1,0 +1,14 @@
+Readiness probe:
+    - A readiness probe tells Kubernetes:
+        "Is this container ready to receive user traffic?"
+
+    - if it fails,
+        - container is not restarted, and keep running
+        - container stopped receiving traffic from service.
+        - endpoint is removed from service
+
+Liveness probe:
+    - "Is this application still alive, or is it stuck and needs to be restarted?"
+
+    - if it fails,
+        - container restarts
