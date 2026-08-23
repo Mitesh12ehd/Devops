@@ -1,0 +1,137 @@
+Image Signing and verification:
+	- Image has its unique digest, it changes when something is modified in the image
+	- signing is used to verify that image is published from valid source only.
+	
+	ex:
+		Step 1: Build the image
+			docker build -t myapp:v1 .
+
+		Step 2: Calculate a digest
+			- Every image has a unique SHA-256 digest.
+			Example:
+				sha256:3fd8b12ab4d8c2...
+				If even one byte changes, the digest changes completely.
+
+            - to see digests:
+                docker images --digest
+
+		Step 3: Create a digital signature
+			- The digest is encrypted (signed) using the publisher's private key.
+			
+			Signature = Encrypt(
+			    Image Digest,
+			    Private Key
+			)
+			- The signature is stored alongside the image in the registry.
+            
+		Step 4: Verification
+			- When someone pulls the image:
+				download image
+				calculate digest again
+				decrypt signature using the public key
+				compare both digests
+			- If they match:
+				Image is authentic
+				Image was not modified
+			- Otherwise:
+				Image has been tampered
+				
+Signing and verification using public + private key:
+	- publisher
+		- have private key + public key
+		- build the image
+		- get the image digest
+		- Create signature:
+			Signature = sign( sha:ABC1234 , private key)
+		- pushes image + signature to repository
+		
+	- puller
+		- download the image + signature
+		- have image's current digest
+		- get the signed digest from (signature + public key)
+		- if both digest match, image is verified
+
+Key-based signing:
+
+	1. Generate key pair
+		cosign generate-key-pair
+
+	2. Build image:
+		- tag image specified registry
+			docker build -t ghcr.io/mitesh12ehd/myapp:1.0.0 .
+		- push image
+			docker push ghcr.io/mitesh12ehd/myapp:1.0.0 .
+
+		- pushing is necessary to generate digest
+
+	2.  Sign image using private key:
+		cosign sign --key cosign.key ghcr.io/mitesh12ehd/ledger-api:1.0
+
+		- it ask for password which will be same as entered while generating key pair
+		- then it create signature = private key + image digest
+		- Pushes the signature as a separate OCI artifact alongside the image in the same 
+		  registry (tagged sha256-<digest>.sig)
+
+	3. Check signature artifact is attached with image
+		cosign tree ghcr.io/mitesh12ehd/ledger-api:1.0
+
+	4. Verify signature using public key:
+		- anyone having public key can verify signature
+
+		cosign tree ghcr.io/mitesh12ehd/ledger-api:1.0
+
+		expected:
+			Verification for ghcr.io/mitesh12ehd/ledger-api:1.0 --
+			The following checks were performed on each of these signatures:
+			- The cosign claims were validated
+			- Existence of the claims in the transparency log was verified offline
+			- The signatures were verified against the specified public key
+
+			[{"critical":{"identity":{"docker-reference":"ghcr.io/mitesh12ehd/ledger-api:1.0"},"image":{"docker-manifest-digest":"sha256:d4a1af89ff10c031f8c9d5da655f9874b7acd9bdb1771816904dd8474887ceab"},"type":"https://sigstore.dev/cosign/sign/v1"},"optional":{}}]
+
+Key based signing using AWS KMS (key management system):
+
+	- key will stays on kms 
+	- everything else will be same
+
+Key-less signing:
+	- using cosign, sigstore and fulcio
+
+	1. Sign image:
+		cosign sign docker.io/miteshch/demo-app@sha256:d4a1af89ff10c031f8c9d5da655f9874b7acd9bdb1771816904dd8474887ceab
+
+		- this opens browser and sigstore's website
+		- sign in via google / microsoft / github
+
+		what happens:
+			1. cosign generates a brand-new ephemeral keypair in memory, on your machine.
+			
+			2. You authenticate to an OIDC provider (say, Google). cosign receives a signed 
+			   ID token proving you@gmail.com just authenticated.
+			
+			3. cosign sends Fulcio a certificate signing request containing the ephemeral 
+			   public key, plus that OIDC ID token as proof of identity.
+			
+			4. Fulcio (Sigstore's certificate authority) verifies the OIDC token, then issues 
+			   a short-lived X.509 certificate (~10 minutes validity) with your verified 
+			   identity embedded in it (e.g. you@gmail.com, issuer https://accounts.google.com).
+			
+			5. cosign uses the ephemeral private key to sign the image digest.
+
+			6. cosign uploads the signature + the Fulcio certificate to the registry, attached to 
+			   your image.
+
+			7. cosign also submits this signing event to Rekor, the public append-only transparency 
+			   log, which timestamps and permanently records it.
+
+			8. The ephemeral private key is discarded — it only ever existed in memory for 
+			   a few seconds, and is never needed again.
+
+	2. Verify image is signed:
+		cosign tree docker.io/miteshch/demo-app@sha256:d4a1af89ff10c031f8c9d5da655f9874b7acd9bdb1771816904dd8474887cea
+
+	2. Verify image:
+		cosign verify \
+			--certificate-identity=miteshchavda57@gmail.com \
+			--certificate-oidc-issuer=https://accounts.google.com \
+			docker.io/miteshch/demo-app@sha256:d4a1af89ff10c031f8c9d5da655f9874b7acd9bdb1771816904dd8474887ceab
