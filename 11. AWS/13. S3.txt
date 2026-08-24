@@ -1,0 +1,103 @@
+S3:
+    - simple storage service
+    - can store unlimited amount of data
+    - charges is depends one amount of data
+    - data can be accessible from anywhere to anywhere
+
+    - store data as objects
+
+Bucket:
+    - which stores data 
+    - name must be unique
+    - bucket is region specific
+    - each data is key-value pair:
+        key: object name 
+        value: file content
+
+    - maximum object size: 5TB
+    - multipart upload is recommended for object larger than 5TB
+
+Host static website using s3:
+    - add content
+    - properties > Enable static website hosting
+    - disable 'block public access'
+    
+    S3 bucket policies:
+        - this policy is required to access static website endpoint  
+        ex.
+            {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                    "Sid": "Statement1",
+                    "Effect": "Allow",
+                    "Principal": {
+                        "AWS": "*"
+                    },
+                    "Action": [
+                        "s3:GetObject"
+                    ],
+                    "Resource": "arn:aws:s3:::dummy-bucket-abc6543/*"
+                    }
+                ]
+            }
+
+    - To generate policy
+        - use policy generator
+        - use aws docs
+
+S3 versioning:
+    - it allows us to keep multiple versions of an object in the same bucket, providing  protection against accidental 
+      deletion
+
+S3 replication:
+    - it allows you to automatically copy objects from one S3 bucket to another, which can be
+        - in same region
+        - in different region
+
+    - we need to create rules once, and it automatically sync the replica
+
+Storage class:
+    - aws provide various storage class 
+    - so that we can choose based on requirement and generate minimum cost
+
+    ex. 
+        - Standard :
+        - Intelligent Tiering
+        - Standard-IA
+        - One Zone-IA
+        - Glacier
+        - Glacier deep archive
+        - outposts
+
+S3 bucket lifecycle:
+    - lifecycle policy to control the movement of objects between different storage classes or delete 
+      them permentatnly,
+      based on conditions like age or inactivity
+
+    ex.
+        - if data is in standard class
+        - after 30 days, we want to move it to standard IA
+        - after 60 days, we want to move it to one zone IA
+
+    - Bucket > management > Lifecycle configuration > Create lifecycle rules
+    - lifecycle rule action: Transition current versions of objects between storage classes
+    - choose destination type storage class
+    - add transition accordingly
+
+S3 snow family:
+    - if we have 10TB data in local
+    - we want to upload it to s3
+    - if we choose via internet, how much time will it take?
+    - AWs provide physical device, and AWs collect data from that physical device and upload it to cloud
+
+    - Snow family includes:
+        - AWS snowcone: small, portable device for few terabytes of data
+        - AWS Snowball: large device to move petabytes of data, used for edge computing
+        - AWs Snowmobile: massive, truck sized container used for exabyte-scale data transfer, used by big 
+                          companies to transfer data center
+
+Amazon S3 storage gateway:
+    - it is hybrid cloud storage service (local + cloud data center) 
+    - it connects premises environments to cloud storage in Amazon S3.
+    - it acts as bridge between local to cloud
