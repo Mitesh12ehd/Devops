@@ -1,0 +1,11 @@
+RDS:
+    - Relational database services
+    
+RDS use cases:
+    - Multi AZ deployment
+    - Read replicas
+    - Automated backups
+    - Manual snapshots
+    - VPC and security groups
+    - Monitoring
+    - Encryption and IAM
