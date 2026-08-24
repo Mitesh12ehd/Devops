@@ -1,0 +1,106 @@
+Route 53:
+    - It is AWS's DNS(Domain name system)
+    - It translate human readable domain ex. google.com into Ip address
+
+    - It is not just DNS, it also does
+        - Domain registration (buy domain)
+        - Health checking (monitor if your servers are up)
+        - Traffic routing (send users to the best/nearest/healthiest server)
+
+    - service name contains 53 because dns listen at port 53
+
+Why it is beyond simple dns?
+    - Failover routing — if your main server (US-East) goes down, automatically send traffic to backup server (US-West)
+    - Latency-based routing — send European users to your Europe server, US users to US server, automatically
+    - Weighted routing — send 90% traffic to old version, 10% to new version (canary deployments)
+    - Geolocation routing — show different content based on user's country
+    - Health checks — Route 53 pings your servers; if one fails, it stops sending traffic there
+
+Routing policy:
+    - setup routing policy based on your needs
+
+Simple routing to access application hosted on EC2 instance or S3 bucket:
+    - we have application endpoint either ip address or endpoint url given by AWS
+
+    arch:
+        User  --->  myexample.com ---> DNS server(Route 53) ---> Returns ip address or endpoint ---> User ---> access application
+
+    1. Purchase domain:
+        - purchase domain withing aws Route 53 or on other platforms like GoDady, Hostinger
+        - Domain have DNS/Nameserver defined
+            - we can keep them as it as or change it.
+        
+    2, Hosted zone:
+        - Create hosted zone to manage DNS records
+        - If we register domain via aws, hosted zone is already created
+
+        - create hosted zone
+        - enter domain name
+        - keep public 
+        - create 
+
+    3. DNS Record:
+        - it route traffic to various endpoints
+        - inside hosted zone, we have 2 record created 
+        - Type: NS and SOA
+
+        - Copy all 4 values from type NS
+
+    4. Update nameserver:
+        - go to your domain provider (godady, hostinger)
+        - Update nameserver
+        - add 4 copied values
+
+        - now request --> Domain --> Route 53 DNS service 
+
+    5. Create record inside hosted zone:
+        - Record name: enter or keep empty, it is subdomain ex. www
+        - Record type: A : Route traffic to IPv4 address
+        - Value: ip where request should be go.
+        - Routing policy: Simple
+            - we can choose based on our requirement 
+        - create
+
+    6. Test:
+        go to domain: www.myexample.com
+        it should redirect to application
+
+Latency based routing:
+    - if we send request from europe, it should go to europe server
+    - if we send request from india, it should go to india server
+
+    - Create 2 record inside hosted zone with type Latency:
+        - in 1 choose europe region, put ip value of europe server
+        - in 1 choose india region, put ip value of indian server
+
+Health checks:
+    - Configure health check to monitor endpoints and trigger failover when needed
+    - we can create healthcheck for our server 
+    - attach that healtcheck to hosted zone > Records
+
+    test:
+        - if one server from europe goes down
+        - the indian server serve the request
+
+DNS record types:
+    ## A Record (IPv4)
+    Maps a domain name to an IPv4 address.
+    Example: www.google.com => 12.34.56.78
+
+    ## AAAA Record (IPv6)
+    Maps a domain name to an IPv6 address.
+    Example: www.example.com => 2001:db8::1
+
+    ## CNAME Record
+    Maps a domain name to another domain name (alias).
+    Example: blog.example.com => www.example.com
+
+    ## MX Record
+    Directs mail to an email server.
+    Example: example.com => mail.example.com (Priority 10)
+
+Use case:
+    - Hosting Websites:     Manage domain names and route traffic to web applications.
+    - Load Balancing:       Distribute traffic across multiple endpoints using weighted or latency-based routing.
+    - Disaster Recovery:    Use health checks and failover routing for high availability.
+    - Multi-Region Deployments: Route traffic to the closest region for low latency.
