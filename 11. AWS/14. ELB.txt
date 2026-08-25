@@ -1,0 +1,78 @@
+Load balancer:
+    - if we have multiple server, 
+    - request goes to which server, is decided by load balancer
+
+Type of load balancer:
+
+    1. ALB:
+        - for http and https request
+    
+    2. Network load balancer:
+        - For TCP, UDP, TLS request
+
+    3. Gateway load balancer:
+        - to deploy firewalls and monitoring solutions
+    
+Demo:
+
+    1. Create 2 instance and launch one static page on port 80
+
+    2. Create load balancer:
+        - create security group for load balancer
+        - port 80 should open for load balancer , so that request comes to load balancer
+    
+    3. Create target group:
+        - choose ec2 instances where application is running.
+    
+    4. Verify flow :
+        - Load balancer > Resource map
+        - check flow of request
+
+Auto-scaling groups(ASG):
+    - it is service that automatically add or remove ec2 instance based on your demand
+    - replace unhealthy instance automatically 
+    - we can create scaling policy 
+
+    demo:
+    
+        1. Create image of your ec2 machine:
+            - choose ec2 instance
+            - actions > image and template > create image
+        
+        2. Go to EC2 > Auto-scaling group:
+            - create
+            - name
+            - create launch template:
+                - it is configuration for ec2 machine, when ASG create it automatically
+
+                - choose my AMI > your recently created AMI
+                - choose instance Type
+                - choose your security group
+                    - normally it will be same as our main ec2 instance, as both will run application
+
+            - choose template
+
+            - Choose instance launch options:
+                - select vpc and az and subnets where we want to create our ec2 instance while scaling  
+
+            - Integrate with other services:
+                - Load balancing: attach to existing load balancer
+                - select your load balancer target groups
+
+                - healthcheck:
+                    - Turn on Elastic Load Balancing health checks
+
+            - Configure group size and scaling:
+                - desired capacity: 2
+                    - 2 instance will keep running in any case
+                - min desired capacity: 1
+                - max desired capacity: 3
+
+                - target tracking policy:
+                    - ex. avg cpu utilization 
+                          application load balancer request count per target 
+
+            - Create 
+
+    Note: Instance that is created before creation ASG is not managed by ASG.
+          ASG create number of desired instance new
