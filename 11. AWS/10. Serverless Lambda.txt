@@ -40,25 +40,78 @@ Lambda:
         - we can call different lambda function on different route
 
 Nodejs application using serverless:
+    serverless framework:
+        - we can't write all the code in web ide
+        - so use serverless framework
 
-serverless framework:
-    - we can't write all the code in web ide
-    - so use serverless framework
-
-Install serverless globally
-    npm install serverless -g
+    Install serverless globally
+        npm install serverless -g
 
 
-1. Write js code into local
-    hello.js
+    1. Write js code into local
+        hello.js
 
-2. Write serverless configuration
-    serverless.yaml
+    2. Write serverless configuration
+        serverless.yaml
 
-3. Deploy into aws account 
-    serverless deploy
+    3. Deploy into aws account 
+        serverless deploy
 
-4. Check function in aws
-    - Go to Lambda
-    - Check function
-    - newly created function must there
+    4. Check function in aws
+        - Go to Lambda
+        - Check function
+        - newly created function must there
+
+Supported language:
+    - there is limited supported language
+    - ex. Java, python, nodejs, ruby etc..
+
+How it works?
+    - we create function
+    - function is basically lambda handler
+    - we need to create events to run the code
+    - when we change our code, we need to deploy it again
+
+    Event-driver execution:
+        - lambda runs your code in response to certain triggers or events
+        - events can be comes from  
+            - s3 (file uploads)
+            - DynamoDB (database changes)
+            - API gateway (HTTP requests)
+            - Cloudwatch (Scheduled events)
+
+Demo: Trigger lambda function from s3 buckets   
+
+    1. Create function
+
+    2. Create s3 buckets
+
+    3. Create trigger in function 
+        - s3 
+        - choose event type: object change, creation, deletion, put, post, delete etc.
+
+    4. Upload object in s3 bucket
+        - to trigger function
+    
+    5. Check function is run or not:
+        - in Monitor section 
+        - check cloudwatch logs 
+        - and dashboard
+
+Limitation:
+    
+    1. Execution time limit:
+        - lambda function can only be run for maximum 15 minutes
+
+    2. Stateless:
+    
+    3. Cold start delays:
+        - If lambda function hasn't run for while, there might be delay called cold start
+
+Use case:
+    1. Image process:
+        - if user is uploading image to your app, we can resize, compress and apply filters
+    
+    2. Notification:
+        - if events happen, we can use lambda to trigger an email, SMS, or other notification
+          instantly
