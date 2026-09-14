@@ -1,70 +1,244 @@
-IAM service:
+IAM:
+    - authentication and authorization service for user and application to aws
+    - IAM is global scoped service
     - Identity and access management
-    - to manage access of aws service and resource
-    - it is global scope service
-
-    - Create and manage users and groups
-    - Assign policies (set of permissions)
 
 ROOT user:
     - when we create aws account, ROOT user is created by default.
-    - ROOT user has unlimited privileges.
-
-Admin user:
-    - Best practice is create one admin user with less privileges than ROOT.
-    - admin user will manage whole aws account.
+    - ROOT user has each and every privileges.
     
-    Create admin user:
-        Users > Create user > Give name 'admin' 
-            > Choose access through AWS CLI console
-                > Select password method (autogenerate or custom)
-                > Choose 'Users must create a new password at next sign-in - Recommended' accordingly
+User:
+    - user is identity.
+    - user can be human user or system user
 
-            > Select permission option 'Attach policies directly'
-                (because admin user are not in any groups)
+    Create user:
+        1. name
+        2. Provide user access to the AWS Management Console
+            - check if user need to access AWS UI console 
+            - Select password method (autogenerate or custom)
+            - Choose 'Users must create a new password at next sign-in - Recommended' accordingly
+        
+        2. Permission:
+            - group: add user to group (permission of group automatically assigned to user)
+            - copy: copy permission of existing user 
+            - attach: attach permission
+                ex. for admin choose 'AdministratorAccess'
 
-            > Select policies 
-                - for admin choose 'AdministratorAccess'
+        3. Create:
+            - Download csv contains
+            - account id
+            - username
+            - password
+            - console sign in url (if enabled)
 
-            > Create user
-            > Download csv file for
-                - Account ID 
-                - username
-                - password
-                - console sing in url
+    Give programmatic access to user:
+        - programmatic access required to interact with aws via AWS CLI, or AWS API's 
 
-    Sign in with IAM user:
-        - Choose sign in via IAM
-        - set account id (present in console url in .csv file)
-        - give username and password
-        - Update password if needed
+        1. Go to your IAM > created user 
+        2. Security credentials
+        3. Add access key
+        4. Select AWS CLI
+        5. Get access key and secret access key
 
-    Give programmatic access to user aws console:
-        - sign in using IAM user
-        - Profile > security credentials > Access keys
-        - Create access key
-        - Choose CLI option
-        - Give tag if required
-        - Store Access key and secret access key or download csv file
+Policy:
+    - IAM Policy is a document that defines what actions an identity is allowed or denied to perform on AWS resources.
 
-Users:
-    - we can assign policy to IAM users
+    ex.: policy to allow start ec2 instance
+        {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Action": "ec2:StartInstances",
+                    "Resource": "*"
+                }
+            ]
+        }
 
-    - Access methods
-        UI access : through Username and password
-        Console access : through Access Key and Secret key
+    1. Effect: can be Allow or Deny 
+    2. Action: can be single or array of multiple
+    3. Resource: ARN of resource if specific resource 
+        - there can be array
+        ex. "arn:aws:s3:::my-company-bucket"
 
-    1. Human user:
-        - human user that need access of services
+    - Not every action supports specifying resource arn.
 
-    2. System user:
-        - jenkins to deploy container or push image
+    AWS provided policy:
+        - AWS provide some predefined policy
+        - which is bundle of some type of permission used widely
+        - We can expand it and check resource and its access scope
+
+    Custom policy:
+        - we can create our own policy 
+        - Policy > Create policy 
+
+        1. Select service
+            - ex. ec2
+
+        2. Select permission
+            - ex. DescribeInstances
+
+        3. Review and create:
+            - we can see json of permission 
+            - create
+
+        - we can directly create policy using json 
+            without selecting service and permission via UI.
 
 Groups:
     - for granting access to multiple IAM users
     - ex. to give access to devops team by creating devops group
+    - Give permission to group
+    - user in the group automatically gets the permission
+
+    Notes:
+        - user can be in the multiple groups 
+        - if one group is allow ec2 and other is deny 
+        - deny wins.
 
 Roles:
-    - we can assign policy to IAM role
-    - roles required when one service require some access of another service
-    - ex. EC2 require access of S3
+    - Role is temporary identities with no permanent credentials
+    - no one log into role directory. 
+    - someone or something assumes it, gets short-lived credentials, uses them, and the 
+      credentials expire and regenerated again.
+    - used when one service require access of another service
+
+    - Every role has 2 policies:
+        1. Trust policy
+        2. Permission policy
+
+    1. Trust policy:
+        - who can assume this role
+        - who is allowed to become this role
+
+        {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Principal": { "Service": "ec2.amazonaws.com" },
+                    "Action": "sts:AssumeRole"
+                }
+            ]
+        }
+
+        - after creating this role and attaching to ec2 instance,
+        - from ec2 machine if we do
+            aws sts get-caller-identity
+            - we must see account details
+
+    2, Permission policy:
+        - what this role can do 
+        - Defines what action role can do.
+
+        {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Action": ["s3:GetObject", "s3:ListBucket"],
+                    "Resource": [
+                        "arn:aws:s3:::my-app-bucket",
+                        "arn:aws:s3:::my-app-bucket/*"
+                    ]
+                }
+            ]
+        }
+    
+Situation to use roles:
+
+    1. EC2 instance role:
+        - if your ec2 instance need to access s3 or dynamodb 
+        - we can create role instead of hardcoding aws credential in ec2 instance   
+        - create role >> Attach role as instance profile to ec2 machine 
+        - now ec2 machine have defined permissions
+
+    2. Service roles:
+        - Many AWS services need permission to do things in your account. Example: Lambda needs 
+          a role to write logs to CloudWatch.
+        - Trust policy: trusts lambda.amazonaws.com
+        - Permission policy: logs:CreateLogGroup, logs:PutLogEvents, plus whatever else the 
+          function needs (e.g., s3:GetObject if it processes S3 uploads)
+        - This is why every Lambda function has an "execution role" — that role is the function's 
+          identity
+
+    3. Cross account roles:
+        - Company has a dev account and a prod account. An engineer with a user in the dev 
+          account needs to deploy to prod — but you don't want to create a duplicate IAM user 
+          in prod.
+        - instead, create role in prod account that trust dev account
+
+        Example:
+
+        Account A = 111111111111 
+            - this is the "source" account. 
+            - This is where your actual IAM user lives (e.g., you, a developer, or a CI/CD pipeline).
+        Account B = 222222222222
+            - this is the "target" account. This is the account you want to access (e.g., production).
+
+        Goal: A user in Account A wants to manage S3 buckets in Account B, without having a separate IAM user created in Account B.
+
+        Flow: 
+            IAM User, Account A
+            Long-lived cred 
+                |
+                |
+            IAM Role, Account B
+            Trust policy:who can assume
+                |
+                |
+            Temp credential
+            access key + session token
+                |
+                |
+            Target resource, B
+            permission policy what is allowed
+
+        1. In account B, Create role 
+            trust policy:
+            {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Effect": "Allow",
+                        "Principal": { "AWS": "arn:aws:iam::111111111111:root" },
+                        "Action": "sts:AssumeRole",
+                        "Condition": {
+                            "StringEquals": { "sts:ExternalId": "shared-secret-123" }
+                        }
+                    }
+                ]
+            }
+
+            permission policy:
+            {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Effect": "Allow",
+                        "Action": ["s3:GetObject", "s3:PutObject"],
+                        "Resource": "arn:aws:s3:::prod-app-bucket/*"
+                    }
+                ]
+            }
+
+        2. In account A, run command 
+
+            aws sts assume-role \
+                --role-arn arn:aws:iam::222222222222:role/ProdDeployRole \
+                --role-session-name my-session \
+                --external-id shared-secret-123
+
+            - STS checks Account B's role's trust policy
+            - does it allow Account A's principal to assume it? If yes, 
+            - STS generates a brand-new, temporary set of three credentials
+
+    4. Identity provide roles:
+        - Role assumed outside aws, and we don't want to provide permenant credentials
+        - ex. 
+            - user logging in via your company's SSO(Okta, google) or github OIDC 
+
+STS:
+    - security token service 
+    - used in roles
+

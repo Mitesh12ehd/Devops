@@ -13,7 +13,6 @@ AWS:
 
 AWS account and service scope:
     - Different service are created in different scope
-    - 
 
     1. Global scope (AWS account):
         - IAM users are into global scope
