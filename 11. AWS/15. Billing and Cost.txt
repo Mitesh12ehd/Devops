@@ -1,0 +1,45 @@
+Pricing model:
+
+    1. On-Demand Instances
+    Pay by the hour/second with no long-term commitments. Perfect for unpredictable workloads 
+    and getting started quickly.
+
+    2. Reserved Instances
+    Commit 1-3 years for big discounts up to 75%. Ideal for steady-state workloads with 
+    predictable usage patterns.
+
+    3. Spot Instances
+    Bid for unused capacity, cheapest but interruptible. Great for fault-tolerant applications0
+    and batch processing.
+
+    4. Free Tier
+    Limited free usage for new accounts (12 months). Essential for learning and testing before 
+    production deployment.
+
+Free tier:
+    - Limited service with some limited type inside service also 
+    - for 6 months
+    - Good for testing
+
+AWS billing tools:
+    
+    1. Billing dashboard: 
+        - High level view of monthly charges, breakdown by service, region
+
+    2. Cost explorer:
+        - Analyze usage and spending patterns with detailed filtering and forecasting 
+          capabilities
+
+    3. Budget:
+        - Define cost and usage threshold with custom alerts and automated actions
+        - set budget to prevent overspending
+
+    4. Billing alarms:
+        - Get alerts via cloudwatch + SNS when cost exceed thresholds
+
+    5. Cost Allocation Tags:
+        - tag resources (team:backend, env:prod) so Cost Explorer/CUR can break spend down by 
+          who owns it. Without tagging discipline, cost attribution in a real org is chaos
+
+Create budget:
+    - Create budget > set alarm
