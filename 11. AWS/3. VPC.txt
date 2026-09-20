@@ -1,84 +1,213 @@
+Check image:
+    - Images/vpc.png
+
+Region:
+    - AWs provide regions
+    - we can create region specific resource
+    - ex. 
+        ap-south-1
+        us-east-1
+        us-east-2
+        eu-central-1
+        eu-west-1
+
+Availability zone:
+    - In one region, there is no single data center.
+    - there is multiple distributed data center to avoid single point of failure
+
+    ex. for region ap-south-1 we have 
+        az. ap-south-1a, ap-south-1b, ap-south-1c
+
+        for region eu-central-1 we have 
+        eu-central-1a	Availability Zone 1
+        eu-central-1b	Availability Zone 2
+        eu-central-1c	Availability Zone 3
+        eu-central-1d	Availability Zone 4
+        eu-central-1e	Availability Zone 5
+        eu-central-1f   Availability Zone 6
+
+CIDR:
+	- Classless inter-domain routing
+	- ex. 10.0.0.0/16, 10.0.1.0/24, 172.16.0.0/20, 0.0.0.0/0
+	
+	- Number after forward slash represent network portion
+	
+	- IPv4: 32 bit*******ample:
+	- 10.0.0.0/16
+	- /16 means: 16 Network bits + 16 host bits
+	- Number of address 2^host bits = 2^16 = 65,536
+	- so range is 10.0.0.0 to 10.0.255.255
+
 VPC:
-    - Virtual private cloud
-    - VPC for each region
-    - VPC is own isolated network in the cloud
-    - VPC spans all AZs in that region
+	- Virtual private cloud
+	- Your own isolated network inside AWS
+	- Region specific service
+	- we can create VPC in specific region
+	- VPC contains subnets
+	
+	AWS --> Region --> VPC (10.0.0.0/16) --> subnet A 10.0.1.0/24
+	 									 --> subnet B 10.0.2.0/24
 
+    - Default VPC:
+        - every AWS account have default VPC per region with public subnet in all availability 
+          zone already configured
+        - Internet gateway is also there
+        - No NAT gateway because no private subnet require to talk with internet
+	
 Subnet:
-    - subnet for each availability zone
-    - each AZ have own subnet
+	- If we create VPC with CIDR: 10.0.0.0/16
+	- We can create smaller subnets
+		10.0.1.0/24, 10.0.2.0/24, 10.0.3.0/24, 10.0.4.0/24 .... likewise
+    - VPC is created in region and and each subnet belongs to individual availibility zones
+	- There can be number of subnets > az
+	- but single subnet is part of only one az
+	- az may have multiple subnet
 
-    Private and public subnet:
-        - Firewall rule configuration makes it either private or public subnet
+    - whichever resource we create, that is created inside subnets
+        ex. EC2
 
-        Private subnet:
-            - We can configure that is firewall, and it becomes
-            private subnet.
-            - external traffic can't enter subnet
-            - use case: for database we block all external traffic and allow only application to send the query or
-                        request
-            - Other services inside VPC still have access.
+    Public subnet:
+        - resource inside public subnet can be accessed from outside
+        - its route table have entry
+            0.0.0.0/0
+            target: Internet gateway
+    
+    Private subnet:
+        - resource inside private subnet can't be accessed from outside
+        - resource can be accessed via public subnet by defining NACLs rules
+
+Route table:
+    - Every subnet is associated with exactly one route table
+    - If not explicitly defined route table for subnet, it uses VPC's route table
+    - It is decide where to forward data from subnets
+
+    - Route table have set of rules
+    - for destination CIDR X, send traffic to target Y.
+    - It handle both way, outgoing and incoming
+
+    Example:
+        Rule1:
+            Destination: 0.0.0.0/0
+            Target: igw-024bdda26b57049f2
+            Meaning: If your ec2 instance 10.0.1.10 want to access 8.8.8.8
+                     destination: 8.8.8.8
+                    - so route table redirect it to internet gateway >> Internet
+
+        Rule2:
+            Destination: 10.0.0.0/16
+            Target: Local
+            Meaning: If someone on the internet want to access your ec2 instance
+                    Internet >> Internet gateway >> Route table >> EC2 10.0.1.10
+                so request for our ec2 instance is within 10.0.0.0/16, 
+                so that it redirect to our ec2 instance
+
+    Default vpc's route table:
+        - If we check route table for default vpc
+        - it has 0.0.0.0/0 to target internet gateway 
+        - so it has all public resource 
+
+    Public and private subnet:
+        - There is no checkbox to make private or public subnet
+        - It is decided by attached route table rules.
 
         Public subnet:
-            - external traffic can access
-            - use case: web application host in public subnet so everyone can access it.
+            - its route table sending 0.0.0.0/0 traffic to an Internet Gateway (IGW)
+            - 0.0.0.0/0 --> igw
+            - 10.0.0.0/16 --> local
 
-IP range:
-    CIDR block:
-        - In IP address we can see 'IPv4 CIDR'.
-        - '172.31.0.0/16'
-        - here 16 gives range instead of one ip address,
-        = here last 16 digit in 32 bit are dynamic.
-        - 16 is subnet mask
-
-    VPC range:  
-    - Internal IP ranges on VPC level
-    - range is defined by default
-    - to check range
-        > Go to VPC
-        > check range 'IPv4 CIDR 172.31.0.0/16'
- 
-    - whenever we create instance(EC2 or other), IP address is assigned from this range
-    - this IP is for internal communication inside the VPC, not for outside web traffic
-
-    Subnet range:
-    - each subnet gets IP range from VPC range
-    - to check subnet range
-        > VPC
-        > go to subnet
-        > check range 'IPv4 CIDR'
-
-    How our instance get public and private IP address?
-        - When we create EC2 instance for web application, we want IP that accessible outside of VPC.
-        - While creating EC2, it gives public IP that we can access outside.
+        Private subnet:
+            - its route table has no route to IGW
+            - outgoing traffic is going through NAT gateway
+            - 0.0.0.0/0 --> nat
+            - 10.0.0.0/16 --> local
 
 Internet gateway:
-    - to connect VPC to outside internet.
+    - it is component that allows communication between vpc and internet
+    - It has no configuration, we just create via name and attach to VPC.
     
-Controlling access:
-    - we need to control access of our VPC.
-    - we need to control access to your individual server instances
-    - firewall type configuration for VPC.
+    Note:
+        - Route table must have target = internet gateway defined to use igw.
 
-    Network ACLs:
-        - Network access control list
-        - VPC > Security > Network ACLs
-        - it allows to control access on subnet level
+Elastic IP address:
+    - Static IP address designed for dynamic cloud computing
+    - If our instance restart, recreated, then their ip will change
+    - we can use elastic ip that will stay same permanent
 
-    Security groups:
-        - VPC > Security > Security groups
-        - it allows to control access on instance level
+NAT gateway:
+    - If our instance present in private subnet requires to connect to internet to download
+      packages,
+    - we can create NAT gateway 
+    - private subnet ---> NAT gateway --> Public subnet --> Internet gateway
+    - NAT gateway is created in public subnet 
+    
+    Cost:
+        - NAT gateway charges per hour + per GB proceeded
+        - for multi-AZ setup it is recommended to use separate NAT for all azs
+        - for cheaper cost, alternative is single NAT across all azz, but High availability will remain
+          concern.
+    
+    - NAT required its own ip, we can give elastic ip
 
-        Inbound rule:
-            - rule for incoming request that comes from outside
-            - example. we try to access application on 3000 port using web browser
+Security groups:
+    - Network firewall rules that control inbound and outbound rules
+    - It is resource level, ex. EC2, RDS, ECS/EKS nodes, Load balancers etc..
+	- Security groups is applies to specific resource
+    - only allow rules possible
 
-        Outbound rule:
-            - rule for request outgoing from machine
-            - ex. for docker install there yum request goes outside
+    Stateful:
+        - if you allow a request in one direction, the response is automatically allowed back, 
+          even if no rule explicitly permits it.
+        - ex. if we allow port 22 for ssh.
+            - if client send request to your instance on port 80: allow
+            - our instance can send response back, on ephemeral port like 54321
+        - when request for ssh 22 comes in, it established a connection, so reply in that connection 
+          is automatically allowed
 
-        ex.
-            - one EC2 instance require 
-                - port open 80 and 3000 for incoming request
-                - port open 7000 for outgoing request
-            - other EC2 require some other configuration
+NACL:
+    - Network access control list 
+    - Optional layer for security of VPC
+    - it is security layer that control traffic going into and out of subnet.
+    - Allow or deny rules possible
+    - all the resource inside that subnet will follow defined rules
+    
+    Stateless:
+        - it doesn't track connections
+        - every packet transaction is checked via rules independently, it is allowed or not.
+
+        - ex. if we allow port 22 for ssh.
+            - if client send request to your instance on port 80: allow
+            - our instance can send response back, on ephemeral port like 54321
+            - here response is blocked because there is no rule for 54321
+
+--- Advanced topics ---
+
+VPC Peering:
+    - Networking connection between two VPC
+    - Enable route traffic between them privately
+
+VPC Endpoint:
+    - Allows you to privately connect your VPC to supported AWS services
+    - By default, calling AWS services like S3 or DynamoDB from a private subnet routes out through 
+      the NAT Gateway to the public AWS endpoint — costing NAT processing fees and technically 
+      leaving your VPC. VPC Endpoints fix this.
+
+Bastion Host:
+    - special purpose instance that provide secure access to private instance
+
+VPC Flow logs:
+    - Capture information about the IP going to and from network interfaces in your vpc
+
+Direct connect:
+    - Establish dedicated network connection from your premises to AWS.
+
+AWS Client VPN:
+    - Managed VPN service that enable secure remote access to AWS resource, and 
+      on premises network using open-vpn based clients 
+
+Transit gateway:
+    - When you have more than a handful of VPCs needing to talk to each other (hub-and-spoke), 
+      pairwise peering becomes an unmanageable mesh (N VPCs = N(N-1)/2 peering connections). 
+    - Transit Gateway (TGW) solves this.
+    - Acts as a regional virtual router — VPCs, VPN connections, and Direct Connect attach to it.
+    - Supports route tables per attachment, allowing segmentation 
+    - (e.g., prod VPCs can't route to dev VPCs even though both attach to the same TGW).
