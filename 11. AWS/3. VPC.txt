@@ -179,6 +179,74 @@ NACL:
             - our instance can send response back, on ephemeral port like 54321
             - here response is blocked because there is no rule for 54321
 
+ENI:
+	- Elastic network interface
+	- Think of ENI is virtual network card attached to AWS resource
+	- Physical server has network card:
+		Server -> Network card -> IP address
+								  MAC address
+								  
+	- In AWS
+		EC2 --> ENI --> Private IP
+		                Public IP (if attached)
+		                MAC address
+		                Security groups
+		                Subnet
+		                
+	- When EC2 is launched, AWS created ENI for it.
+	- IP address are associated with ENI, not directly with EC2 os.
+	
+    Multiple ENI:
+        - One EC2 can have multiple ENI's
+        - It is useful when server is doing multiple things, and we want seperate network rules for them.
+        - We want 
+            - Internet facing traffic comes through ENI-1
+            - Internal database traffic comes through ENI-2
+        
+        - ENI 1 have sg to access application via internet
+        - ENI 2 have sg to access application via only ENI1-subnet-ip
+        - So EC2 have 2 network interface in different subnet
+        
+        Example:
+            1. Create VPC 10.0.0.0/16
+            2. Create 2 subnet
+                Public subnet/app subnet: 10.0.1.0/24
+                Private subnet/internal: 10.0.2.0/24
+                
+            3. Create ec2 in 10.0.1.0/24
+                - AWS automatically creates ENI1-Private IP: 10.0.1.10
+                - It is called primary ENI
+                
+            3. Create second ENI
+                - it is called secondary ENI
+                - Network interface > create
+                - Select subnet 10.0.2.0/24
+                - sg - internal-sg
+            
+            4. Attach ENI to EC2.
+            
+            5. Verify ip
+                ip addr
+                - we can see eth0: inet 10.0.1.10
+                            eth1: inet 10.0.2.10
+                            
+            6. Now if our ec2 is running 2 application:
+                frontend: 80
+                database: 8080
+            
+                - we create seperate sg in each ENI 
+                - one allow frontend for everyone
+                - second allow databse for frontend app (subnet ip only)
+                
+            7. We can see route table:
+                ip route
+                    default via 10.0.1.1 dev eth0
+                    10.0.1.0/24 dev eth0
+                    10.0.2.0/24 dev eth1
+        
+                means Internet traffic -> eth0/ENI1
+                    10.0.2.x traffic -> eth1/ENI2
+
 --- Advanced topics ---
 
 VPC Peering:

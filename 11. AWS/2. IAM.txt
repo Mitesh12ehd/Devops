@@ -85,6 +85,47 @@ Policy:
         - we can directly create policy using json 
             without selecting service and permission via UI.
 
+    Identity based vs resource based policy:
+        
+        Identity based:
+            - this policy is for allowed/denied to perform these actions on resources
+            - ex. Allow an IAM user to read objects from an S3 bucket.
+
+            {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                    "Effect": "Allow",
+                    "Action": "s3:GetObject",
+                    "Resource": "arn:aws:s3:::my-bucket/*"
+                    }
+                ]
+            }
+
+        Resource based:
+            - this policy is directly attached to resource
+            - resource that support this type of policy is 
+                s3 bucket, sqs queue, sns topic, Lambda function
+            - it says this resource allow/deny this principal to perform these action
+
+            - ex. Allow another AWS account to read objects from an S3 bucket.
+
+            {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                    "Effect": "Allow",
+                    "Principal": {
+                        "AWS": "arn:aws:iam::123456789012:root"
+                    },
+                    "Action": "s3:GetObject",
+                    "Resource": "arn:aws:s3:::my-bucket/*"
+                    }
+                ]
+            }
+            
+            - this policy is attached to resource.
+
 Groups:
     - for granting access to multiple IAM users
     - ex. to give access to devops team by creating devops group
@@ -234,11 +275,10 @@ Situation to use roles:
             - STS generates a brand-new, temporary set of three credentials
 
     4. Identity provide roles:
-        - Role assumed outside aws, and we don't want to provide permenant credentials
+        - Role assumed outside aws, and we don't want to provide permanent credentials
         - ex. 
             - user logging in via your company's SSO(Okta, google) or github OIDC 
 
 STS:
     - security token service 
     - used in roles
-
