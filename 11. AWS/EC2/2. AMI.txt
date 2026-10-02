@@ -1,0 +1,57 @@
+AMI:
+    - It is a template that contains everything needed to launch an EC2 instance    
+    AMI include:
+        - OS
+        - Installed software, configuration and application
+
+Type of AMI:
+    1. Public: 
+        - available to all users, ex. ALI, ubuntu
+    2. Private: 
+        - Created by user
+        - only available within that account or shared with specific account
+    3. Paid/Marketplace AMI:    
+        - Provided by Third party through AWS marketplace
+        - ex. Windows AMI
+        - Also some paid softwares create their AMI image to easiness
+
+Create image:
+    - Create image creates an AMI (Amazon Machine Image) from your EC2 instance.
+    - Capture this server's current state so I can create another server with the same setup.
+    - Captures
+        OS
+        Installed packages
+        Configuration
+        Files
+        EBS volume snapshots
+        Application setup
+    
+    - when we create new ec2 instance using this image,
+        1. It allocated new storage and take all data same as EBS snapshot
+
+Create template from instance
+    - Create template creates an EC2 Launch Template.
+    - Save the configuration I want AWS to use whenever it launches an EC2 instance.
+    - include 
+        AMI ID
+        Instance type
+        Key pair
+        Security groups
+        IAM instance profile
+        User data
+        Network/subnet settings
+        EBS configuration
+        Tags
+        Monitoring
+    - if doesn't include file, installed packages, application setup etc.
+
+-----------------------------------------------------------------------------
+AMI:
+    - root volume template:
+        - OS, application server, applications
+        - Snapshot of EBS volume or instance store image
+    - Launch permissions:
+        - who can use this AMI
+    - Block device mapping:
+        - which volume(root + additional) get attached, their size, types and whether 
+          they are deleted on termination

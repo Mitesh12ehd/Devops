@@ -1,0 +1,132 @@
+Storage in EC2:
+  - AWS gives two type of disk to ec2
+    1. EBS: 
+      - Elastic block store 
+      - network attached virtual hard drive
+      - it stays separately from physical host
+      - connected over the network
+      - it is persistent
+      - data persist even after termination if we have configured DeleteOnTermination = false.
+
+      Multiple EBS:
+        - multiple EBS can be attached with single ec2 instance
+        - one EBS is configured as root directory, other connected as secondary disk
+
+    2. Instance store:
+      - physical disk space on actual host machine where instance is running
+      - data not persist on stop, termination or if hardware fails
+      - it survives only reboot
+
+  - choosing storage type is depend on instance type we select
+  - some instance type also supports both type of storage attached
+
+Snapshots:
+  - a backup of EBS volume
+  - taken in incremental time
+  - first snapshot: full copy of volume 
+  - every snapshot after that: only blocks that changes after last snapshot taken
+  - we can delete older snapshots
+  - we can copy snapshots across the regions/accounts and restore it to create new EBS 
+    volume.
+  - snapshot is stored in managed s3 bucket.
+
+EBS volume:
+  - it is az specific resource 
+  - attached with ec2 instance 
+  - if we want to move to other az,
+      - create snapshot first 
+      - then copy snapshot
+
+  - one volume can be attached at one instance at time (except multi attach io1/io2)
+
+EBS volume types:
+  - it is there because different applications need different storage performance characteristics like
+    - IOPS — how many I/O operations per second
+    - Throughput — how much data per second
+    - Latency — how quickly each I/O completes
+    - Capacity — how much storage you need
+    - Cost — how much you want to pay
+
+  1. gp3:
+    - SSD, 
+    - General purpose
+    - default choice for most workload
+    - max IOPS - 16000
+    - max throughput - 10000 MB/s
+
+  2. gp2:
+    - SSD, 
+    - General purpose
+    - max IOPS - 16,000 (burst-based)
+    - max throughput - 250 MB/s
+
+  3. io2 (Block Express):
+    - Provisioned IOPS SSD
+    - Mission-critical DBs needing high IOPS + durability
+    - max IOPS - 256,000
+    - 4,000 MB/s
+
+  4. st1
+    - HDD, throughput optimized, 
+    - Big sequential workloads: big data, log processing
+    - max IOPS - N/A
+    - max throughput - 500 MB/s
+  
+  4. sc1
+    - HDD, cold storage
+    - Infrequently accessed data, lowest cost
+    - max IOPS - N/A
+    - max throughput - 250 MB/s
+
+  Storage size:
+    - gp2/gp3: 1 GiB – 16 TiB
+    - io1/io2: 4 GiB – 64 TiB (io2 Block Express even higher)
+    - st1/sc1: 125 GiB – 16 TiB
+    - You choose size at creation and can increase it later (not decrease) without downtime.
+
+EBS Encryption
+  - Uses AWS KMS keys (AWS-managed or customer-managed).
+  - Encrypts data at rest, data in transit between instance and volume, and all snapshots 
+    taken from it.
+  - Cannot un-encrypt an existing volume in place — you'd snapshot it, copy the snapshot 
+    with encryption enabled, then create a new encrypted volume from that.
+  - You can set your account to encrypt all new EBS volumes by default.
+
+Creating a Volume from a Snapshot:
+  - volume size > snapshot size
+
+Mounting volume in case of multiple volume:
+  - if we attach multiple volume to ec2 instance,
+  - one will become primary (root dir) and other will become secondary.
+
+  How to use secondary volume?
+    - Connect ec2 instance 
+    - Identify volumes:
+      run 'lsblk'
+
+      o/p:
+        nvme0n1     259:0    0   8G  0 disk
+        ├─nvme0n1p1
+        │           259:1    0   8G  0 part /
+        └─...
+        nvme1n1     259:2    0   8G  0 disk4
+
+      - here nvme1n1 is secondary
+
+    - Check current mount path of both volumes:
+      df -h
+
+      - we can see primary volume is mounted at root / path 
+      - secondary volume is not mounted anywhere
+
+  - Create file system on secondary EBS:
+    sudo mkfs -t xfs /dev/nvme1n1
+
+  - Create folder:
+      sudo mkdir /data
+
+  - Mount Secondary volume at /data folder.
+      sudo mount /dev/nvme1n1 /data
+
+  - Verify it is mounted
+      df -h

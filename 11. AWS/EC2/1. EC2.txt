@@ -1,0 +1,176 @@
+Virtual machine:
+    - If we have windows machine, we want to run app on linux 
+    - we can enable virtualization on system and setup linux
+    - we can setup multiple type of os
+
+    Hypervisor:
+        - it is software that create and run virtual machine
+        - separate virtual CPU, RAM, Storage etc.
+        - vm is fully isolated
+
+    Type of virtualization:
+        1. Hosted:
+            - we create virtual machine over one main host os.
+        2. Bare-metal:
+            - create separate virtual machine by sharing main hardware resource directly
+            - used by cloud providers and enterprise servers.   
+
+EC2:
+    - Elastic compute cloud
+    - Virtual machine running on nitro system (Hypervisor + custom silicon for networking/storage)
+    - AWS Nitro is the underlying hardware and virtualization system that AWS uses for many modern EC2 instances.
+
+    Nitro system has 3 parts:
+    1. Nitro Hypervisor:
+        - create and manages ec2 instance
+    2. Nitro cards:
+        - Dedicated hardware handles things such as 
+        - networking
+        - EBS storage
+        - Security/isolation
+    3. Nitro Security chip:
+        - provide isolation between instances
+
+EC2 Instance Lifecycle:
+    pending > running > stopping > stopped > running > Shutting down > terminated
+
+    1. pending:
+        - instance is being created/started
+        - while pending state, aws is allocating resources and booting the instance
+
+    2. running:
+        - instance is powered up and usable
+        - we can ssh into it, run application, access EBS volumes, send/receive traffic
+
+    3. stopping:
+        - AWS is shutting down os and stopping the instance
+    
+    4. stopped:
+        - ec2 instance is powered off
+
+    5. Shutting down:
+        - when we choose 'Terminate instance' 
+        - aws is permanently deleting instance
+
+    6. Terminated:
+        - ec2 instance gone 
+        - can't restart again
+
+Instance types and families:
+    - types define hardware resource and capabilities available in your virtual machine.
+    - ex. t3.micro, m6i.large, c7i.xlarge
+    - These tell AWS roughly:
+        How much CPU
+        How much RAM
+        CPU architecture/vendor
+        Network performance
+        EBS bandwidth
+        Whether the CPU is burstable
+        Whether specialized hardware is available
+
+    Naming convention:
+        - m6i.large
+        - m: Instance family 
+        - 6: generation
+        - i: processor/variant
+        - large: instance size
+
+    Generation:
+        - Generally, newer generations provide improvements in areas such as:
+            CPU performance
+            Network bandwidth
+            EBS bandwidth
+            price/performance
+            newer processor technology
+
+    processor/variant:
+        - i means intel based processor
+        - a means amd based
+        - g means AWS Graviton
+
+        - intel and amd uses 86x64 arch 
+        - aws graviton use arm architecture
+        - so while choosing processor/variant make sure with application, library, docker images etc.
+
+        - if there is no suffix, means intel
+
+    Instance size:
+        - The size determines the amount of resources allocated.
+        - nano < micro < small < medium < large < xlarge < 2xlarge < 4xlarge < 8xlarge
+
+Instance family:
+    - What is the workload bottleneck?, by answer of this choose instance family 
+    - choose instance family based on CPU, Memory, Storage, GPU, Balanced usage
+
+    m:
+        - general purpose
+        - provide balances combination of CPU, Memory, Networking
+        - ex. CPU: 40%, Memory 50%, Storage: normal 
+        - then we can choose this family
+        - m6i.large,m6a.xlarge,m7g.large
+        
+    t:
+        - Burstable general purpose
+        - Burstable:
+            - designed for workloads with low average CPU usage but occasional spikes, 
+              rather than needing consistent high performance all the time.
+            - Each burstable instance gets a baseline CPU performance level 
+              (a percentage of a full CPU core, e.g., 20%).
+            - When your workload is idle or using less than the baseline, 
+              you accumulate CPU credits.
+            - When your workload spikes and needs more CPU, the instance spends those 
+              credits to "burst" above the baseline — potentially up to 100% CPU — for as 
+              long as credits last.
+
+        - Credit modes:
+            - Standard: you can only burst as long as you have accumulated credits. If you run out, performance is capped at baseline.
+            - Unlimited: if you run out of credits, you will be charged, and instance is running above baseline
+
+        - t3.micro, t3.small
+        
+    c:
+        - compute optimized
+        - c6i.large, c7i.xlarge
+        - Designed for workloads where CPU is the primary resource requirement.
+        - data processing, video encoding, gaming server
+
+    r:
+        - r6i.xlarge
+        - memory optimized
+        - databases, in memory application, large data processing
+
+    x:
+        - designed for very memory intensive workloads
+        - large databases, SAP workloads
+
+    i:
+        - i4i, i7i
+        - designed for high local storage performance. High I/O ops
+        - Data warehouses, Log processing
+
+    d:
+        - dense storage
+        - designed for large amount of local storage
+    
+    g:
+        - GPU enabled
+        - designed for workload like graphics, video processing, gaming, ML interface
+    
+    Inf:
+        - They're designed particularly for machine-learning inference.
+    
+    Trn:
+        - designed for machine learning training
+
+vCPU:
+  - virtual CPU
+  - AWS doesn't give your EC2 instance entire physical CPU.
+  - instead, underlying physical hardware is virtualized, and AWS assigns your instance 
+    certain number of CPU's
+  - The number of vCPUs determines how much CPU processing capacity is available to the 
+    instance, but actual performance also depends on the processor architecture, generation, 
+    instance family, and workload.
+
+Network performance:
+  - it describe how much traffic instance can send and receive trough its Network interface
+  - we can check network performance in instance types
