@@ -1,0 +1,82 @@
+Hop:
+	- When data travels across a network, 
+	- it rarely goes straight from sender to receiver. It passes through intermediate 
+	  devices that forward it along. These are routers (and similar devices that route 
+	  packets, like gateways and NAT devices).
+	- if packet travel from one router to another it counts one hop
+
+IP TTL:
+	- Every IP packet has a small number written in its header called TTL (Time To Live).
+	- it is hop counter 
+	- The sender sets a starting TTL (say 64).
+	- Every router that forwards the packet subtracts 1.
+	- If a router receives a packet and the TTL has reached 0, it throws the packet away.
+
+IMDS:
+	- Instance metadata service
+	- service available inside ec2 instance that provide information about that instance and cred of role.
+	- metadata service is accessed through, local ip address available from ec2
+		http://169.254.169.254/
+
+    - it list data like
+        - instance id 
+        - ami-id
+        - local ipv4
+        - placement
+        - iam
+
+	IMDSv1:
+		- it uses simple http format
+			curl http://169.254.169.254/latest/meta-data/
+			curl http://169.254.169.254/latest/meta-data/iam/security-credentials/
+			curl http://169.254.169.254/latest/meta-data/iam/security-credentials/MyEC2Role
+			
+		- response contains
+			{
+			  "AccessKeyId": "...",
+			  "SecretAccessKey": "...",
+			  "Token": "...",
+			  "Expiration": "..."
+			}
+			
+		- it is security concern
+		- if application running on ec2 has vulnerability where attacker can make application send http request
+		- attacker might try to hit http://169.254.169.254, and get role's temprary credentials
+		- this type of incident happened in the past in data breaches
+
+	IMDSv2:
+		- it use two step handshake
+		- it use token to validate request
+
+		1. Get session token with PUT request
+			TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" \
+			-H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+
+		2. Provide token in every request
+			curl -s "http://169.254.169.254/latest/meta-data/" \
+			-H "X-aws-ec2-metadata-token: $TOKEN"
+
+			curl -s "http://169.254.169.254/latest/meta-data/identity-credentials" \
+			-H "X-aws-ec2-metadata-token: $TOKEN"
+
+		How it prevent attacks:
+			1. request need put with custom header, and it is difficult to send these type of 
+			  request via application url 
+
+			2. It refuse proxied request, if request contains X-Forwarded-For header, IMDSv2
+			   reject it, reverse proxies, load balancers add this header while forwarding.
+
+			3. Token response is send by ttl 1 by default, so it is unreachable other device or network
+			   - if container is trying to get connect to IMDS via bridge network, it stops it
+			     as it travel vis different network and it increase hop count
+
+	Enforce v2:
+		- Instance metadata options have three knobs: 
+			1. HttpTokens (optional means v1 and v2 both work, required means v2 only), 
+			2. HttpPutResponseHopLimit, 
+			3. HttpEndpoint (enabled or disabled).
+
+		- aws ec2 modify-instance-metadata-options \
+			--instance-id i-0123456789abcdef0 \
+			--http-tokens required \
+			--http-put-response-hop-limit 1

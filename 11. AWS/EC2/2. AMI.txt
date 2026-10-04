@@ -44,14 +44,3 @@ Create template from instance
         Tags
         Monitoring
     - if doesn't include file, installed packages, application setup etc.
-
------------------------------------------------------------------------------
-AMI:
-    - root volume template:
-        - OS, application server, applications
-        - Snapshot of EBS volume or instance store image
-    - Launch permissions:
-        - who can use this AMI
-    - Block device mapping:
-        - which volume(root + additional) get attached, their size, types and whether 
-          they are deleted on termination
