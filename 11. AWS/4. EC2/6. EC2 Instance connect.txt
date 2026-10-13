@@ -1,0 +1,70 @@
+Connection to ec2 instance:
+	1. SSH: Linux EC2
+	2. RDP: Windows EC2
+	3. EC2 Instance Connect: Browser/CLI-based SSH access
+	4. Bastion/Jump Host: Private EC2 instances
+	5. AWS Systems Manager Session Manager: Private instances without SSH
+	6. SSM Port Forwarding: Access private services through SSM
+	
+Bastion Host/Jump:
+	- It is ec2 instance that acts as controlled entry point into private network
+	- Internet >> SSH >> Bastion host >> Privaet EC2
+	- Bastion host SG: 
+		- InBound - SSH 22 - Everyone
+	- Private EC2 SG:
+		- InBound - SSH 22 - Private ip of bastion host
+		
+	- Connecting through Bastion host:
+		1. ssh into bastion >> ssh into private ec2
+		2. ssh jump:
+			- ssh -J ec2-user@54.10.20.30 ec2-user@10.0.2.50
+			
+	- SSH Jump/proxy jump:
+		- ssh -i my-key.pem -J ec2-user@54.10.20.30 ec2-user@10.0.2.50
+		- private key remains on our laptop, it doesn't need to be copied on bastion
+		- bastion is used as network jump/proxy
+		
+		1. If both machine can be connected with same private key:
+			- ssh -i my-key.pem -J ec2-user@54.10.20.30 ec2-user@10.0.2.50
+			
+		2. If both machine can be connected with different private key:
+			- Use ~/.ssh/config
+				Host bastion
+					HostName 54.10.20.30
+					User ec2-user
+					IdentityFile ~/.ssh/bastion-key.pem
+					
+				Host private-ec2
+				    HostName 10.0.2.50
+				    User ec2-user
+				    IdentityFile ~/.ssh/private-ec2-key.pem
+				    ProxyJump bastion
+				    
+			- now do.
+				ssh private-ec2
+	
+	- Bastion jump is not related to aws ec2, it works almost anywhere where we use ssh.
+	
+EC2 Instance connect:
+	
+	1. Using AWS console:
+		- AWS Console > EC2 > Instances > Select instance > Connect > EC2 Instance Connect > Connect
+		- it provide web based terimnal that is connected to ec2 instnace
+
+	2. Using AWS CLI:
+		- Send public key to ec2 machine
+			aws ec2-instance-connect send-ssh-public-key \
+		    --instance-id i-0123456789abcdef0 \
+		    --instance-os-user ec2-user \
+		    --availability-zone ap-south-1a \
+		    --ssh-public-key file://my-key.pub
+		    
+		- now connect using ssh normally
+		
+		- Prerequisites:
+			- Your aws identity need permission to send the key
+				{
+				  "Effect": "Allow",
+				  "Action": "ec2-instance-connect:SendSSHPublicKey",
+				  "Resource": "*"
+				}

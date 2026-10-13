@@ -1,0 +1,12 @@
+EC2:
+    - EC2 Stop vs Hibernate vs Terminate
+    - What happens to each component of ec2 instance in each state.
+
+    AMI:
+        - How it behaved based on EBS or Instance store
+
+    Instance store and EBS
+
+    EBS:
+        - Attach two volume in single ec2 
+        - check from terminal of ec2 ssh
